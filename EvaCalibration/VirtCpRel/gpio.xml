@@ -1,0 +1,1215 @@
+<gpio>
+
+<!--                                                                                 -->
+<!-- Aliases                                                                         -->
+<!--                                                                                 -->
+<aliases>
+<!-- List of common default aliases, a specific module or version can override these -->
+    <default>
+        <alias name="GPIO_IN[0]">GPIO Input 0</alias>
+        <alias name="GPIO_IN[1]">GPIO Input 1</alias>
+        <alias name="GPIO_IN[2]">GPIO Input 2</alias>
+        <alias name="GPIO_IN[3]">GPIO Input 3</alias>
+        <alias name="GPIO_OUT[0]">Q0</alias>
+        <alias name="GPIO_OUT[1]">Q1</alias>
+        <alias name="GPIO_OUT[2]">Q2</alias>
+        <alias name="GPIO_OUT[3]">Q3</alias>
+        <alias name="GPIO_OUT[0] (feedback)">Q0 (feedback)</alias>
+        <alias name="GPIO_OUT[1] (feedback)">Q1 (feedback)</alias>
+        <alias name="GPIO_OUT[2] (feedback)">Q2 (feedback)</alias>
+        <alias name="GPIO_OUT[3] (feedback)">Q3 (feedback)</alias>   
+        <alias name="CAM_IN[0]">Frame Valid</alias>
+        <alias name="CAM_IN[1]">Line Valid</alias>
+        <alias name="CAM_IN[2]">Data Valid</alias>
+        <alias name="CAM_IN[3]">Spare</alias>
+        <alias name="CAM_CTRL[0]">CC1</alias>
+        <alias name="CAM_CTRL[1]">CC2</alias>
+        <alias name="CAM_CTRL[2]">CC3</alias>
+        <alias name="CAM_CTRL[3]">CC4</alias>
+        <alias name="CAM_CTRL[0] (feedback)">CC1 (feedback)</alias>
+        <alias name="CAM_CTRL[1] (feedback)">CC2 (feedback)</alias>
+        <alias name="CAM_CTRL[2] (feedback)">CC3 (feedback)</alias>
+        <alias name="CAM_CTRL[3] (feedback)">CC4 (feedback)</alias>
+        <alias name="GPIO_CTRL[0]">GPIO Control Bit 0</alias>
+        <alias name="GPIO_CTRL[1]">GPIO Control Bit 1</alias>
+        <alias name="GPIO_CTRL[2]">GPIO Control Bit 2</alias>
+        <alias name="GPIO_CTRL[3]">GPIO Control Bit 3</alias>
+        <alias name="pulse_out[0]">Pulse Generator 0 Output</alias>
+        <alias name="pulse_out[1]">Pulse Generator 1 Output</alias>
+        <alias name="pulse_out[2]">Pulse Generator 2 Output</alias>
+        <alias name="pulse_out[3]">Pulse Generator 3 Output</alias>
+        <alias name="rescaler_out[0]">Rescaler 0 Output</alias>
+        <alias name="delayer_out[0]">Delayer 0 Output</alias>
+        <alias name="counter_out[0]">Counter 0 Output</alias>
+        <alias name="counter_eq[0]">Counter 0 Equal</alias>
+        <alias name="counter_gt[0]">Counter 0 Greater</alias>
+        <alias name="TS_TRIG[0]">Timestamp Trigger 0</alias>
+        <alias name="TS_TRIG[1]">Timestamp Trigger 1</alias>
+        <alias name="TS_TRIG[2]">Timestamp Trigger 2</alias>
+        <alias name="TS_TRIG[3]">Timestamp Trigger 3</alias>
+    </default>
+
+    <module id="2">
+        <alias name="CAM_IN[0]">Video Vertical Sync</alias>
+        <alias name="CAM_IN[1]">Video Horizontal Sync</alias>
+        <alias name="CAM_IN[2]">Active Video</alias>
+        <alias name="CAM_IN[3]">Video Field Indicator</alias>
+    </module>
+
+    <module id="5">
+        <alias name="CAM_IN[0]">Video Vertical Sync</alias>
+        <alias name="CAM_IN[1]">Video Horizontal Sync</alias>
+        <alias name="CAM_IN[2]">External Sync Clock</alias>
+        <alias name="CAM_IN[3]">Unused</alias>
+    </module>
+
+    <module id="6">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">LVDS Input</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Camera Link Frame Valid</alias>
+        <alias name="CAM_IN[1]">Camera Link Line Valid</alias>
+        <alias name="CAM_IN[2]">Camera Link Data Valid</alias>
+        <alias name="CAM_IN[3]">Camera Link Spare</alias>
+
+        <sub_module id="0">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+
+        <sub_module id="3">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+
+        <sub_module id="64">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+
+        <sub_module id="96">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+    </module>
+
+    <module id="7">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Video Vertical Sync</alias>
+        <alias name="CAM_IN[1]">Video Horizontal Sync</alias>
+        <alias name="CAM_IN[2]">Active Video</alias>
+        <alias name="CAM_IN[3]">Video Field Indicator</alias>
+    </module>
+
+    <module id="8">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">Not connected</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Video Frame Valid</alias>
+        <alias name="CAM_IN[1]">Video Line Valid</alias>
+        <alias name="CAM_IN[2]">Video Real-Time Status 1</alias>
+        <alias name="CAM_IN[3]">Video Field Indicator</alias>
+    </module>
+
+    <module id="9">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Camera Frame Valid</alias>
+        <alias name="CAM_IN[1]">Camera Line Valid</alias>
+        <alias name="CAM_IN[2]">Camera Data Valid</alias>
+        <alias name="CAM_IN[3]">Camera Data[23]</alias>
+    </module>
+
+    <module id="10">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">Not connected</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Video Frame Valid</alias>
+        <alias name="CAM_IN[1]">Video Line Valid</alias>
+        <alias name="CAM_IN[2]">Video Real-Time Status 1</alias>
+        <alias name="CAM_IN[3]">Video Field Indicator</alias>
+    </module>
+
+    <module id="11">
+        <!-- Puli2 and Puli3's Mod Id.Sub Id = 11.bXXXXXXX1 -->
+        <alias name="CAM_IN[0]">Frame Valid (FDV)</alias>
+        <alias name="CAM_IN[1]">Line Valid (LDV)</alias>
+
+        <alias name="GPIO_CTRL[0]">GPIO Control Bit 0 (CTRL0)</alias>
+        <alias name="GPIO_CTRL[1]">Camera Strobe (CAM_STROBE)</alias>
+        <alias name="GPIO_CTRL[2]">GPIO Control Bit 1 (CTRL1)</alias>
+        <alias name="GPIO_CTRL[3]">GPIO Control Bit 2 (CTRL2)</alias>
+
+        <alias name="GPIO_IN[0]">TTL_IN (EXT_TRIG)</alias>
+        <alias name="GPIO_IN[1]">TTL_IN (EXT_VD)</alias>
+        <alias name="GPIO_IN[2]">TTL_IN (EXT_HD)</alias>
+        <alias name="GPIO_IN[3]">TTL_IN (INT)</alias>
+
+        <alias name="pulse_out[0]">pulse_out0</alias>
+        <alias name="pulse_out[1]">pulse_out1</alias>
+        <alias name="pulse_out[2]">pulse_out2</alias>
+        <alias name="pulse_out[3]">pulse_out3</alias>
+
+        <!-- Puli1's Mod ID.Sub ID = 11.0 -->
+        <sub_module id="0">
+            <alias name="CAM_IN[0]">Frame Valid (FDV)</alias>
+            <alias name="CAM_IN[1]">Line Valid (LDV)</alias>
+
+            <alias name="GPIO_CTRL[0]">GPIO Control Bit 0 (CTRL0)</alias>
+            <alias name="GPIO_CTRL[1]">GPIO Control Bit 1 (CTRL1)</alias>
+            <alias name="GPIO_CTRL[2]">GPIO Control Bit 2 (CTRL2)</alias>
+            <alias name="GPIO_CTRL[3]">GPIO Control Bit 3 (CTRL3)</alias>
+
+            <alias name="GPIO_IN[0]">TTL Input 0 (TTLIN0)</alias>
+            <alias name="GPIO_IN[1]">TTL Input 1 (TTLIN1)</alias>
+        </sub_module>
+    </module>
+
+    <module id="12">   
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Camera Frame Valid</alias>
+        <alias name="CAM_IN[1]">Camera Line Valid</alias>
+        <alias name="CAM_IN[2]">Camera Data Valid</alias>
+    </module>
+
+    <module id="14">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Camera 0 Frame Valid</alias>
+        <alias name="CAM_IN[1]">Camera 0 Line Valid</alias>
+        <alias name="CAM_IN[2]">Camera 1 Frame Valid</alias>
+        <alias name="CAM_IN[3]">Camera 1 Line Valid</alias>
+    </module>
+
+    <module id="19">
+        <alias name="GPIO_IN[0]">TTL Input 0</alias>
+        <alias name="GPIO_IN[1]">TTL Input 1</alias>
+        <alias name="GPIO_IN[2]">LVDS Input</alias>
+        <alias name="GPIO_IN[3]">Optically-Isolated Input</alias>
+
+        <alias name="CAM_IN[0]">Camera Link Frame Valid</alias>
+        <alias name="CAM_IN[1]">Camera Link Line Valid</alias>
+        <alias name="CAM_IN[2]">Camera Link Data Valid</alias>
+        <alias name="CAM_IN[3]">Camera Link Spare</alias>
+
+        <sub_module id="0">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+
+        <sub_module id="64">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+
+        <sub_module id="96">
+            <alias name="GPIO_IN[2]">TTL Input 2</alias>
+        </sub_module>
+    </module>
+</aliases>
+
+
+
+<!--                                                                                 -->
+<!-- Labels                                                                          -->
+<!--                                                                                 -->
+<labels>
+<!-- List of common default labels, a specific module or version can override these -->
+    <default>
+        <input id="0">
+            <item>GPIO_IN[0]</item>
+            <item>CAM_IN[0]</item>
+        </input>
+
+        <input id="1">
+            <item>GPIO_IN[1]</item>
+            <item>CAM_IN[1]</item>
+        </input>
+
+        <input id="2">
+            <item>GPIO_IN[2]</item>
+            <item>GPIO_CTRL[3]</item>
+        </input>
+
+        <input id="3">
+            <item>GPIO_IN[3]</item>
+            <item>GPIO_CTRL[2]</item>
+        </input>
+
+        <input id="4">
+            <item>GPIO_CTRL[1]</item>
+            <item>CAM_IN[2]</item>
+        </input>
+
+        <input id="5">
+            <item>GPIO_CTRL[0]</item>
+            <item>CAM_IN[3]</item>
+        </input>
+
+        <input id="6">
+            <item>pulse_out[1]</item>
+        </input>
+
+        <input id="7">
+            <item>pulse_out[0]</item>
+        </input>
+    </default>
+
+    <module id="6">
+        <version version="3.50">
+            <input id="0">
+                <item>GPIO_IN[0]</item>
+                <item>CAM_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="1">
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[1]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="2">
+                <item>GPIO_IN[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="3">
+                <item>GPIO_IN[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>TS_TRIG[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>TS_TRIG[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="6">
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[2]</item>
+                <item>TS_TRIG[1]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[3]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="7">
+                <item>pulse_out[0]</item>
+                <item>pulse_out[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>TS_TRIG[0]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>counter_gt[0]</item>
+            </input>
+        </version>
+    </module>
+
+    <module id="8">
+        <version version="3.50">
+            <input id="0">
+                <item>GPIO_IN[0]</item>
+                <item>CAM_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="1">
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[1]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="2">
+                <item>GPIO_IN[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="3">
+                <item>GPIO_IN[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>TS_TRIG[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>TS_TRIG[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="6">
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[2]</item>
+                <item>TS_TRIG[1]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[3]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="7">
+                <item>pulse_out[0]</item>
+                <item>pulse_out[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>TS_TRIG[0]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>counter_gt[0]</item>
+            </input>
+        </version>
+    </module>
+
+    <module id="9">
+        <input id="5">
+            <item>GPIO_CTRL[0]</item>
+        </input>
+
+        <version version="3.12">
+	          <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>CAM_IN[3]</item>
+            </input>
+        </version>
+
+        <version version="3.50">
+            <input id="0">
+                <item>GPIO_IN[0]</item>
+                <item>CAM_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="1">
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[1]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="2">
+                <item>GPIO_IN[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="3">
+                <item>GPIO_IN[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>TS_TRIG[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>TS_TRIG[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="6">
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[2]</item>
+                <item>TS_TRIG[1]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[3]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="7">
+                <item>pulse_out[0]</item>
+                <item>pulse_out[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>TS_TRIG[0]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>counter_gt[0]</item>
+            </input>
+        </version>
+    </module>
+
+    <module id="11">
+        <!-- Puli1 specific -->
+        <sub_module id="0">
+            <input id="0">
+                <item>GPIO_IN[0]</item>
+                <item>CAM_IN[0]</item>
+            </input>
+    
+            <input id="1">
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[1]</item>
+            </input>
+    
+            <input id="2">
+                <item>GPIO_CTRL[3]</item>
+            </input>
+    
+            <input id="3">
+                <item>GPIO_CTRL[2]</item>
+            </input>
+    
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>pulse_out3</item>
+            </input>
+    
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>pulse_out2</item>
+            </input>
+    
+            <input id="6">
+                <item>pulse_out1</item>
+            </input>
+    
+            <input id="7">
+                <item>pulse_out0</item>
+            </input>
+        </sub_module>
+
+        <!-- Puli2, Puli3 specific FW < 3.50 -->
+        <input id="0">
+            <item>GPIO_IN[0]</item>
+            <item>CAM_IN[0]</item>
+        </input>
+    
+        <input id="1">
+            <item>GPIO_IN[1]</item>
+            <item>CAM_IN[1]</item>
+        </input>
+    
+        <input id="2">
+            <item>GPIO_CTRL[2]</item>
+            <item>GPIO_IN[1]</item>
+        </input>
+    
+        <input id="3">
+            <item>GPIO_CTRL[1]</item>
+            <item>GPIO_IN[3]</item>
+        </input>
+    
+        <input id="4">
+            <item>GPIO_CTRL[1]</item>
+            <item>pulse_out[3]</item>
+        </input>
+    
+        <input id="5">
+            <item>GPIO_CTRL[0]</item>
+            <item>pulse_out[2]</item>
+        </input>
+    
+        <input id="6">
+            <item>pulse_out[1]</item>
+        </input>
+    
+        <input id="7">
+            <item>pulse_out[0]</item>
+        </input>
+
+        <!-- Puli2, Puli3 specific, F/W >= 3.50 on -->
+        <version version="3.50">
+            <input id="2">
+                <item>GPIO_IN[2]</item>
+                <item>GPIO_CTRL[3]</item>
+            </input>
+
+            <input id="3">
+                <item>GPIO_IN[3]</item>
+                <item>GPIO_CTRL[2]</item>
+            </input>
+
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>pulse_out[1]</item>
+            </input>
+
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>pulse_out[2]</item>
+            </input>
+
+            <input id="6">
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>pulse_out[3]</item>
+            </input>
+
+            <input id="7">
+                <item>pulse_out[0]</item>
+            </input>
+        </version>
+    </module>
+
+    <module id="12">
+        <input id="5">
+            <item>GPIO_CTRL[0]</item>
+        </input>
+    </module>
+
+    <module id="19">
+        <version version="3.50">
+            <input id="0">
+                <item>GPIO_IN[0]</item>
+                <item>CAM_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="1">
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[1]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="2">
+                <item>GPIO_IN[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="3">
+                <item>GPIO_IN[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>TS_TRIG[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>TS_TRIG[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="6">
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[2]</item>
+                <item>TS_TRIG[1]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[3]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="7">
+                <item>pulse_out[0]</item>
+                <item>pulse_out[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>TS_TRIG[0]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>counter_gt[0]</item>
+            </input>
+        </version>
+    </module>
+
+    <module id="21">
+        <version version="3.50">
+            <input id="0">
+                <item>GPIO_IN[0]</item>
+                <item>CAM_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="1">
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[1]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+            </input>
+
+            <input id="2">
+                <item>GPIO_IN[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="3">
+                <item>GPIO_IN[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>Reserved</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>pulse_out[3]</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="4">
+                <item>GPIO_CTRL[1]</item>
+                <item>CAM_IN[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[2]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[1]</item>
+                <item>TS_TRIG[3]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[0]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="5">
+                <item>GPIO_CTRL[0]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>TS_TRIG[2]</item>
+                <item>GPIO_CTRL[3]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>pulse_out[2]</item>
+                <item>Reserved</item>
+                <item>rescaler_out[0]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_gt[0]</item>
+            </input>
+
+            <input id="6">
+                <item>pulse_out[1]</item>
+                <item>rescaler_out[0]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[0]</item>
+                <item>Reserved</item>
+                <item>CAM_IN[2]</item>
+                <item>TS_TRIG[1]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>GPIO_CTRL[2]</item>
+                <item>GPIO_OUT[2] (feedback)</item>
+                <item>CAM_CTRL[2] (feedback)</item>
+                <item>pulse_out[3]</item>
+                <item>delayer_out[0]</item>
+                <item>counter_eq[0]</item>
+            </input>
+
+            <input id="7">
+                <item>pulse_out[0]</item>
+                <item>pulse_out[2]</item>
+                <item>GPIO_IN[0]</item>
+                <item>GPIO_IN[1]</item>
+                <item>GPIO_IN[3]</item>
+                <item>CAM_IN[0]</item>
+                <item>CAM_IN[1]</item>
+                <item>CAM_IN[3]</item>
+                <item>GPIO_CTRL[0]</item>
+                <item>GPIO_CTRL[1]</item>
+                <item>TS_TRIG[0]</item>
+                <item>GPIO_OUT[3] (feedback)</item>
+                <item>CAM_CTRL[3] (feedback)</item>
+                <item>Reserved</item>
+                <item>Reserved</item>
+                <item>counter_gt[0]</item>
+            </input>
+        </version>
+    </module>
+</labels>
+
+</gpio> 

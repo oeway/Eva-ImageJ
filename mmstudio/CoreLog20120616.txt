@@ -1,0 +1,258 @@
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): -------->>
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): Core session started on 2012-06-16T13:13:23.687500 by Administrator on PC-201206051205
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): Debug logging disabled
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): Debug logging disabled
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): > MM Studio version: 1.4.7  20111110
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): > MMCore version 2.3.1
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): > Device API version 51, Module API version 7
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): > Operating System: Windows XP 5.1
+LOG(2012-06-16T13:13:23.687500, 2380, 0010DE30:): > JVM: Java HotSpot(TM) Client VM, version 1.6.0_32; 32 bit
+LOG(2012-06-16T13:13:24.046875, 2380, 0010DE30:): All devices unloaded.
+LOG(2012-06-16T13:13:24.046875, 2380, 0010DE30:): > Notification for Device: Core Property: Initialize changed to value: 0
+LOG(2012-06-16T13:13:24.046875, 2380, 0010DE30:): Device PmacXYStage loaded from PmacStage and labeled as PmacXYStage
+LOG(2012-06-16T13:13:24.046875, 2380, 0010DE30:): Device PmacXYStage set as default xyStage.
+LOG(2012-06-16T13:13:24.046875, 2380, 0010DE30:): Error occured. Device MMCore::loadDevice. �Ҳ���ָ����ģ�顣
+ VarianFPD
+Unable to load library: file not accessible or corrupted.
+
+LOG(2012-06-16T13:13:24.046875, 2380, 0010DE30:): Starting initialization sequence for 1 devices...
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Device PmacXYStage initialized.
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): > Notification for Device: Core Property: Initialize changed to value: 1
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Auto shutter OFF.
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): > Notification for Device: Core Property: AutoShutter changed to value: 0
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration 旋转/NewPreset: new setting for device PmacXYStage defined as PositionY=0.0001
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration 升降/NewPreset: new setting for device PmacXYStage defined as PositionX=0.0088
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Configuration XY/NewPreset: new setting for device PmacXYStage defined as Set position XY axis (mm) (X= Y=)=X= 0.008800 Y= 0.000050
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-06-16T13:13:24.109375, 2380, 0010DE30:): > 
+java.lang.Exception: Line 8: Device,VarianFPD,VarianFPD,VarianFPD
+ÕҲ»µ½ָ¶¨µÄģ¿顣
+ VarianFPD
+Unable to load library: file not accessible or corrupted.
+
+Line 11: Property,VarianFPD,Model,2520
+VarianFPD
+Can't find the device with the specified label.
+
+Line 21: Property,Core,Camera,VarianFPD
+Attempted to set "Core-Camera" to "VarianFPD".
+Core property is read-only or the requested value is not allo in Thread[AWT-EventQueue-0,6,main]
+  at mmcorej.MMCoreJJNI.CMMCore_loadSystemConfiguration(Native Method)
+  at mmcorej.CMMCore.loadSystemConfiguration(CMMCore.java:260)
+  at org.micromanager.MMStudioMainFrame.loadSystemConfiguration(MMStudioMainFrame.java:3372)
+  at org.micromanager.MMStudioMainFrame.access$18(MMStudioMainFrame.java:3355)
+  at org.micromanager.MMStudioMainFrame$38.windowOpened(MMStudioMainFrame.java:1711)
+  at java.awt.AWTEventMulticaster.windowOpened(Unknown Source)
+  at java.awt.Window.processWindowEvent(Unknown Source)
+  at javax.swing.JFrame.processWindowEvent(Unknown Source)
+  at java.awt.Window.processEvent(Unknown Source)
+  at java.awt.Component.dispatchEventImpl(Unknown Source)
+  at java.awt.Container.dispatchEventImpl(Unknown Source)
+  at java.awt.Window.dispatchEventImpl(Unknown Source)
+  at java.awt.Component.dispatchEvent(Unknown Source)
+  at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+  at java.awt.EventQueue.access$000(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue.dispatchEvent(Unknown Source)
+  at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.run(Unknown Source)
+
+
+LOG(2012-06-16T13:13:32.734375, 2380, 0010DE30:): System state cache updated.
+LOG(2012-06-16T13:13:32.750000, 2380, 0010DE30:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-16T13:13:32.750000, 2380, 0010DE30:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-16T13:13:32.750000, 2380, 0010DE30:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-16T13:13:32.781250, 2380, 0010DE30:): > Startup script file (G:\Projects\MM_Project\micro-manager1.4\mmstudio/MMStartup.bsh) not present.
+LOG(2012-06-16T13:13:33.046875, 2380, 0010DE30:): > 
+java.lang.Exception: VarianFPD
+Can't find the device with the specified label. in Thread[AWT-EventQueue-0,6,main]
+  at mmcorej.MMCoreJJNI.CMMCore_getCurrentConfig(Native Method)
+  at mmcorej.CMMCore.getCurrentConfig(CMMCore.java:584)
+  at org.micromanager.ConfigGroupPad$StateTableData.updateStatus(ConfigGroupPad.java:300)
+  at org.micromanager.ConfigGroupPad$StateTableData.<init>(ConfigGroupPad.java:169)
+  at org.micromanager.ConfigGroupPad.setCore(ConfigGroupPad.java:81)
+  at org.micromanager.MMStudioMainFrame$38.windowOpened(MMStudioMainFrame.java:1723)
+  at java.awt.AWTEventMulticaster.windowOpened(Unknown Source)
+  at java.awt.Window.processWindowEvent(Unknown Source)
+  at javax.swing.JFrame.processWindowEvent(Unknown Source)
+  at java.awt.Window.processEvent(Unknown Source)
+  at java.awt.Component.dispatchEventImpl(Unknown Source)
+  at java.awt.Container.dispatchEventImpl(Unknown Source)
+  at java.awt.Window.dispatchEventImpl(Unknown Source)
+  at java.awt.Component.dispatchEvent(Unknown Source)
+  at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+  at java.awt.EventQueue.access$000(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue.dispatchEvent(Unknown Source)
+  at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.run(Unknown Source)
+
+
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): -------->>
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): Core session started on 2012-06-16T13:13:40.187500 by Administrator on PC-201206051205
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): Debug logging disabled
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): Debug logging disabled
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): > MM Studio version: 1.4.7  20111110
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): > MMCore version 2.3.1
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): > Device API version 51, Module API version 7
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): > Operating System: Windows XP 5.1
+LOG(2012-06-16T13:13:40.187500, 3440, 0010F370:): > JVM: Java HotSpot(TM) Client VM, version 1.6.0_32; 32 bit
+LOG(2012-06-16T13:13:40.468750, 3440, 0010F370:): All devices unloaded.
+LOG(2012-06-16T13:13:40.468750, 3440, 0010F370:): > Notification for Device: Core Property: Initialize changed to value: 0
+LOG(2012-06-16T13:13:40.484375, 3440, 0010F370:): Device PmacXYStage loaded from PmacStage and labeled as PmacXYStage
+LOG(2012-06-16T13:13:40.484375, 3440, 0010F370:): Device PmacXYStage set as default xyStage.
+LOG(2012-06-16T13:13:40.484375, 3440, 0010F370:): Error occured. Device MMCore::loadDevice. �Ҳ���ָ����ģ�顣
+ VarianFPD
+Unable to load library: file not accessible or corrupted.
+
+LOG(2012-06-16T13:13:40.484375, 3440, 0010F370:): Starting initialization sequence for 1 devices...
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Device PmacXYStage initialized.
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): > Notification for Device: Core Property: Initialize changed to value: 1
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Auto shutter OFF.
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): > Notification for Device: Core Property: AutoShutter changed to value: 0
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration 旋转/NewPreset: new setting for device PmacXYStage defined as PositionY=0.0001
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration 升降/NewPreset: new setting for device PmacXYStage defined as PositionX=0.0088
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Configuration XY/NewPreset: new setting for device PmacXYStage defined as Set position XY axis (mm) (X= Y=)=X= 0.008800 Y= 0.000050
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-06-16T13:13:40.531250, 3440, 0010F370:): > 
+java.lang.Exception: Line 8: Device,VarianFPD,VarianFPD,VarianFPD
+ÕҲ»µ½ָ¶¨µÄģ¿顣
+ VarianFPD
+Unable to load library: file not accessible or corrupted.
+
+Line 11: Property,VarianFPD,Model,2520
+VarianFPD
+Can't find the device with the specified label.
+
+Line 21: Property,Core,Camera,VarianFPD
+Attempted to set "Core-Camera" to "VarianFPD".
+Core property is read-only or the requested value is not allo in Thread[AWT-EventQueue-0,6,main]
+  at mmcorej.MMCoreJJNI.CMMCore_loadSystemConfiguration(Native Method)
+  at mmcorej.CMMCore.loadSystemConfiguration(CMMCore.java:260)
+  at org.micromanager.MMStudioMainFrame.loadSystemConfiguration(MMStudioMainFrame.java:3372)
+  at org.micromanager.MMStudioMainFrame.access$18(MMStudioMainFrame.java:3355)
+  at org.micromanager.MMStudioMainFrame$38.windowOpened(MMStudioMainFrame.java:1711)
+  at java.awt.AWTEventMulticaster.windowOpened(Unknown Source)
+  at java.awt.Window.processWindowEvent(Unknown Source)
+  at javax.swing.JFrame.processWindowEvent(Unknown Source)
+  at java.awt.Window.processEvent(Unknown Source)
+  at java.awt.Component.dispatchEventImpl(Unknown Source)
+  at java.awt.Container.dispatchEventImpl(Unknown Source)
+  at java.awt.Window.dispatchEventImpl(Unknown Source)
+  at java.awt.Component.dispatchEvent(Unknown Source)
+  at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+  at java.awt.EventQueue.access$000(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue.dispatchEvent(Unknown Source)
+  at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.run(Unknown Source)
+
+
+LOG(2012-06-16T13:13:54.015625, 3440, 0010F370:): System state cache updated.
+LOG(2012-06-16T13:13:54.031250, 3440, 0010F370:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-16T13:13:54.031250, 3440, 0010F370:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-16T13:13:54.031250, 3440, 0010F370:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-16T13:13:54.093750, 3440, 0010F370:): > Startup script file (G:\Projects\MM_Project\micro-manager1.4\mmstudio/MMStartup.bsh) not present.
+LOG(2012-06-16T13:13:54.375000, 3440, 0010F370:): > 
+java.lang.Exception: VarianFPD
+Can't find the device with the specified label. in Thread[AWT-EventQueue-0,6,main]
+  at mmcorej.MMCoreJJNI.CMMCore_getCurrentConfig(Native Method)
+  at mmcorej.CMMCore.getCurrentConfig(CMMCore.java:584)
+  at org.micromanager.ConfigGroupPad$StateTableData.updateStatus(ConfigGroupPad.java:300)
+  at org.micromanager.ConfigGroupPad$StateTableData.<init>(ConfigGroupPad.java:169)
+  at org.micromanager.ConfigGroupPad.setCore(ConfigGroupPad.java:81)
+  at org.micromanager.MMStudioMainFrame$38.windowOpened(MMStudioMainFrame.java:1723)
+  at java.awt.AWTEventMulticaster.windowOpened(Unknown Source)
+  at java.awt.Window.processWindowEvent(Unknown Source)
+  at javax.swing.JFrame.processWindowEvent(Unknown Source)
+  at java.awt.Window.processEvent(Unknown Source)
+  at java.awt.Component.dispatchEventImpl(Unknown Source)
+  at java.awt.Container.dispatchEventImpl(Unknown Source)
+  at java.awt.Window.dispatchEventImpl(Unknown Source)
+  at java.awt.Component.dispatchEvent(Unknown Source)
+  at java.awt.EventQueue.dispatchEventImpl(Unknown Source)
+  at java.awt.EventQueue.access$000(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.awt.EventQueue$1.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.awt.EventQueue$2.run(Unknown Source)
+  at java.security.AccessController.doPrivileged(Native Method)
+  at java.security.AccessControlContext$1.doIntersectionPrivilege(Unknown Source)
+  at java.awt.EventQueue.dispatchEvent(Unknown Source)
+  at java.awt.EventDispatchThread.pumpOneEventForFilters(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForFilter(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+  at java.awt.EventDispatchThread.run(Unknown Source)
+
+

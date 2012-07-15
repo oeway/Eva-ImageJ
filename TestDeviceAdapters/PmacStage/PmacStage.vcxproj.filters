@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Source Files\PComm32">
+      <UniqueIdentifier>{a51f2c5d-96ff-4ffe-b6d5-8c77d0c6a47b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PComm32">
+      <UniqueIdentifier>{400c7a91-54d2-478d-9a26-b76ae64dad98}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\MMDevice\ModuleInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MMDevice\Property.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MMDevice\DeviceUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PComm32\MCAxisBase.cpp">
+      <Filter>Source Files\PComm32</Filter>
+    </ClCompile>
+    <ClCompile Include="PComm32\PCommAxis.cpp">
+      <Filter>Source Files\PComm32</Filter>
+    </ClCompile>
+    <ClCompile Include="PComm32\PMACRuntime.cpp">
+      <Filter>Source Files\PComm32</Filter>
+    </ClCompile>
+    <ClCompile Include="PmacStage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\MMDevice\DeviceBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MMDevice\DeviceUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MMDevice\MMDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MMDevice\ModuleInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MMDevice\Property.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PComm32\DataDefine.h">
+      <Filter>Header Files\PComm32</Filter>
+    </ClInclude>
+    <ClInclude Include="PComm32\MCAxisBase.h">
+      <Filter>Header Files\PComm32</Filter>
+    </ClInclude>
+    <ClInclude Include="PComm32\PCommAxis.h">
+      <Filter>Header Files\PComm32</Filter>
+    </ClInclude>
+    <ClInclude Include="PComm32\PMACRuntime.h">
+      <Filter>Header Files\PComm32</Filter>
+    </ClInclude>
+    <ClInclude Include="PmacStage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
