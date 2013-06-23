@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block banner %}
+
+<!-- Carousel
+ ================================================== -->
+<div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="{{ SITEURL }}/theme/img/slide-01.jpg" alt="">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Example headline.</h1>
+                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        <a class="btn btn-large btn-primary" href="#">Sign up today</a>
+                    </div>
+                </div>
+                </div>
+        <div class="item">
+            <img src="{{ SITEURL }}/theme/img/slide-02.jpg" alt="">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Another example headline.</h1>
+                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        <a class="btn btn-large btn-primary" href="#">Learn more</a>
+                    </div>
+                </div>
+                </div>
+        <div class="item">
+            <img src="{{ SITEURL }}/theme/img/slide-03.jpg" alt="">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>One more for good measure.</h1>
+                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        <a class="btn btn-large btn-primary" href="#">Browse gallery</a>
+                    </div>
+                </div>
+                </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div><!-- /.carousel -->
+
+{% endblock %}
+{% block content %}
+
+{% if articles %}
+{% for article in (articles_page.object_list if articles_page else articles) %}
+<div class='article'>
+	<h2>{{ article.title }}</h2>
+	<div class="well small">{% include "metadata.html" %}</div>
+	<div class="summary">{{ article.summary }} <a class="btn primary xsmall" href="{{ SITEURL }}/{{ article.url }}">more…</a>
+	</div>
+</div>	
+{% endfor %}
+{%endif%}
+
+{% if articles_page and articles_paginator.num_pages > 1 %}
+<div class="pagination">
+<ul>
+	{% if articles_page.has_previous() %}
+		{% set num = articles_page.previous_page_number() %}
+		<li class="prev"><a href="{{ SITEURL }}/{{ page_name }}{{ num if num > 1 else '' }}.html">&larr; Previous</a></li>
+	{% else %}
+		<li class="prev disabled"><a href="#">&larr; Previous</a></li>
+	{% endif %}
+	{% for num in range( 1, 1 + articles_paginator.num_pages ) %}
+		<li class="{{ 'active' if num == articles_page.number else '' }}"><a href="{{ SITEURL }}/{{ page_name }}{{ num if num > 1 else '' }}.html">{{ num }}</a></li>
+	{% endfor %}
+	{% if articles_page.has_next() %}
+		<li class="next"><a href="{{ SITEURL }}/{{ page_name }}{{ articles_page.next_page_number() }}.html">Next &rarr;</a></li>
+	{% else %}
+		<li class="next disabled"><a href="#">&rarr; Next</a></li>
+	{% endif %}
+</ul>
+</div>
+{% endif %}
+
+{% endblock %}
