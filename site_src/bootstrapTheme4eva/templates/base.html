@@ -56,28 +56,28 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="brand" href="#">{{ SITENAME }}</a>
+                    <a class="brand" href={{ SITEURL }}/>{{ SITENAME }}</a>
                     <!-- Responsive Navbar Part 2: Place all navbar contents you want collapsed withing .navbar-collapse.collapse. -->
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li class="active"><a href="#">Home</a></li>
                             {% for title, link in MENUITEMS %}
-                            <li><a href="{{ link }}">{{ title }}</a></li>
+                             {% if '_dropdown' in title %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{title.replace('_dropdown','')}} <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        {% for cat, url in link %}
+                                            {% if cat == '-' or url == '-' %}
+                                                <li class="divider"></li>
+                                            {% else %}
+                                                <li><a href="{{ SITEURL }}/{{ url }}">{{ cat }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                             {% else %}
+                                <li><a href="{{ SITEURL }}/{{ link }}">{{ title }}</a></li>
+                             {% endif %}
                             {% endfor %}
-                            
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    {% for cat, null in categories %}
-                                    <li><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
-                                    {% endfor %}
-
-                                    <li class="divider"></li>
-                                    <li class="nav-header">About</li>
-                                    <li><a href="#">EVA-NDE</a></li>
-                                    <li><a href="#">Author</a></li>
-                                </ul>
-                            </li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div><!-- /.navbar-inner -->
@@ -101,8 +101,8 @@
 			{% block content %}{% endblock %}
         <hr class="featurette-divider">
 		<footer>
-		  <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme based on <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>.</p>
-		  <p>&copy; {{ AUTHOR }}</p>
+		  <p>Powered by <a href="http://icy.bioimageanalysis.org">Icy</a>/<a href="http://rsbweb.nih.gov/ij/‎">ImageJ</a>/<a href="http://www.micro-manager.org/‎">Micro-Manager</a></p>
+		  <p>&copy; EVA-NDE Team</p>
 		</footer>
 	  </div>
 

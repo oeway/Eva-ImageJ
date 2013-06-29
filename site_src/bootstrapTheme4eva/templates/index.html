@@ -6,36 +6,28 @@
  ================================================== -->
 <div id="myCarousel" class="carousel slide">
     <div class="carousel-inner">
-        <div class="item active">
-            <img src="{{ SITEURL }}/theme/img/slide-01.jpg" alt="">
+        {% set active_link = 1 %}
+        {% for item in CAROUSELITEMS%}
+        
+        <div class="item {% if active_link %} active {% set active_link = 0 %} {% endif %}">
+            {% if item['image'] %}
+            <img src={{ SITEURL }}/{{ item['image'] }} alt="">
+            {% endif %}
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1>Example headline.</h1>
-                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <a class="btn btn-large btn-primary" href="#">Sign up today</a>
+                        {% if item['headline'] %}
+                        <h1> {{ item['headline'] }} </h1>
+                        {% endif %}
+                        {% if item['subtitle'] %}
+                        <p class="lead">{{item['subtitle']}}</p>
+                        {% endif %}
+                        {% if item['buttonLink'] %}
+                        <a class="btn btn-large btn-primary" href={{ SITEURL }}/{{item['buttonLink']}}>{{item['buttonCaption']}}</a>
+                        {% endif %}
                     </div>
                 </div>
                 </div>
-        <div class="item">
-            <img src="{{ SITEURL }}/theme/img/slide-02.jpg" alt="">
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h1>Another example headline.</h1>
-                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <a class="btn btn-large btn-primary" href="#">Learn more</a>
-                    </div>
-                </div>
-                </div>
-        <div class="item">
-            <img src="{{ SITEURL }}/theme/img/slide-03.jpg" alt="">
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h1>One more for good measure.</h1>
-                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <a class="btn btn-large btn-primary" href="#">Browse gallery</a>
-                    </div>
-                </div>
-                </div>
+        {% endfor %}
     </div>
     <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
     <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
