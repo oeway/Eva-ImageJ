@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = u'Wei Ouyang'
+AUTHOR = u'Will Ouyang'
 SITENAME = u'EVA-NDE'
 SITEURL = ''
 
@@ -17,7 +17,8 @@ TRANSLATION_FEED_ATOM = None
 
 THEME = 'bootstrapTheme4eva'
 
-
+DISQUS_SITENAME = 'eva-nde'
+TWITTER_USERNAME = 'oeway'
 
 NDE_CATEGORIES = (
             ('Ultrasonic','pages/ultrasonic.html'),
