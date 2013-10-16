@@ -32,10 +32,10 @@ We can use the canvas to show all kinds of waveforms such as eddy current and ul
 
 
 
-[Chart1DCanvas screen shot]:/static/images/chart1dscreen.png
+[Chart1DCanvas screen shot]:../static/images/chart1dscreen.png
 
 [Chart1DCanvas]:http://icy.bioimageanalysis.org/plugin/Chart1DCanvas
 [a thread]:
 [Intensity Profile]:http://icy.bioimageanalysis.org/plugin/Intensity_Profile
-[ultrasonic waveform]:/static/images/ultrasonicWave.JPG
-[1-Row Image With Intensity Profile]:/static/images/CaptureOfIcyGUI.PNG
+[ultrasonic waveform]:../static/images/ultrasonicWave.JPG
+[1-Row Image With Intensity Profile]:../static/images/CaptureOfIcyGUI.PNG
