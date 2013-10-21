@@ -116,7 +116,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 	@Override
 	protected void initialize()
 	{
-		startMicroManagerForIcy();
+		//startMicroManagerForIcy();
 		// 1) variables must be initialized
 		scanMapSeq = new EzVarSequence("Scan Map Sequence");
 		stepSize = new EzVarDouble("Step Size");
