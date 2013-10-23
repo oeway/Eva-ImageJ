@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import plugins.adufour.ezplug.*;
  
 /**
- * Alignment pixels row by row according to the threshold
+ * Align pixels row by row according to the threshold
  * Originally used for surface tracking in ultrasound imaging
  * 
  * @author Will Ouyang / oeway007@gmail
@@ -124,7 +124,7 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 									detected = true;
 							}
 						}
-						if(detected)
+						//if(detected) //use last i if can't detect
 						{
 							int length =image.getWidth()-i;
 							for(int x=0;x<image.getWidth();x++)
