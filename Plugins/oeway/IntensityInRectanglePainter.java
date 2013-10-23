@@ -12,6 +12,7 @@ import icy.util.ShapeUtil.ShapeConsumer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -32,7 +33,9 @@ import java.util.Random;
  */
 public class IntensityInRectanglePainter extends Overlay
 {
+	public int nameIndex=0;
 	public HashMap<ROI2D,ROI2D> roiPairDict = new HashMap<ROI2D,ROI2D>();
+	public Point lastPoint;
     public IntensityInRectanglePainter(String name) {
 		super(name);
 	}
@@ -48,7 +51,8 @@ public class IntensityInRectanglePainter extends Overlay
 	@Override
     public void paint(Graphics2D g, Sequence sequence, IcyCanvas canvas)
     {
-		
+		if(lastPoint == null)
+			lastPoint = new Point(0,-Math.max(100,sequence.getHeight()));
         // create a graphics object so that we can then dispose it at the end of the paint to clean
         // all change performed in the paint,
         // like transform, color change, stroke (...).
@@ -56,6 +60,7 @@ public class IntensityInRectanglePainter extends Overlay
         Graphics2D g2 = (Graphics2D) g.create();
         for (ROI2D roi : sequence.getROI2Ds())
         {
+        	
             if (roi instanceof ROI2DShape){
             	if("icy.roi.ROI2DLine" ==roi.getClassName())
             	{
@@ -63,6 +68,7 @@ public class IntensityInRectanglePainter extends Overlay
             		if(roiPairDict.containsKey(roi))
             		{
             			rect = roiPairDict.get(roi);
+            			rect.setName("["+roi.getName()+"]");
             			Rectangle2D box2 = rect.getBounds2D();
            
             			if(!sequence.getROI2Ds().contains(rect)){
@@ -78,9 +84,14 @@ public class IntensityInRectanglePainter extends Overlay
             		}
             		else
             		{
+            			roi.setName(""+Integer.toString(nameIndex)+"#");
+            			nameIndex +=1;
             			roi.setColor(getRandomColor());
             			//roi.setSelectedColor(getRandomColor());
-            			rect = new ROI2DRectangle(0,-Math.max(100,sequence.getHeight()),sequence.getWidth(),0);
+            			
+            			rect = new ROI2DRectangle(lastPoint.getX(),lastPoint.getY(),Math.min(800,sequence.getWidth()),0);
+            			lastPoint.setLocation(lastPoint.getX()+20,lastPoint.getY()-20);
+            			rect.setName("("+roi.getName()+")");
             			rect.setColor(roi.getColor());
             			rect.setSelectedColor(roi.getSelectedColor());
             			sequence.addROI(rect);
@@ -108,7 +119,7 @@ public class IntensityInRectanglePainter extends Overlay
         g2.dispose();
     }
 
-    private void computeIntensityROI(ROI2DShape roi,final ROI2DShape rect, final Graphics2D g, final Sequence sequence, final IcyCanvas canvas)
+    private void computeIntensityROI(final ROI2DShape roi,final ROI2DShape rect, final Graphics2D g, final Sequence sequence, final IcyCanvas canvas)
     {
 
         ShapeUtil.consumeShapeFromPath(roi.getPathIterator(null), new ShapeConsumer()
@@ -118,14 +129,14 @@ public class IntensityInRectanglePainter extends Overlay
             {
                 if (shape instanceof Line2D)
                 {
-                    drawHisto((Line2D) shape, rect, g, sequence, canvas);
+                    drawHisto((Line2D) shape,roi.getName(), rect, g, sequence, canvas);
                 }
                 return true; // continue
             }
         });
     }
 
-    void drawHisto(Line2D line, ROI2DShape rect, Graphics2D g, Sequence sequence, final IcyCanvas canvas)
+    void drawHisto(Line2D line,String roiName, ROI2DShape rect, Graphics2D g, Sequence sequence, final IcyCanvas canvas)
     {
         for (int component = 0; component < sequence.getSizeC(); component++)
         {
@@ -191,14 +202,14 @@ public class IntensityInRectanglePainter extends Overlay
                 if (component == 2)
                     g.setColor(Color.blue);
             }
-            Rectangle2D box = ((ROI2DRectangle) rect).getRectangle();
+            Rectangle2D rectBox = ((ROI2DRectangle) rect).getRectangle();
             Rectangle2D polyBox = polygon.getBounds2D();
             try
             {
 	           
-	            g.translate(box.getMinX(), box.getMaxY());
-	            double sx = box.getWidth()/polyBox.getWidth();
-	            double sy = box.getHeight()/polyBox.getHeight();
+	            g.translate(rectBox.getMinX(), rectBox.getMaxY());
+	            double sx = rectBox.getWidth()/polyBox.getWidth();
+	            double sy = rectBox.getHeight()/polyBox.getHeight();
 	            g.scale(sx, -sy);
 	            g.draw(polygon);
 
@@ -210,15 +221,36 @@ public class IntensityInRectanglePainter extends Overlay
             	 // transform to put the painter at the right place
 	            char[] c = Integer.toString((int)line.getP1().getX()).toCharArray();
 	            //x1
-        	    g.drawChars(c, 0, c.length ,(int)box.getMinX(),(int)box.getMaxY()+15);
+        	    g.drawChars(c, 0, c.length ,(int)rectBox.getMinX(),(int)rectBox.getMaxY()+15);
         	    
 	            c = Integer.toString((int)line.getP2().getX()).toCharArray();
 	            //x2
-        	    g.drawChars(c, 0, c.length ,(int)box.getMaxX(),(int)box.getMaxY()+15);
+        	    g.drawChars(c, 0, c.length ,(int)rectBox.getMaxX(),(int)rectBox.getMaxY()+15);
         	    
         	    c = ("max:"+Integer.toString((int)maxData)+" min:"+Integer.toString((int)minData)).toCharArray();
 	            //min,max
-        	    g.drawChars(c, 0, c.length ,(int)box.getCenterX(),(int)box.getMinY()-8);
+        	    
+                if (sequence.getSizeC() != 1)
+                {
+	        	    if(component == 1)
+	        	    g.drawChars(c, 0, c.length ,(int)rectBox.getMinX(),(int)rectBox.getMinY()-8);
+	        	    if(component == 2)
+	        	    g.drawChars(c, 0, c.length ,(int)rectBox.getCenterX(),(int)rectBox.getMinY()-8);
+	        	    if(component == 3)
+	        	    g.drawChars(c, 0, c.length ,(int)rectBox.getMaxX(),(int)rectBox.getMinY()-8);
+                }
+                else
+                	g.drawChars(c, 0, c.length ,(int)rectBox.getCenterX(),(int)rectBox.getMinY()-8);
+        	    c = (roiName).toCharArray();
+	            //ROI Name of line ROI
+        	    if(line.getP1().getX()> line.getP2().getX())
+        	    	g.drawChars(c, 0, c.length ,(int) line.getP1().getX()+10,(int)line.getP1().getY());
+        	    else
+        	    	g.drawChars(c, 0, c.length ,(int) line.getP2().getX()+10,(int)line.getP2().getY());
+        	    
+        	    c = (rect.getName()).toCharArray();
+	            //ROI Name of line ROI
+        	    g.drawChars(c, 0, c.length, (int)rectBox.getCenterX(),(int)rectBox.getMaxY()-7 );
         	    
             }
             

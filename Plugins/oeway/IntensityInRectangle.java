@@ -26,7 +26,6 @@ public class IntensityInRectangle extends PluginActionable
     @Override
     public void run()
     {
-
         Sequence sequence = getFocusedSequence();
         if (sequence == null)
         {
@@ -55,15 +54,35 @@ public class IntensityInRectangle extends PluginActionable
         }
         else
         {
-        	new AnnounceFrame("IntensityInRectangle mode terminated. Remove all ROIs?", "Remove", new Runnable()
+        	new AnnounceFrame("Do you want to kill intensityInRectangle plugin", "Exit", new Runnable()
             {
+        		IntensityInRectanglePainter Pt;
                 @Override
                 public void run()
                 {
-                	getFocusedSequence().removeAllROI();
+                	try{
+                		
+                		getFocusedSequence().removePainter(Pt);
+                	}
+                	finally
+                	{
+                		
+                	}
+                	new AnnounceFrame("Remove all ROIs?", "Remove", new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                        	getFocusedSequence().removeAllROI();
+                        }
+                    }, 15);
                 }
-            }, 15);
-        	getFocusedSequence().removePainter(oldPt);
+                public Runnable init(IntensityInRectanglePainter pstr) {
+                    this.Pt=pstr;
+                    return(this);
+                }
+            }.init(oldPt), 15);
+        	
         }
         
     }
