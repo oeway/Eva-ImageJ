@@ -1,4 +1,5 @@
 package plugins.oeway;
+import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.image.IcyBufferedImage;
 import icy.main.Icy;
@@ -6,9 +7,11 @@ import icy.roi.ROI2D;
 import icy.roi.ROI2DShape;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
+import icy.type.DataType;
 import icy.type.collection.array.Array1DUtil;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 import plugins.adufour.ezplug.*;
@@ -23,12 +26,16 @@ import plugins.adufour.ezplug.*;
 public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 {
 	
-
+	private enum thresholdModesEnum
+	{
+		GreaterThan,LessThan,EqualTo
+	}
 
 	EzVarSequence 				sequenceVar;
 	EzVarDouble					thresholdVar;
-	EzVarText					roiVar;
+	EzVarEnum<thresholdModesEnum>	thresholdModeVarEnum;
 	EzVarBoolean 				inplaceVar;
+	EzVarBoolean 				offsetMapVar;
 	// some other data
 	boolean						stopFlag;
 	@Override
@@ -37,10 +44,10 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 		// 1) variables must be initialized
 		sequenceVar = new EzVarSequence("Target");
 		thresholdVar = new EzVarDouble("Threshold");
-		roiVar = new EzVarText("ROI", new String[] { "" }, 0, true);
 		inplaceVar = new EzVarBoolean("In-Place",false);
-	
-		EzGroup groupInit= new EzGroup("", sequenceVar,roiVar,thresholdVar,inplaceVar);
+		offsetMapVar = new EzVarBoolean("Offset Map",true);
+		thresholdModeVarEnum = new EzVarEnum<thresholdModesEnum>("Threshold Mode", thresholdModesEnum.values(), thresholdModesEnum.GreaterThan);
+		EzGroup groupInit= new EzGroup("", sequenceVar,thresholdModeVarEnum,thresholdVar,inplaceVar,offsetMapVar);
 		super.addEzComponent(groupInit);			
 
 	}
@@ -53,24 +60,46 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 	protected void execute()
 	{
 		Sequence sequence = sequenceVar.getValue();
-
+		IcyBufferedImage offsetMap = null;
+		
 		double threshold = thresholdVar.getValue();
 		ROI2DShape roi = null;
+		
+		 ArrayList<ROI2D> rois = sequence.getROI2Ds();
+	        int size = rois.size();
 
-		for (ROI2D r : sequence.getROI2Ds())
-		{	ROI2DShape r2 = null;
-			if (r instanceof ROI2DShape){
-				r2 = (ROI2DShape)r;
-				if(r2.getName().trim() .equals(roiVar.getValue().trim()))
-				{	
-					roi = r2;
-					break;
-				}
-			}
-		}
+	        if (size == 0)
+	        {
+	            MessageDialog.showDialog("There is no ROI in the current sequence.\nAlign operation need a ROI.",
+	                    MessageDialog.INFORMATION_MESSAGE);
+	            return;
+	        }
+	        else if (size >= 1)
+	        {
+	            rois = sequence.getSelectedROI2Ds();
+	            size = rois.size();
+	            if (size == 1)
+	            {
+	            	if (rois.get(0) instanceof ROI2DShape)
+	            		roi = (ROI2DShape)rois.get(0);
+	            }
+	            else if (size > 1)
+	            {
+	            	for (ROI2D r : rois)
+	        		{	ROI2DShape r2 = null;
+	        			if (r instanceof ROI2DShape && "icy.roi.ROI2DLine" ==r.getClassName())
+	        			{
+	        				r2 = (ROI2DShape)r;
+	        					roi = r2;
+	        					break;
+	        			}
+	        		}
+	            }
+	        }
 		if(roi == null)
 		{
-			new AnnounceFrame("No roi named " + roiVar.getValue(),5);
+			MessageDialog.showDialog("No ROI available, please select a ROI for alignment.",
+                    MessageDialog.INFORMATION_MESSAGE);
 			stopFlag = true;
 			return;
 		}
@@ -85,6 +114,7 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 				new AnnounceFrame("Error when copying the sequnce undo will not available!");
 			}
 		}
+		offsetMap = new IcyBufferedImage(sequence.getSizeZ(),sequence.getSizeY(),sequence.getSizeT(),DataType.USHORT);	
 		double minX = roi.getBounds().getMinX();
 		double maxX = roi.getBounds().getMaxX();
 		double val = 0.0;
@@ -104,10 +134,10 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 					
 					// Get a copy of the data in double.
 					double[] dataBuffer = Array1DUtil.arrayToDoubleArray( imageData , image.isSignedDataType() );
-				    int i = 0;
+				    
 					for(int y =0;y<image.getHeight();y++)
 					{
-						
+						int i = 0;
 						boolean detected = false;
 						for(int x=(int) minX;x<maxX;x++)
 						{
@@ -120,10 +150,24 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 							{
 								val = Array1DUtil.getValue(dataBuffer, image.getOffset((int) x, (int) y),
 				                        image.isSignedDataType());
-								if(val > threshold)
-									detected = true;
+								if(thresholdModeVarEnum.getValue() == thresholdModesEnum.GreaterThan)
+								{
+									if(val > threshold)
+										detected = true;
+								}
+								else if(thresholdModeVarEnum.getValue() == thresholdModesEnum.EqualTo)
+								{
+									if(val == threshold)
+										detected = true;
+								}
+								else
+								{
+									if(val < threshold)
+										detected = true;
+								}
 							}
 						}
+						offsetMap.setData(z, y, t, i);
 						//if(detected) //use last i if can't detect
 						{
 							int length =image.getWidth()-i;
@@ -142,6 +186,7 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 							
 						}
 						
+						
 					}
 					cpt +=1;
 					// Put the data back to the original image
@@ -154,8 +199,17 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 		        }
 	        }
         }
+        
+        if(offsetMapVar.getValue()){
+	        Sequence offsetSeq=new Sequence();
+			offsetSeq.setImage(0, 0, offsetMap);
+			offsetSeq.setName("Offset Map of " + sequence.getName());
+			Icy.getMainInterface().addSequence(offsetSeq);
+        }
+		
         System.gc();
 		stopFlag = true;
+		new AnnounceFrame("Alignment operation done!",5);
 	}
 	
 	@Override
