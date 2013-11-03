@@ -6,14 +6,10 @@ package plugins.oeway;
  */
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
-import icy.painter.Painter;
+import icy.painter.Overlay;
 import icy.plugin.abstract_.PluginActionable;
-import icy.roi.ROI2D;
-import icy.roi.ROI2DLine;
-import icy.roi.ROI2DPolyLine;
+import plugins.kernel.roi.roi2d.ROI2DLine;
 import icy.sequence.Sequence;
-
-import java.awt.Polygon;
 
 /**
  * 
@@ -26,14 +22,14 @@ public class IntensityInRectangle extends PluginActionable
     @Override
     public void run()
     {
-        Sequence sequence = getFocusedSequence();
+        Sequence sequence = getActiveSequence();
         if (sequence == null)
         {
             MessageDialog.showDialog("Please open an image first.", MessageDialog.ERROR_MESSAGE);
             return;
         } 
         IntensityInRectanglePainter oldPt = null;
-        for(Painter p: getFocusedSequence().getPainters())
+        for(Overlay p: getActiveSequence().getOverlays())
         {
         	if( p instanceof IntensityInRectanglePainter)
         	{
@@ -44,7 +40,7 @@ public class IntensityInRectangle extends PluginActionable
         	
         if(oldPt == null)
         {
-        	getFocusedSequence().addPainter(new IntensityInRectanglePainter("IntensityInRectangleOverlay"));
+        	getActiveSequence().addOverlay(new IntensityInRectanglePainter("IntensityInRectangleOverlay"));
             // creates a ROI2DPolyLine if no ROI exists
             if (sequence.getROIs().size() == 0)
             {
@@ -62,7 +58,7 @@ public class IntensityInRectangle extends PluginActionable
                 {
                 	try{
                 		
-                		getFocusedSequence().removePainter(Pt);
+                		getActiveSequence().removeOverlay(Pt);
                 	}
                 	finally
                 	{
@@ -73,7 +69,7 @@ public class IntensityInRectangle extends PluginActionable
                         @Override
                         public void run()
                         {
-                        	getFocusedSequence().removeAllROI();
+                        	getActiveSequence().removeAllROI();
                         }
                     }, 15);
                 }

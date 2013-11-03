@@ -3,8 +3,8 @@ import icy.canvas.IcyCanvas;
 import icy.image.IcyBufferedImage;
 import icy.painter.Overlay;
 import icy.roi.ROI2D;
-import icy.roi.ROI2DRectangle;
-import icy.roi.ROI2DShape;
+import plugins.kernel.roi.roi2d.ROI2DRectangle;
+import plugins.kernel.roi.roi2d.ROI2DShape;
 import icy.sequence.Sequence;
 import icy.type.collection.array.Array1DUtil;
 import icy.util.ShapeUtil;
@@ -62,7 +62,7 @@ public class IntensityInRectanglePainter extends Overlay
         {
         	
             if (roi instanceof ROI2DShape){
-            	if("icy.roi.ROI2DLine" ==roi.getClassName())
+            	if("ROI2DLine".equals(roi.getSimpleClassName()))
             	{
             		ROI2D rect;
             		if(roiPairDict.containsKey(roi))
@@ -77,7 +77,6 @@ public class IntensityInRectanglePainter extends Overlay
             				Rectangle2D box = roi.getBounds2D();
                 			rect = new ROI2DRectangle(box.getMinX(),box2.getMinY(),Math.max(5,box.getMaxX()),Math.max(5,box2.getMaxY()));
                 			rect.setColor(roi.getColor());
-                			rect.setSelectedColor(roi.getSelectedColor());
                 			sequence.addROI(rect);
             			}
             			
@@ -93,16 +92,15 @@ public class IntensityInRectanglePainter extends Overlay
             			lastPoint.setLocation(lastPoint.getX()+20,lastPoint.getY()-20);
             			rect.setName("("+roi.getName()+")");
             			rect.setColor(roi.getColor());
-            			rect.setSelectedColor(roi.getSelectedColor());
             			sequence.addROI(rect);
 
             		}
             		
             		
             		if(roi.isSelected())
-            			rect.setSelected(roi.isSelected(),false);
+            			rect.setSelected(roi.isSelected());
             		else if(rect.isSelected())
-            			roi.setSelected(rect.isSelected(),false);
+            			roi.setSelected(rect.isSelected());
             		roiPairTemp.put(roi, rect);
             		
             		computeIntensityROI((ROI2DShape) roi,(ROI2DShape) rect, g2, sequence, canvas);
