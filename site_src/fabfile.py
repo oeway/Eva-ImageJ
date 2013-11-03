@@ -35,13 +35,10 @@ def reserve():
 def preview():
     local('pelican -s publishconf.py')
 
-def cf_upload():
-    rebuild()
-    local('cd {deploy_path} && '
-          'swift -v -A https://auth.api.rackspacecloud.com/v1.0 '
-          '-U {cloudfiles_username} '
-          '-K {cloudfiles_api_key} '
-          'upload -c {cloudfiles_container} .'.format(**env))
+def github():
+    if os.path.isdir(DEPLOY_PATH):
+        local('ghp-import {deploy_path}'.format(**env))
+        local('git push origin gh-pages')
 
 @hosts(production)
 def publish():
