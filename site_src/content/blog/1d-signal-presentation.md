@@ -12,30 +12,18 @@ Icy is designed for 2D+ image data processing, but in NDE, we often get 1D signa
 
 ## Solution
 
-So if we want to process 1d signal, or acquisite 1d signal in Micro-Manager within Icy, we need to figure out some way to presente 1d signal in Icy.
-Icy itself have Jfreechart included in its library, and there also some plugins like [Intensity Profile][] can draw a profile of a line of pixel intensity.
-So a intuitive idea is acqusite the 1d signal as a 1-row image using Micro-Manager for Icy plugin and then plot the intensity profile of the 1-row image. The following image demostrate this idea.
+But there are a lot of plugins available on the Icy repository, and a user can alway find something they want. So I found the "Intensity Profile" plugin which can used a a temporary solution to show a waveform in Icy.
+The following picture shows the screen shot of using intensity profile to show a waveform stored as a picture with only one row pixels.
+
 
 ![1-Row Image With Intensity Profile][]
 
-## The Plugin -- Chart1DCanvas
+Usage:
+1. Input "IntensityProfile" in the search bar of Icy, it located in the upper left of the main window. When it appears in the search result, just click to install.
+2. Open you image, we can store a waveform as a row of pixels, which also means one pixels is one sample value from your data acquisition device. Don't care much about the data range, Icy supports 32-bit gray image, which will be enough for most ADC device.
+3. Then put a line ROI on the image, adjust it to the right position, you can press shift key to make it orthogonal.
+4. Click "IntensityProfile" in the menu bar. And you will see a cure displayed in a chart window. You can zoom in and out, the chart is handled by a java chart library known as "JfreeChart".
 
-Following this idea, I fired [a thread][] in the forum of Icy. Then I got some suggestions from Fabrice and Stephane. After some coding work, I finally implemented a canvas plugin named [Chart1DCanvas][] which can actually do the 1d signal representation work. This plugin will be act as a basis to the following NDE applications.
-Here goes a screen shot of the plugin.
-
-![Chart1DCanvas screen shot][]
-
-With this plugin, Icy will show a 1d signal in native way which actually is canvas.
-We can use the canvas to show all kinds of waveforms such as eddy current and ultrasonic etc.. 
-
-
-
-
-
-[Chart1DCanvas screen shot]:../static/images/chart1dscreen.png
-
-[Chart1DCanvas]:http://icy.bioimageanalysis.org/plugin/Chart1DCanvas
-[a thread]:
 [Intensity Profile]:http://icy.bioimageanalysis.org/plugin/Intensity_Profile
-[ultrasonic waveform]:../static/images/ultrasonicWave.JPG
-[1-Row Image With Intensity Profile]:../static/images/CaptureOfIcyGUI.PNG
+[ultrasonic waveform]:../images/ultrasonicWave.JPG
+[1-Row Image With Intensity Profile]:../images/CaptureOfIcyGUI.PNG

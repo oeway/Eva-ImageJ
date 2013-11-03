@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Will Ouyang'
-SITENAME = u'EVA-NDE'
+SITENAME = u'EVA'
 SITEURL = ''
 
 TIMEZONE = 'Asia/Shanghai'
@@ -37,15 +37,15 @@ MENUITEMS =(('Home',''),
 
 CAROUSELITEMS = (
             {
-            'image':'static/images/slide-01.jpg',  
+            'image':'images/slide-01.jpg',  
             'headline':'Non Destructive Evaluation',
             'subtitle':'Make the world a safe place',
             'buttonLink':'#',
             'buttonCaption':'Learn More',
             },
             {
-            'image':'static/images/slide-02.jpg',  
-            'headline':'EVA-NDE',
+            'image':'images/slide-02.jpg',  
+            'headline':'EVA',
             'subtitle':'An Open Souce Imaging platform based on Icy',
             'buttonLink':'#',
             'buttonCaption':'Download Now',
@@ -63,7 +63,6 @@ USE_FOLDER_AS_CATEGORY = True
 ARTICLE_URL = '{category}/{slug}.html'
 ARTICLE_SAVE_AS = '{category}/{slug}.html'
 
-FILES_TO_COPY = () #specify files to be copied
 
 # Blogroll
 LINKS =  (('Pelican', 'http://getpelican.com/'),
