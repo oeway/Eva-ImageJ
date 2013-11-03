@@ -13,7 +13,11 @@ public class PannableXYPlot
     extends XYPlot
     implements Pannable
 {
-    private boolean domainPannable = true;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5058105183885427900L;
+	private boolean domainPannable = true;
     private boolean rangePannable = true;
 
     public PannableXYPlot()

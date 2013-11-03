@@ -15,12 +15,12 @@ import icy.gui.util.GuiUtil;
 import icy.image.IcyBufferedImage;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
-import icy.roi.ROI2DEllipse;
-import icy.roi.ROI2DLine;
-import icy.roi.ROI2DPolyLine;
-import icy.roi.ROI2DPolygon;
-import icy.roi.ROI2DRectangle;
-import icy.roi.ROI2DShape;
+import plugins.kernel.roi.roi2d.ROI2DEllipse;
+import plugins.kernel.roi.roi2d.ROI2DLine;
+import plugins.kernel.roi.roi2d.ROI2DPolyLine;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
+import plugins.kernel.roi.roi2d.ROI2DRectangle;
+import plugins.kernel.roi.roi2d.ROI2DShape;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
@@ -402,8 +402,8 @@ public class IntensityProfile  {
 				{
 					ROI2DShape roiShape = (ROI2DShape) associatedROI;
 					
-					BooleanMask2D boolMask = roiShape.getAsBooleanMask();
-					boolMask.intersect( new ROI2DRectangle( sequence.getBounds() ).getAsBooleanMask() );
+					BooleanMask2D boolMask = roiShape.getBooleanMask(true);
+					boolMask.intersect( new ROI2DRectangle( sequence.getBounds2D() ).getBooleanMask(true) );
 					
 					//computeSurfaceProfileAlongZ(boolMask, sequence, currentT)
 					

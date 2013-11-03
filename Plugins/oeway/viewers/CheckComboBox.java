@@ -56,7 +56,7 @@ import javax.swing.ListCellRenderer;
 * ComboBox containing checkbox
 * @author gjj
 */
-class CheckComboBox extends JComboBox {
+class CheckComboBox extends JComboBox<Object> {
 
 
 	private static final long serialVersionUID = -7947410911737341771L;
@@ -287,7 +287,7 @@ class CheckComboBox extends JComboBox {
    }
 
    // checkbox renderer for combobox
-   class CheckBoxRenderer implements ListCellRenderer {
+   class CheckBoxRenderer implements ListCellRenderer<Object> {
        private final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
        private javax.swing.JSeparator separator;
        private final List<ObjCheckBox> cbs;
@@ -302,7 +302,7 @@ class CheckComboBox extends JComboBox {
 
        //@Override
        public Component getListCellRendererComponent(
-                               JList list,
+                               JList<?> list,
                                Object value,
                                int index,
                                boolean isSelected,
@@ -321,7 +321,7 @@ class CheckComboBox extends JComboBox {
 
            String str;
            Object[] objs = getSelectedItems();
-           Vector<String> strs = new Vector();
+           Vector<String> strs = new Vector<String>();
            if (objs==null) {
                str = "Select display options";
            } else {

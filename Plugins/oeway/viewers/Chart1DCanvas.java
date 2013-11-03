@@ -39,7 +39,7 @@ public class Chart1DCanvas extends PluginActionable implements PluginCanvas, Seq
     @Override
     public void run()
     {
-        final Sequence input = getFocusedSequence();
+        final Sequence input = getActiveSequence();
         if (input == null) return;
 
         
@@ -90,10 +90,7 @@ public class Chart1DCanvas extends PluginActionable implements PluginCanvas, Seq
     {
         private static final long serialVersionUID = 1L;
         
-        private Sequence  sequence;
-
         private IntensityProfile iprofile;
-        private Viewer currentViewer;
         public ChartCanvas(Viewer viewer)
         {
         	super(viewer);
@@ -104,8 +101,7 @@ public class Chart1DCanvas extends PluginActionable implements PluginCanvas, Seq
             // all channel visible at once ?
             posC = -1;
             
-        	currentViewer = viewer;
-            sequence= getSequence();
+        	getSequence();
             iprofile = new IntensityProfile(this,getSequence());
 
 

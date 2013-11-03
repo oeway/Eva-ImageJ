@@ -4,7 +4,7 @@ import icy.gui.frame.progress.AnnounceFrame;
 import icy.image.IcyBufferedImage;
 import icy.main.Icy;
 import icy.roi.ROI2D;
-import icy.roi.ROI2DShape;
+import plugins.kernel.roi.roi2d.ROI2DShape;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
@@ -87,7 +87,7 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 	            {
 	            	for (ROI2D r : rois)
 	        		{	ROI2DShape r2 = null;
-	        			if (r instanceof ROI2DShape && "icy.roi.ROI2DLine" ==r.getClassName())
+	        			if (r instanceof ROI2DShape && "ROI2DLine".equals(r.getSimpleClassName()))
 	        			{
 	        				r2 = (ROI2DShape)r;
 	        					roi = r2;

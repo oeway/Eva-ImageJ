@@ -24,7 +24,11 @@ public class PanningChartPanel
     implements MouseWheelListener
 {
 
-    public static final int MOUSE_ZOOM = 1;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7137545362221062062L;
+	public static final int MOUSE_ZOOM = 1;
     public static final int MOUSE_PAN = 2;
 
     private int mouseMode = MOUSE_ZOOM;
