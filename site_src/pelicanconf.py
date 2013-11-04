@@ -37,18 +37,11 @@ MENUITEMS =(('Home',''),
 
 CAROUSELITEMS = (
             {
-            'image':'images/slide-01.jpg',  
-            'headline':'Non Destructive Evaluation',
-            'subtitle':'Make the world a safe place',
-            'buttonLink':'#',
+            'image':'images/slide-01.png',  
+            'headline':'Imaging and Evaluation',
+            'subtitle':'An Open Souce Platform and Community',
+            'buttonLink':'pages/about.html',
             'buttonCaption':'Learn More',
-            },
-            {
-            'image':'images/slide-02.jpg',  
-            'headline':'EVA',
-            'subtitle':'An Open Souce Imaging platform based on Icy',
-            'buttonLink':'#',
-            'buttonCaption':'Download Now',
             },
             
 )
