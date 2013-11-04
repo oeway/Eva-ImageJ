@@ -1,3 +1,9 @@
-Title: Empty page
+Title: About EVA
 Slug: about
+Author: Will Ouyang
+
+## Under Construction...
+
+
+
 
