@@ -1,7 +1,7 @@
 Title: Surface tracking plugin for Icy
-Date: 2013-9-23 5:10
+Date: 2013-10-12 7:40
 Tags: plugin, ultrasonic
-Slug: 2013-7-4
+Slug: 2013-10-12
 Author: Will Ouyang
 Summary:
 
@@ -11,6 +11,9 @@ Immersion testing is one of the most common method in Ultrasonic testing. A tech
 
 ## pixelRowAlign plugin
 The simplest method to achieve this goal is using a simple threshold to find the interface echo position. We have implement a plugin named "pixelRowAlign". With this plugin, you will able to find the echo by defining a threshold, you can choose differenet stratage to find the echoes.
-![pixelRowAlignPlugin][http://i.imgur.com/YGQABo6.jpg]
 
-See more detail about the plugins, see [Download][../pages/downloads].
+![pixelRowAlignPlugin][]
+
+See more detail about the plugins, see [Download](../pages/downloads).
+
+[pixelRowAlignPlugin]:http://i.imgur.com/YGQABo6.jpg

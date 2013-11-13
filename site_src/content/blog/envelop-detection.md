@@ -1,7 +1,7 @@
-Title: Surface tracking plugin for Icy
-Date: 2013-9-23 5:10
+Title: Envelop detection plugin for Icy
+Date: 2013-10-24
 Tags: plugin, ultrasonic
-Slug: 2013-7-4
+Slug: 2013-10-24
 Author: Will Ouyang
 Summary:
 
@@ -12,4 +12,4 @@ Envelope detection technology can be used to extract the amplitude in ultrasonic
 ## EnvelopeDetection plugin
 
 
-See more detail about the plugins, see [Download][../pages/downloads].
+See more detail about the plugins, see [Download](../pages/downloads).

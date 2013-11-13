@@ -1,7 +1,7 @@
 Title: Hardware connection with Micro-Manager
-Date: 2013-9-23 5:10
+Date: 2013-9-27 10:30
 Tags: plugin
-Slug: 2013-7-4
+Slug: 2013-9-27
 Author: Will Ouyang
 Summary:
 
