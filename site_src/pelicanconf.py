@@ -21,8 +21,12 @@ DISQUS_SITENAME = 'eva-nde'
 TWITTER_USERNAME = 'oeway'
 
 NDE_CATEGORIES = (
+            
+            ('Bioimaging','pages/bioimaging.html'),
+            ('-','-'),
             ('Ultrasonic','pages/ultrasonic.html'),
             ('Radiography', 'pages/radiography.html'),
+            ('Eddy-current', 'pages/eddycurrent.html'),
             ('-','-'),
             
             
@@ -30,7 +34,7 @@ NDE_CATEGORIES = (
 MENUITEMS =(('Home',''),
             ('Blog','blog.html'),
             ('Downloads','pages/downloads.html'),
-            ('Documentation','pages/documentation.html'),
+            ('Wiki','https://github.com/oeway/EVA/wiki'),
             ('Categories_dropdown', NDE_CATEGORIES ),
             ('About','pages/about.html'),
             )

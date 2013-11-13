@@ -69,13 +69,21 @@
                                             {% if cat == '-' or url == '-' %}
                                                 <li class="divider"></li>
                                             {% else %}
-                                                <li><a href="{{ SITEURL }}/{{ url }}">{{ cat }}</a></li>
+                                                {% if 'http' in url %}
+                                                    <li><a href="{{ url }}">{{ cat }}</a></li>
+                                                {% else %}
+                                                    <li><a href="{{ SITEURL }}/{{ url }}">{{ cat }}</a></li>
+                                                {% endif %}
                                             {% endif %}
                                         {% endfor %}
                                     </ul>
                                 </li>
                              {% else %}
-                                <li><a href="{{ SITEURL }}/{{ link }}">{{ title }}</a></li>
+                                {% if 'http' in link %}
+                                    <li><a href="{{ link }}">{{ title }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ SITEURL }}/{{ link }}">{{ title }}</a></li>
+                                {% endif %}
                              {% endif %}
                             {% endfor %}
                         </ul>
