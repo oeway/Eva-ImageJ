@@ -113,17 +113,22 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 	                                                      Ontology.REAL));
     		  }
 	    }
-	    attributes.add(AttributeFactory.createAttribute("x", 
-                Ontology.REAL));
-	    attributes.add(AttributeFactory.createAttribute("y", 
-                Ontology.REAL));
-	    Attribute label = AttributeFactory.createAttribute("label", 
-	                                                       Ontology.NOMINAL);
+	    Attribute xAttr = AttributeFactory.createAttribute("x", Ontology.REAL);
+	    Attribute yAttr = AttributeFactory.createAttribute("y", Ontology.REAL);
+	    Attribute label = AttributeFactory.createAttribute("label",Ontology.NOMINAL);
+	    
+	    int xIndex = attributes.size();
+	    attributes.add(xAttr);
+	    int yIndex = attributes.size();
+	    attributes.add(yAttr);
+	    int labelIndex = attributes.size();
 	    if(labelled)
 	    	attributes.add(label);
+	    
 			
 	    // create table
 	    MemoryExampleTable table = new MemoryExampleTable(attributes);
+	    
 	    
 	    // fill table (here: only real values)
 	    if(maskStack != null)
@@ -148,18 +153,14 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 					    			  i++;
 					    		  }
 					    	}	
+					      
+					      data[xIndex] = x;
+					      data[yIndex] = y;
 					      if(labelled)
 					      {
-						      data[data.length-3] = x;
-						      data[data.length-2] = y;
-						      // maps the nominal classification to a double value
-						      data[data.length - 1] = 
-						          label.getMapping().mapString(m.getLabel());
-					      }
-					      else
-					      {
-					    	  data[data.length-2] = x;
-						      data[data.length-1] = y;
+					    	  // maps the nominal classification to a double value
+					    	  data[labelIndex] = 
+					          label.getMapping().mapString(m.getLabel());
 					      }
 					      // add data row
 					      table.addDataRow(new DoubleArrayDataRow(data));
@@ -187,8 +188,8 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 				    			  i++;
 				    		  }
 				    	}
-				      data[data.length-2] = x;
-				      data[data.length-1] = y;
+				      data[xIndex] = x;
+				      data[yIndex] = y;
 				      // add data row
 				      table.addDataRow(new DoubleArrayDataRow(data));
 		    	}
@@ -203,6 +204,8 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 	    {
 	    	exampleSet= table.createExampleSet();
 	    } 	
+	    exampleSet.getAttributes().setSpecialAttribute(yAttr,"y");
+	    exampleSet.getAttributes().setSpecialAttribute(xAttr,"x");
 	    return exampleSet;
     }
 	 public boolean export(ExampleSet exampleSet, String filePath, boolean isSupervised) throws OperatorCreationException
@@ -262,9 +265,8 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 			try {
 				ExampleSet exampleSetOutput = trainingOutputContainer.get(ExampleSet.class);
 				Attribute clusterAttr = exampleSetOutput.getAttributes().getCluster();
-			    Attribute xAttr = exampleSetOutput.getAttributes().get("x");
-			    Attribute yAttr = exampleSetOutput.getAttributes().get("y");
-			   
+			    Attribute xAttr = exampleSetOutput.getAttributes().getSpecial("x");
+			    Attribute yAttr = exampleSetOutput.getAttributes().getSpecial("y");
 				if(clusterAttr!= null && xAttr !=null && yAttr !=null)
 				{
 					NominalMapping clusterMapping =clusterAttr.getMapping();
@@ -296,6 +298,8 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 					 allStack.endUpdate();
 
 				}
+				else
+					return false;
 			} catch (MissingIOObjectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -335,8 +339,8 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 				predictDataContainer = process.run(new IOContainer(exampleSet));
 			}
 		 	ExampleSet predictDataSet = predictDataContainer.get(ExampleSet.class);
-		    Attribute xAttr = predictDataSet.getAttributes().get("x");
-		    Attribute yAttr = predictDataSet.getAttributes().get("y");
+		    Attribute xAttr = predictDataSet.getAttributes().getSpecial("x");
+		    Attribute yAttr = predictDataSet.getAttributes().getSpecial("y");
 		    Attribute predictAttr = isSupervised? predictDataSet.getAttributes().getPredictedLabel():predictDataSet.getAttributes().getCluster();;  
 		    if((predictAttr!= null)&& xAttr !=null && yAttr !=null)
 		    {
@@ -370,6 +374,8 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 					
 				stack.endUpdate();
 		    }
+		    else
+		    	return false;
 			
 		} catch (OperatorException e) {
 			// TODO Auto-generated catch block
@@ -401,6 +407,10 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 			
 			try
 			{
+				if(varTrainXmlFile.getValue() == null)
+				{
+					new AnnounceFrame("Please select valid process file first!",10);
+				}
 				if(varTrainXmlFile.getValue().exists() && varTrainXmlFile.getValue().getName().toLowerCase().endsWith(".xml"))
 				{
 					Sequence sequence = varTrainSequence.getValue();
@@ -411,7 +421,10 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 				    	return;
 					Process process = new Process(varTrainXmlFile.getValue());
 					if(train(process,exampleSet,stack,isSupervised))
+					{
+						varStage.setValue(StageEnumeration.Predicting);
 						new AnnounceFrame("Training done!",10);
+					}
 					else
 						new AnnounceFrame("Training failed!",10);
 				}
@@ -430,12 +443,16 @@ public class RapidLearning extends EzPlug implements EzStoppable, ActionListener
 		{
 			try 
 			{
+				if(varPredictXmlFile.getValue() == null)
+				{
+					new AnnounceFrame("Please select valid process file first!",10);
+				}
 				if(varPredictXmlFile.getValue().exists() && varPredictXmlFile.getValue().getName().toLowerCase().endsWith(".xml"))
 				{
 					Sequence sequence = varPredictSequence.getValue();
 					MaskEditor me = MaskEditor.getRunningInstance(true);
 					MaskStack stack = me.getBackupObject();
-					ExampleSet exampleSet = generateExampleSet(sequence,isSupervised, null);
+					ExampleSet exampleSet = generateExampleSet(sequence,false, null);
 				    if(stopFlag)
 				    	return;
 				    Process process = new Process(varPredictXmlFile.getValue());
