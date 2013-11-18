@@ -33,9 +33,9 @@ NDE_CATEGORIES = (
             )
 MENUITEMS =(('Home',''),
             ('Blog','blog.html'),
-            ('Downloads','pages/downloads.html'),
             ('Wiki','https://github.com/oeway/EVA/wiki'),
-            ('Categories_dropdown', NDE_CATEGORIES ),
+            #('Categories_dropdown', NDE_CATEGORIES ),
+            ('Downloads','pages/downloads.html'),
             ('About','pages/about.html'),
             )
 
