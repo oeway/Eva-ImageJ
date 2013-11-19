@@ -35,37 +35,50 @@
 
 {% endblock %}
 {% block content %}
+ <script src="{{ SITEURL }}/theme/js/jquery.js"></script>
+<script type="text/javascript">
+/* Copyright (c) 2013 by Joseph Pan (http://hahack.com) */
 
-{% if articles %}
-{% for article in (articles_page.object_list if articles_page else articles) %}
-<div class='article'>
-	<h2>{{ article.title }}</h2>
-	<div class="well small">{% include "metadata.html" %}</div>
-	<div class="summary">{{ article.summary }} <a class="btn primary xsmall" href="{{ SITEURL }}/{{ article.url }}">more…</a>
-	</div>
-</div>	
-{% endfor %}
-{%endif%}
+function videoGFW(src) {
+if (window.XMLHttpRequest)
+{// code for IE7+, Firefox, Chrome, Opera, Safari
+var request = new XMLHttpRequest();
+}
+else
+{// code for IE6, IE5
+var request = new ActiveXObject("Microsoft.XMLHTTP");
+}
+request.open('GET', 'http://freegeoip.net/xml');
+request.onreadystatechange = function() {
+if (request.readyState == 4 && request.status == 200) {
+var xmlDoc = request.responseXML;
+var root = xmlDoc.documentElement;
+var element = root.getElementsByTagName("CountryName");
+var country = element[0].firstChild.nodeValue;
+if (country != "China"){
+chooseVideo(src);
+}
+}
+}
+request.send(null);
+}
 
-{% if articles_page and articles_paginator.num_pages > 1 %}
-<div class="pagination">
-<ul>
-	{% if articles_page.has_previous() %}
-		{% set num = articles_page.previous_page_number() %}
-		<li class="prev"><a href="{{ SITEURL }}/{{ page_name }}{{ num if num > 1 else '' }}.html">&larr; Previous</a></li>
-	{% else %}
-		<li class="prev disabled"><a href="#">&larr; Previous</a></li>
-	{% endif %}
-	{% for num in range( 1, 1 + articles_paginator.num_pages ) %}
-		<li class="{{ 'active' if num == articles_page.number else '' }}"><a href="{{ SITEURL }}/{{ page_name }}{{ num if num > 1 else '' }}.html">{{ num }}</a></li>
-	{% endfor %}
-	{% if articles_page.has_next() %}
-		<li class="next"><a href="{{ SITEURL }}/{{ page_name }}{{ articles_page.next_page_number() }}.html">Next &rarr;</a></li>
-	{% else %}
-		<li class="next disabled"><a href="#">&rarr; Next</a></li>
-	{% endif %}
-</ul>
+function chooseVideo(src)
+{
+var video = '<iframe id="embededvideo" width=100% height=498 src=' + src + ' frameborder=0 allowfullscreen></iframe>';
+$("#embededvideo").remove();
+$("#videogfw").append(video);
+}
+</script>
+
+<div id="videogfw">
+    <script type="text/javascript">
+        var default_src = "//www.youtube.com/embed/mT-2Ur6-tnc"
+        var alternate_src = "http://player.youku.com/embed/XNjM2NTgxNjA4"
+        chooseVideo(alternate_src);  // the default video source you wanna play
+    
+        videoGFW(default_src);  // uncomment this if you want it automatically
+        // select the video source according to ip address
+    </script>
 </div>
-{% endif %}
-
 {% endblock %}
