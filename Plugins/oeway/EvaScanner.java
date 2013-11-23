@@ -477,7 +477,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 				  		}
 			  		}
 					catch (Exception e){//Catch exception if any
-						new AnnounceFrame("Error when parsing line:"+strLine);
+						new AnnounceFrame("Error when parsing line:"+strLine,10);
 					}
 			  		
 			  	}
@@ -492,7 +492,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 			  			snapSuccess = false;
 		  				SnapThread mt = new SnapThread();
 		  				mt.start();
-
+		  				while(!snapWaiting && !stopFlag) Thread.sleep(10);
 			  			core.setProperty(xyStageParentLabel, "Command",strLine);			  			
 			  			retryCount++;
 			  			
@@ -519,7 +519,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 				  			break;
 			  		}
 			  		if(!success){
-			  			new AnnounceFrame("Error when snapping image!");
+			  			new AnnounceFrame("Error when snapping image!",10);
 			  			break; //exit current progress!
 			  		}
 			  		cpt++;
@@ -644,7 +644,10 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 			
 		}
 		else if (((JButton)e.getSource()).getText().equals(gotoPostion.name)) {
-			 
+				try {
+					core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
+				} catch (Exception e2) {
+				} 
 				try {
 					xyStageLabel = core.getXYStageDevice();
 					core.setXYPosition(xyStageLabel, posX.getValue()*1000.0, posY.getValue()*1000.0);
@@ -777,6 +780,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 		    							return;
 		    						} 
 		    					core.setProperty(xyStageParentLabel, "Command","$H");
+		    					
 		    					new AnnounceFrame("Homing completed!",5);
 		    				} catch (Exception e1) {
 		    					 new AnnounceFrame("Homing error,try to restart controller!",10);
