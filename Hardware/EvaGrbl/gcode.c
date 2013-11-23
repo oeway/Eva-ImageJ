@@ -186,6 +186,7 @@ uint8_t gc_execute_line(char *line)
           case 8: gc.coolant_mode = COOLANT_FLOOD_ENABLE; break;
           case 9: gc.coolant_mode = COOLANT_DISABLE; break;
 		  case 108: non_modal_action = NON_MODAL_SET_SYNC; break;
+		  case 109: non_modal_action = NON_MODAL_SET_AUTO_SYNC; break;
           default: FAIL(STATUS_UNSUPPORTED_STATEMENT);
         }            
         break;
@@ -375,6 +376,9 @@ uint8_t gc_execute_line(char *line)
 	  else
 		sync_axis = X_AXIS;
       break;
+	case NON_MODAL_SET_AUTO_SYNC:
+	  auto_sync_enable = p;
+	  break;
   }
 
   // [G0,G1,G2,G3,G80]: Perform motion modes. 

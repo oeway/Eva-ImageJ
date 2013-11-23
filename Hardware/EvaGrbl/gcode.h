@@ -63,6 +63,7 @@
 #define NON_MODAL_RESET_COORDINATE_OFFSET 8 //G92.1
 
 #define NON_MODAL_SET_SYNC 9 //M108
+#define NON_MODAL_SET_AUTO_SYNC 10 //M109
 
 typedef struct {
   uint8_t status_code;             // Parser status for current block

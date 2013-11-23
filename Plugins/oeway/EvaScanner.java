@@ -4,6 +4,7 @@ import plugins.tprovoost.Microscopy.MicroManagerForIcy.MicroscopeCore;
 import plugins.tprovoost.Microscopy.MicroManagerForIcy.MicroscopeSequence;
 import plugins.tprovoost.Microscopy.MicroManagerForIcy.Tools.ImageGetter;
 import icy.file.Saver;
+import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.image.IcyBufferedImage;
 import icy.main.Icy;
@@ -203,7 +204,11 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
   				System.out.println("status error:"+status);
   				break;
   			}
-  			Thread.yield();
+  			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				Thread.yield();
+			}
   		}
   		if(!status.equals( "Idle") && !stopFlag) // may be error occured
   		{
@@ -267,51 +272,70 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 		}
         return true;
 	}
-	protected boolean snap2Sequence()
-	{
-        IcyBufferedImage capturedImage;
-        if (core.isSequenceRunning())
-        {
-        	new AnnounceFrame("Sequence is running, close it before start!",10);
-        	return false;//capturedImage = ImageGetter.getImageFromLive(core);
-        }
-        else
-            capturedImage = ImageGetter.snapImage(core);
-        
-        if (capturedImage == null)
-        {
-            new AnnounceFrame("No image was captured",30);
-            return false;
-        }
-        
-        if(!lastSeqName.equals( currentSeqName) || currentSequence == null )
-        {
-        	createAndAdd(capturedImage);
-        }
-        else
-        {
-            try
-            {
-            	currentSequence.addImage(((Viewer) currentSequence.getViewers().get(0)).getT(), capturedImage);
-            }
-            catch (IllegalArgumentException e)
-            {
-                String toAdd = "";
-                if (currentSequence.getSizeC() > 0)
-                    toAdd = toAdd
-                            + ": impossible to capture images with a colored sequence. Only Snap C are possible.";
-                new AnnounceFrame("This sequence is not compatible" + toAdd,30);
-                return false;
-            }
-            catch(IndexOutOfBoundsException e2)
-            {
-            	createAndAdd(capturedImage);
-            	new AnnounceFrame("IndexOutOfBoundsException,create new sequence instead!",5);
-            }
-        }
-        return true;
-		
+	boolean snapSuccess = false;
+	boolean snapWaiting = false;
+	class SnapThread extends Thread{  
+		public void run(){  
+			snapSuccess =false;
+	        IcyBufferedImage capturedImage = null;
+	        try
+	        {
+		        if (core.isSequenceRunning())
+		        {
+		        	new AnnounceFrame("Sequence is running, close it before start!",10);
+		        	snapSuccess = false;//capturedImage = ImageGetter.getImageFromLive(core);
+		        	return;
+		        }
+		        else
+		        {
+		        	snapWaiting = true;
+		            capturedImage = ImageGetter.snapImage(core);
+		            snapWaiting = false;
+		        }
+		        
+		        if (capturedImage == null)
+		        {
+		            new AnnounceFrame("No image was captured",30);
+		            snapSuccess = false;
+		            return;
+		        }
+		        
+		        if(!lastSeqName.equals( currentSeqName) || currentSequence == null )
+		        {
+		        	createAndAdd(capturedImage);
+		        }
+		        else
+		        {
+		            try
+		            {
+		            	currentSequence.addImage(((Viewer) currentSequence.getViewers().get(0)).getT(), capturedImage);
+		            }
+		            catch (IllegalArgumentException e)
+		            {
+		                String toAdd = "";
+		                if (currentSequence.getSizeC() > 0)
+		                    toAdd = toAdd
+		                            + ": impossible to capture images with a colored sequence. Only Snap C are possible.";
+		                new AnnounceFrame("This sequence is not compatible" + toAdd,30);
+		                snapSuccess = false;
+		                return;
+		            }
+		            catch(IndexOutOfBoundsException e2)
+		            {
+		            	createAndAdd(capturedImage);
+		            	new AnnounceFrame("IndexOutOfBoundsException,create new sequence instead!",5);
+		            }
+		        }
+		        snapSuccess = true;
+		        return;
+	        }
+	        catch(Exception e)
+	        {
+	        	snapSuccess = false;
+	        }
+		}  
 	}
+
 	@Override
 	protected void execute()
 	{
@@ -378,7 +402,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 //			new AnnounceFrame("Please select a target folder to store data!");
 //			return;
 //		}
-	
+
 		String oldRowCount="1";
 		try {
 			oldRowCount = core.getProperty(picoCameraLabel, "RowCount");
@@ -391,7 +415,10 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 		System.out.println(targetFolder.name + " = " + targetFolder.getValue());
 		System.out.println(note.name + " = " + note.getValue());
 
-
+		try {
+			core.setProperty(xyStageParentLabel, "Command","M109 P0");//disable auto sync
+		} catch (Exception e2) {
+		} 
 		try{
 		  // Open the file that is the first 
 		  // command line parameter
@@ -458,31 +485,23 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 			  		boolean success = false;
 			  		int retryCount = 0;
 
-			  		while(retryCount<maxRetryCount && !success){
+			  		while(retryCount<maxRetryCount && !success && !stopFlag){
+
+		  				//System.out.println("snapping");
+				  		//excute command
+			  			snapSuccess = false;
+		  				SnapThread mt = new SnapThread();
+		  				mt.start();
+
 			  			core.setProperty(xyStageParentLabel, "Command",strLine);			  			
 			  			retryCount++;
-			  			try
-			  			{
-			  				System.out.println("snapping");
-					  		//excute command
-					  		if(snap2Sequence())
-					  			success = true;
-					  		else
-					  			success = false;
-
-			  			}
-			  			catch(Exception e4)
-			  			{
-			  				new AnnounceFrame("Error when snapping image!",5);
-			  				System.out.println("error when snape image:");
-			  				e4.printStackTrace();
-			  			}
-				  		if(!waitUntilComplete())
-				  			success = false;
-				  		    
-				  		if(success)
-				  			break;
+			  			
+				  		success =waitUntilComplete();
 				  		
+				  		if(success && snapSuccess)
+				  			break;
+				  		while(snapWaiting && !stopFlag) Thread.sleep(100); // waiting untile snap complete.
+				  		success = false;
 				  		//if not success, then redo
 				  		core.setProperty(xyStageParentLabel, "Command",lastG00);
 				  		if(! waitUntilComplete()){
@@ -496,7 +515,8 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 							  System.out.println("Error when waiting for the stage to complete");
 				  			break;
 				  		}
-			  			
+				  		if(stopFlag)
+				  			break;
 			  		}
 			  		if(!success){
 			  			new AnnounceFrame("Error when snapping image!");
@@ -541,6 +561,11 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 			  e.printStackTrace();
 		}
 		finally{
+			try {
+				core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
+			} catch (Exception e2) {
+			} 
+			
 			if(currentSequence !=null){
 				try {
 					if(targetFolder.getValue() != null){
@@ -783,12 +808,15 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 					}
 					catch (Exception e1)
 					{
-						new AnnounceFrame("Please add at least one 2d roi in the scan map sequence!",5);
+						MessageDialog.showDialog("Please add at least one 2d roi in the scan map sequence!",
+				                    MessageDialog.ERROR_MESSAGE);
+						
 						return;	
 					}
 					  if(rois.size()<=0)
 					    {
-					    	  new AnnounceFrame("No roi found!",5);
+						  MessageDialog.showDialog("No roi found!",
+				                    MessageDialog.ERROR_MESSAGE);
 							  return;
 					    }
 					if(pathFile.getValue() != null)
@@ -797,7 +825,8 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 					}
 					else
 					{
-						  new AnnounceFrame("Please select the 'Target Folder'!",5);
+						  MessageDialog.showDialog("Please select the 'Target Folder'!",
+			                    MessageDialog.ERROR_MESSAGE);
 						  return;
 					}
 				  
@@ -834,7 +863,8 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 
 				}
 			} catch (Exception e1) {
-				  new AnnounceFrame("Error when generate path file!",20);
+				  MessageDialog.showDialog("Error when generate path file!",
+		                    MessageDialog.ERROR_MESSAGE);
 				  return;
 			}
 			

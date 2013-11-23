@@ -25,6 +25,7 @@ uint32_t sync_step = 100;
 uint8_t sync_axis = X_AXIS;
 uint32_t current_sync_step=0;
 uint32_t half_sync_step=50;
+uint8_t auto_sync_enable=1;
 void sync_init()
 {
    SYNC_CONTROL_DDR |= (1 << SYNC_CONTROL_BIT);

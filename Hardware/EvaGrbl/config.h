@@ -144,7 +144,7 @@
 // If homing is enabled, homing init lock sets Grbl into an alarm state upon power up. This forces
 // the user to perform the homing cycle (or override the locks) before doing anything else. This is
 // mainly a safety feature to remind the user to home, since position is unknown to Grbl.
-//#define HOMING_INIT_LOCK // Comment to disable
+#define HOMING_INIT_LOCK // Comment to disable
 
 // The homing cycle seek and feed rates will adjust so all axes independently move at the homing
 // seek and feed rates regardless of how many axes are in motion simultaneously. If disabled, rates
