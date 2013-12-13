@@ -456,7 +456,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
     		return;
     	IntensityPaint ip = roiPairDict.get(roi);
     	
-    	String currentValue = "";
+    	String currentValueX = "";
+    	String currentValueV = "";
     	String maxValue = "";
     	String minValue = "";
     	
@@ -493,7 +494,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	            		pos = (int)( (cursorPos.x-Math.min(line.getX1(),line.getX2()))/ line.getP1().distance(line.getP2())*ip.dataCount);
 	            		try
 	            		{
-	            			currentValue += String .format("x%d:%.1f v%d:%.1f ",component,cursorPos.x,component,ip.dataArr.get(component)[pos]);
+	            			currentValueX = String .format("%.1f",cursorPos.x);
+	            			currentValueV += String .format("%.1f ",ip.dataArr.get(component)[pos]);
 	            		}
 	            		catch(Exception e2)
 	            		{
@@ -509,7 +511,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	            	ip.cursor1.setLine(pos, 0, pos, polyBox.getHeight());
 	            	try
             		{
-	            		currentValue += String .format("z%d:%.1f v%d:%.1f ",component,cursorPos.z,component,ip.dataArr.get(component)[pos]);
+	            		currentValueX = String .format("%.1f",cursorPos.z);
+	            		currentValueV += String .format("%.3f :",ip.dataArr.get(component)[pos]);
             		}
             		catch(Exception e2)
             		{
@@ -613,15 +616,23 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
             	    //g.drawChars(c, 0, c.length ,(int) Rp.getX()+10,(int)Rp.getY());
 
             	    
-            	    c = (ip.displayRectangle.getName()).toCharArray();
+            	    //c = (ip.displayRectangle.getName()).toCharArray();
     	            //ROI Name of line ROI
-            	    g.drawChars(c, 0, c.length, (int)rectBox.getCenterX(),(int)rectBox.getMaxY()-7 );
+            	    //g.drawChars(c, 0, c.length, (int)rectBox.getCenterX(),(int)rectBox.getMaxY()-7 );
         	    	
-		            c = ("max:"+maxValue+" min:"+minValue).toCharArray();
-	                g.drawChars(c, 0, c.length ,(int)rectBox.getCenterX(),(int)rectBox.getMinY()-8);
-	                
-	                c = currentValue.toCharArray();
+		            //c = ("max:"+maxValue+" min:"+minValue).toCharArray();
+    	            c = maxValue.toCharArray();
+    	            g.drawChars(c, 0, c.length ,(int)rectBox.getMaxX()+10,(int)rectBox.getMinY()+10);
+    	            
+    	            c = minValue.toCharArray();
+    	            g.drawChars(c, 0, c.length ,(int)rectBox.getMaxX()+10,(int)rectBox.getMaxY()-5);
+    	            
+	                c = currentValueX.toCharArray();
 	                g.drawChars(c, 0, c.length,(int) (rectBox.getMinX()+(ip.cursor1.x1/ip.dataCount)*rectBox.getWidth()) -20 ,(int)rectBox.getMaxY()+ 15 );
+	                
+	                c = currentValueV.toCharArray();
+	                g.drawChars(c, 0, c.length,(int) (rectBox.getMinX()+(ip.cursor1.x1/ip.dataCount)*rectBox.getWidth()) -20 ,(int)rectBox.getMinY()-5 );
+	                
         	    }
         	    
             }
