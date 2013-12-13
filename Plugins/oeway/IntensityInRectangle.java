@@ -44,13 +44,14 @@ public class IntensityInRectangle extends PluginActionable
             // creates a ROI2DPolyLine if no ROI exists
             if (sequence.getROIs().size() == 0)
             {
-                ROI2DLine roi = new ROI2DLine(0,sequence.getHeight()/2,sequence.getWidth(),sequence.getHeight()/2);
+                ROI2DLine roi = new ROI2DLine(0,sequence.getHeight()/2,sequence.getWidth()/2,sequence.getHeight()/2);
                 sequence.addROI(roi);
+                roi.setSelected(true);
             }
         }
         else
         {
-        	new AnnounceFrame("Do you want to kill intensityInRectangle plugin", "Exit", new Runnable()
+        	new AnnounceFrame("Do you want to quit intensityInRectangle mode?", "Quit", new Runnable()
             {
         		IntensityInRectanglePainter Pt;
                 @Override

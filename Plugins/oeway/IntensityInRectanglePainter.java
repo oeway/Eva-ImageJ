@@ -1,8 +1,5 @@
 package plugins.oeway;
 import icy.canvas.IcyCanvas;
-import icy.canvas.IcyCanvasEvent;
-import icy.canvas.IcyCanvasListener;
-import icy.canvas.IcyCanvasEvent.IcyCanvasEventType;
 import icy.gui.viewer.Viewer;
 import icy.gui.viewer.ViewerEvent;
 import icy.gui.viewer.ViewerListener;
@@ -29,6 +26,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
@@ -48,13 +47,15 @@ import java.util.Random;
  *           
  * @author Will Ouyang, modified from IntensityOverRoi by Fabrice de Chaumont and Stephane Dallongeville
  */
-public class IntensityInRectanglePainter extends Overlay
+public class IntensityInRectanglePainter extends Overlay implements ViewerListener,KeyListener
 {
 	public int nameIndex=0;
 	public HashMap<ROI2D,IntensityPaint> roiPairDict = new HashMap<ROI2D,IntensityPaint>();
 	public Point5D.Double cursorPos = new Point5D.Double();
 	public Point lastPoint;       
 	public boolean enableAddRoi = true;
+	public IcyCanvas canvas;
+	public boolean skipSelect = false;
 	static  enum PaintMode
     {
         	line,
@@ -102,25 +103,30 @@ public class IntensityInRectanglePainter extends Overlay
 			
 			cursor1 = new Line2D.Double();
 			cursor2 = new Line2D.Double();
-
+			
+			if(guideRoi.getClass().equals(ROI2DLine.class))
+     			paintMode = PaintMode.line;
+     		else if(guideRoi.getClass().equals(ROI2DPoint.class))
+     			paintMode = PaintMode.point;
+     		else
+     			paintMode = PaintMode.area;
 
      		computeData();
      		
      		sequence.addListener(this);
      		guideRoi.addListener(this);
-     		if(paintMode != PaintMode.line)
+     		if(paintMode == PaintMode.line)
      			canvas.getViewer().addListener(this);
      		
     	}
     	
-    	public void despose()
+    	public void dispose()
     	{
     		try
     		{
-    		sequence.removeListener(this);
-     		guideRoi.removeListener(this);
-    		if(paintMode != PaintMode.line)
-    			canvas.getViewer().removeListener(this);
+    			sequence.removeListener(this);
+     			guideRoi.removeListener(this);
+     			canvas.getViewer().removeListener(this);
     		}
     		catch(Exception e)
     		{
@@ -130,24 +136,12 @@ public class IntensityInRectanglePainter extends Overlay
     	}
     	public void computeData()
     	{
-    		if(!roiPairDict.containsKey(guideRoi))
-    		{
-    			return;
-    		}
     		try
     		{
          		maxData = new double[sequence.getSizeC()];
          		minData = new double[sequence.getSizeC()];
          		drawPolygon = new Polygon[sequence.getSizeC()];
-         		
-         		
-         		if(guideRoi.getClass().equals(ROI2DLine.class))
-         			paintMode = PaintMode.line;
-         		else if(guideRoi.getClass().equals(ROI2DPoint.class))
-         			paintMode = PaintMode.point;
-         		else
-         			paintMode = PaintMode.area;
-         		
+
          		if(paintMode == PaintMode.line)
             	{
          			Line2D line = ((ROI2DLine) guideRoi).getLine();
@@ -309,11 +303,13 @@ public class IntensityInRectanglePainter extends Overlay
     	}
 		@Override
 		public void roiChanged(ROIEvent event) {
-			computeData();
+			if(event.getType()== ROIEvent.ROIEventType.ROI_CHANGED)
+				computeData();
 		}
 		@Override
 		public void sequenceChanged(SequenceEvent sequenceEvent) {
-			computeData();
+			if(sequenceEvent.getSource() == SequenceEvent.SequenceEventSourceType.SEQUENCE_DATA )
+				computeData();
 		}
 		@Override
 		public void sequenceClosed(Sequence sequence) {
@@ -322,8 +318,10 @@ public class IntensityInRectanglePainter extends Overlay
 
 		@Override
 		public void viewerChanged(ViewerEvent event) {
-			cursorPos.z=canvas.getPositionZ();
+			if(event.getType()== ViewerEvent.ViewerEventType.POSITION_CHANGED && paintMode == PaintMode.line)
+			{
 				computeData();
+			}
 		}
 		@Override
 		public void viewerClosed(Viewer viewer) {
@@ -359,8 +357,14 @@ public class IntensityInRectanglePainter extends Overlay
     }     
     
 	@Override
-    public void paint(Graphics2D g, Sequence sequence, IcyCanvas canvas)
+    public void paint(Graphics2D g, Sequence sequence, IcyCanvas canv)
     {
+		if(canv != canvas)
+		{
+			canvas = canv;
+			canvas.getViewer().addListener(this);
+			canvas.getViewer().addKeyListener(this);
+		}
 		if(lastPoint == null)
 			lastPoint = new Point(0,0);
         // create a graphics object so that we can then dispose it at the end of the paint to clean
@@ -372,7 +376,7 @@ public class IntensityInRectanglePainter extends Overlay
         {
         	if(roi.getName().contains("[") ||roi.getName().contains("(") )
         		continue;
-            if (roi instanceof ROI2DShape){
+            {
             	IntensityPaint ip;
             	
             	
@@ -382,39 +386,45 @@ public class IntensityInRectanglePainter extends Overlay
 //        			rect.displayRectangle.setName("["+roi.getName()+"]");
 //        			Rectangle2D box2 = rect.displayRectangle.getBounds2D();
 //       //        			if(!sequence.getROI2Ds().contains(ip.displayRectangle)){//        				sequence.removeROI(rect.displayRectangle);//        				rect.displayRectangle.remove();//            			rect.displayRectangle new ROI2DRectangle(lastPoint.getX(),lastPoint.getY(),Math.min(800,sequence.getWidth()),0);;;//            			rect.displayRectangle.setColor(roi.getColor());//            			sequence.addROI(rect.displayRectangle);//        			}
-        			
-        			if(!sequence.getROI2Ds().contains(ip.displayRectangle))
-        			{
-        				ip.despose();
-        			}
-        			else
-        				roiPairTemp.put(roi, ip);
+        			if(ip != null)
+            		{
+	        			if(!sequence.getROI2Ds().contains(ip.displayRectangle))
+	        			{
+	        				ip.dispose();
+	        			}
+	        			else
+	        				roiPairTemp.put(roi, ip);
+            		}
         		}
         		else
         		{
-        			roi.setName(""+Integer.toString(nameIndex)+"#");
-        			nameIndex +=1;
-        			roi.setColor(getRandomColor());
-        			//roi.setSelectedColor(getRandomColor());
-         		
-        			
-        			ip = new IntensityPaint(roi,sequence,canvas);
+        			ip = null;
         			if(enableAddRoi)
         			{
+        				roi.setName(""+Integer.toString(nameIndex)+"#");
+            			nameIndex +=1;
+            			roi.setColor(getRandomColor());
+            			//roi.setSelectedColor(getRandomColor());
+        				ip = new IntensityPaint(roi,sequence,canvas);
         				lastPoint.setLocation(lastPoint.getX()+10,lastPoint.getY()+10);
+        				if(lastPoint.getX()>sequence.getHeight() || lastPoint.getY()>sequence.getWidth())
+        					lastPoint.setLocation(0,0);
         				sequence.addROI(ip.displayRectangle);
         			}
         			roiPairTemp.put(roi, ip);
         		}
-        		
-        		if(roi.isSelected())
-        			ip.displayRectangle.setSelected(roi.isSelected());
-        		else if(ip.displayRectangle.isSelected())
-        			roi.setSelected(ip.displayRectangle.isSelected());
+        		if(ip != null && !skipSelect &&  roi instanceof ROI2DShape)
+        		{
+	        		if(roi.isSelected())
+	        			ip.displayRectangle.setSelected(roi.isSelected());
+	        		else if(ip.displayRectangle.isSelected())
+	        			roi.setSelected(ip.displayRectangle.isSelected());
+        		}
         		
         		try
         		{
-        			drawHisto((ROI2DShape) roi, g2, sequence, canvas);
+        			if(ip != null)
+        				drawHisto(roi, g2, sequence, canvas);
         		}
         		catch(Exception e2)
         		{
@@ -426,14 +436,20 @@ public class IntensityInRectanglePainter extends Overlay
         for (ROI2D roi : roiPairDict.keySet())
         {
         	if(!roiPairTemp.containsKey(roi))
-        		sequence.removeROI(roiPairDict.get(roi).displayRectangle);          		
+        	{
+        		if(roiPairDict.get(roi) != null)
+        		{
+        			roiPairDict.get(roi).dispose();
+        			sequence.removeROI(roiPairDict.get(roi).displayRectangle); 
+        		}
+        	}
         }
         roiPairDict.clear();
         roiPairDict = roiPairTemp;
         g2.dispose();
     }
 
-    void drawHisto(ROI2DShape roi, Graphics2D g, Sequence sequence, final IcyCanvas canvas)
+    void drawHisto(ROI2D roi, Graphics2D g, Sequence sequence, final IcyCanvas canvas)
     {
 
     	if(!roiPairDict.containsKey(roi))
@@ -614,5 +630,45 @@ public class IntensityInRectanglePainter extends Overlay
         }
 
     }
+	@Override
+	public void viewerChanged(ViewerEvent event) {
+		if(event.getType()== ViewerEvent.ViewerEventType.POSITION_CHANGED )
+		{
+			cursorPos.z= canvas.getPositionZ();
+			painterChanged();
+		}
+				
+	}
+	@Override
+	public void viewerClosed(Viewer viewer) {
+		try
+		{
+			canvas.getViewer().removeListener(this);
+			canvas.getViewer().removeKeyListener(this);
+		}
+		catch(Exception e)
+		{
+			System.out.print(e.toString());
+		}
+		
+	}
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		if(arg0.getKeyChar()=='s')
+		{
+			skipSelect = !skipSelect;
+		}
+		
+	}
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+
+		
+	}
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
