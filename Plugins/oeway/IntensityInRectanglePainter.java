@@ -16,6 +16,8 @@ import plugins.kernel.roi.roi2d.ROI2DShape;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
+import icy.sequence.SequenceEvent.SequenceEventSourceType;
+import icy.sequence.SequenceEvent.SequenceEventType;
 import icy.type.collection.array.Array1DUtil;
 import icy.type.point.Point5D;
 import icy.util.ShapeUtil;
@@ -90,7 +92,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
         public Line2D.Double cursor2 ;
         public Polygon[] drawPolygon;
         public PaintMode paintMode;
-
+        public boolean cancelCompute = false;
+        public boolean computing = false;
     	public IntensityPaint(ROI2D roi,Sequence seq, IcyCanvas canv)
     	{
     		canvas = canv;
@@ -111,7 +114,7 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
      		else
      			paintMode = PaintMode.area;
 
-     		computeData();
+			(new Thread(new computeRunnable())).start();
      		
      		sequence.addListener(this);
      		guideRoi.addListener(this);
@@ -134,8 +137,17 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
     		}
     		
     	}
+    	public class computeRunnable implements Runnable {
+
+    	    public void run() {
+    	    	computeData();
+    	    }
+
+    	}
     	public void computeData()
     	{
+    		computing = true;
+    		cancelCompute = false;
     		try
     		{
          		maxData = new double[sequence.getSizeC()];
@@ -214,7 +226,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 			        	            
 			        	            for (int i = 0; i < dataCount; i++)
 			        	            {
-			        	                
+			        	            	if(cancelCompute)
+			    		    				break;
 			        	                if (image.isInside((int) x, (int) y))
 			        	                {
 			        	                    data[i] = Array1DUtil.getValue(image.getDataXY(component), image.getOffset((int) x, (int) y),
@@ -258,17 +271,21 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	                	if(paintMode == PaintMode.point)
 	                	{
 	                		Point p = guideRoi.getPosition();
-	                		maxData[component] = sequence.getData(0, 0, component, p.y , p.x);
-	                		
-	    	                minData[component] = maxData[component];
-	    	                for(int i=0;i<dataCount;i++)
-	    	                {
-	    	                	data[i] =  sequence.getData(0, i, component, p.y , p.x);
-	    	                    if(data[i]>maxData[component])
-	    	                    	maxData[component] = data[i];
-	    	                    if(data[i]<minData[component])
-	    	                    	minData[component] = data[i];
-	    	                }
+	                		if(p.x<sequence.getSizeX() && p.y <sequence.getSizeY())
+	                		{
+		                		maxData[component] = sequence.getData(0, 0, component, p.y , p.x);
+		    	                minData[component] = maxData[component];
+		    	                for(int i=0;i<dataCount;i++)
+		    	                {
+		    	                	if(cancelCompute)
+		    		    				break;
+		    	                	data[i] =  sequence.getData(0, i, component, p.y , p.x);
+		    	                    if(data[i]>maxData[component])
+		    	                    	maxData[component] = data[i];
+		    	                    if(data[i]<minData[component])
+		    	                    	minData[component] = data[i];
+		    	                }
+	                		}
 	                	}
 	                	else
 	                	{
@@ -276,6 +293,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	    	                minData[component] = maxData[component];
 	    		    		for(int i=0;i<dataCount;i++)
 	    		    		{
+	    		    			if(cancelCompute)
+	    		    				break;
 	    		    			data[i] = ROIUtil.getMeanIntensity(sequence, guideRoi,i,-1,component);
 	    		                if(data[i]>maxData[component])
 	    		                	maxData[component] = data[i];
@@ -299,17 +318,42 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
     		{
     			System.out.print(e);
     		}
+    		computing = false;
     		
     	}
 		@Override
 		public void roiChanged(ROIEvent event) {
 			if(event.getType()== ROIEvent.ROIEventType.ROI_CHANGED)
-				computeData();
+			{
+				cancelCompute = true;
+				while(computing)
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				(new Thread(new computeRunnable())).start();
+			}
 		}
 		@Override
 		public void sequenceChanged(SequenceEvent sequenceEvent) {
 			if(sequenceEvent.getSource() == SequenceEvent.SequenceEventSourceType.SEQUENCE_DATA )
-				computeData();
+			{
+				cancelCompute = true;
+				while(computing)
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				(new Thread(new computeRunnable())).start();
+			}
+			if(sequenceEvent.getSourceType()==SequenceEventSourceType.SEQUENCE_OVERLAY &&
+					sequenceEvent.getSource() == this && 
+					sequenceEvent.getType()== SequenceEventType.REMOVED)
+				sequence.removeROI(displayRectangle);
 		}
 		@Override
 		public void sequenceClosed(Sequence sequence) {
@@ -320,7 +364,15 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 		public void viewerChanged(ViewerEvent event) {
 			if(event.getType()== ViewerEvent.ViewerEventType.POSITION_CHANGED && paintMode == PaintMode.line)
 			{
-				computeData();
+				cancelCompute = true;
+				while(computing)
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				(new Thread(new computeRunnable())).start();
 			}
 		}
 		@Override
@@ -374,7 +426,7 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
         Graphics2D g2 = (Graphics2D) g.create();
         for (ROI2D roi : sequence.getROI2Ds())
         {
-        	if(roi.getName().contains("[") ||roi.getName().contains("(") )
+        	if(roi.getName().startsWith("(") && roi.getName().endsWith(")"))
         		continue;
             {
             	IntensityPaint ip;
@@ -484,6 +536,18 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	            if(ip.paintMode == PaintMode.line)
 	        	{
 	            	Line2D line = ((ROI2DLine) roi).getLine();
+	            	Point2D Lp;
+	            	Point2D Rp;
+	            	if(line.getX2()>line.getX1())
+	            	{
+	            		Lp = line.getP1();
+	            		Rp = line.getP2();
+	            	}
+	            	else
+	            	{
+	            		Lp = line.getP2();
+	            		Rp = line.getP1();
+	            	}
 	            	int pos;
 	            	if(Math.min(line.getX1(),line.getX2()) >= cursorPos.x)
 	            		pos = 0;
@@ -491,10 +555,10 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	            		pos = ip.dataCount;
 	            	else
 	            	{
-	            		pos = (int)( (cursorPos.x-Math.min(line.getX1(),line.getX2()))/ line.getP1().distance(line.getP2())*ip.dataCount);
+	            		pos = (int)( (cursorPos.x-Lp.getX())/(Rp.getX()-Lp.getX())*ip.dataCount);
 	            		try
 	            		{
-	            			currentValueX = String .format("%.1f",cursorPos.x);
+	            			currentValueX = String .format("X:%.1f",cursorPos.x);
 	            			currentValueV += String .format("%.1f ",ip.dataArr.get(component)[pos]);
 	            		}
 	            		catch(Exception e2)
@@ -511,8 +575,8 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
 	            	ip.cursor1.setLine(pos, 0, pos, polyBox.getHeight());
 	            	try
             		{
-	            		currentValueX = String .format("%.1f",cursorPos.z);
-	            		currentValueV += String .format("%.3f :",ip.dataArr.get(component)[pos]);
+	            		currentValueX = String .format("Z:%.1f",cursorPos.z);
+	            		currentValueV += String .format("%.1f ",ip.dataArr.get(component)[pos]);
             		}
             		catch(Exception e2)
             		{
@@ -609,18 +673,6 @@ public class IntensityInRectanglePainter extends Overlay implements ViewerListen
     	            //x2
     	            g.drawChars(c, 0, c.length ,(int)rectBox.getMaxX(),(int)rectBox.getMaxY()+30);
            	    
-                    
-    	            
-            	    //c = (ip.displayRectangle.getName()).toCharArray();
-    	            //ROI Name of line ROI
-            	    //g.drawChars(c, 0, c.length ,(int) Rp.getX()+10,(int)Rp.getY());
-
-            	    
-            	    //c = (ip.displayRectangle.getName()).toCharArray();
-    	            //ROI Name of line ROI
-            	    //g.drawChars(c, 0, c.length, (int)rectBox.getCenterX(),(int)rectBox.getMaxY()-7 );
-        	    	
-		            //c = ("max:"+maxValue+" min:"+minValue).toCharArray();
     	            c = maxValue.toCharArray();
     	            g.drawChars(c, 0, c.length ,(int)rectBox.getMaxX()+10,(int)rectBox.getMinY()+10);
     	            
