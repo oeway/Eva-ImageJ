@@ -442,7 +442,7 @@ int CEVA_NDE_PicoCamera::Initialize()
    	status = OpenDevice(&unit);
 	if(PICO_OK != status)
 	return DEVICE_NOT_CONNECTED;
-	picoInitBlock(&unit);
+	picoInitBlock(&unit,sampleOffset_);
    // initialize image buffer
    GenerateEmptyImage(img_);
 
@@ -496,7 +496,7 @@ int CEVA_NDE_PicoCamera::SnapImage()
    EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
    if (pHub && pHub->GenerateRandomError())
       return SIMULATED_ERROR;
-
+   int ret = DEVICE_ERR;
 	static int callCounter = 0;
 	++callCounter;
 
@@ -504,42 +504,51 @@ int CEVA_NDE_PicoCamera::SnapImage()
 
    //picoInitBlock(&unit);
   // CollectBlockImmediate(&unit); 
-   unsigned short* pBuf = (unsigned short*) const_cast<unsigned char*>(img_.GetPixels());
-	for (unsigned long k=0; k<img_.Height(); k++)
-{ 		
-	unsigned long j=0;
-     try
-	{
-		int retryCount =0;
-		int ret = DEVICE_ERR;
-		unsigned long sampleCaptured=0;
-  		while(ret != DEVICE_OK && retryCount++ < WAIT_FOR_TRIGGER_FAIL_COUNT){
-			
-			ret = picoRunBlock(&unit,sampleOffset_,cameraCCDXSize_,PICO_RUM_TIME_OUT, &sampleCaptured);
-			//
-		}
-		if(ret != DEVICE_OK || sampleCaptured<0)
-			return DEVICE_SNAP_IMAGE_FAILED;
+   short* pBuf = (short*) const_cast<unsigned char*>(img_.GetPixels());
+   //rapid block mode
+   unsigned long nCompletedSamples;
+   unsigned long nCompletedCaptures;
+   picoInitRapidBlock(&unit,sampleOffset_);
+   MMThreadGuard g(imgPixelsLock_);
+   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),PICO_RUM_TIME_OUT ,&nCompletedSamples,&nCompletedCaptures,pBuf);
 
-	   //void* pBuf = const_cast<void*>((void*)buffers);
-	   //img_.SetPixels(pBuf);
-	     MMThreadGuard g(imgPixelsLock_);
-		  for (j=0; j<sampleCaptured; j++)
-		  {
-				long lIndex = img_.Width()*k + j;
-				*(pBuf + lIndex) = (unsigned short)(32768+buffers[0][j]);
-				//printf("%ld:%d,",lIndex,buffers[0][j]);
-				// 
-		  }
-		  //printf("\n");
-	  }	
-	 catch(...)
-	{
-		 LogMessage("memory overflow!", false);
-		 return DEVICE_OUT_OF_MEMORY;
-	}
-   //GenerateSyntheticImage(img_, exp);
- }
+
+   //----Block Mode------
+//   picoInitBlock(&unit,sampleOffset_);
+//	for (unsigned long k=0; k<img_.Height(); k++)
+//{ 		
+//	unsigned long j=0;
+//     try
+//	{
+//		int retryCount =0;
+//		int ret = DEVICE_ERR;
+//		unsigned long sampleCaptured=0;
+//  		while(ret != DEVICE_OK && retryCount++ < WAIT_FOR_TRIGGER_FAIL_COUNT){
+//			ret = picoRunBlock(&unit,cameraCCDXSize_,PICO_RUM_TIME_OUT, &sampleCaptured);
+//			//
+//		}
+//		if(ret != DEVICE_OK || sampleCaptured<0)
+//			return DEVICE_SNAP_IMAGE_FAILED;
+//	   //void* pBuf = const_cast<void*>((void*)buffers);
+//	   //img_.SetPixels(pBuf);
+//	     MMThreadGuard g(imgPixelsLock_);
+//		  for (j=0; j<sampleCaptured; j++)
+//		  {
+//				long lIndex = img_.Width()*k + j;
+//				*(pBuf + lIndex) = (unsigned short)(32768+buffers[0][j]);
+//				//printf("%ld:%d,",lIndex,buffers[0][j]);
+//				// 
+//		  }
+//		  //printf("\n");
+//	  }	
+//	 catch(...)
+//	{
+//		 LogMessage("memory overflow!", false);
+//		 return DEVICE_OUT_OF_MEMORY;
+//	}
+//   //GenerateSyntheticImage(img_, exp);
+// }
+
 
    readoutStartTime_ = GetCurrentMMTime();
 

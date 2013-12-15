@@ -7,6 +7,7 @@ import icy.file.Saver;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.image.IcyBufferedImage;
+import icy.image.IcyBufferedImageUtil;
 import icy.main.Icy;
 import icy.plugin.PluginDescriptor;
 import icy.plugin.PluginLauncher;
@@ -14,6 +15,7 @@ import icy.plugin.PluginLoader;
 import icy.roi.ROI2D;
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
+import icy.type.DataType;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -289,14 +291,16 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 		        else
 		        {
 		        	snapWaiting = true;
-		            capturedImage = ImageGetter.snapImage(core);
-		            snapWaiting = false;
+		        	capturedImage = ImageGetter.snapImage(core);
+		            //capturedImage = IcyBufferedImageUtil.convertToType (capturedImage,DataType.SHORT, false);
+		            
 		        }
 		        
 		        if (capturedImage == null)
 		        {
 		            new AnnounceFrame("No image was captured",30);
 		            snapSuccess = false;
+		            snapWaiting = false;
 		            return;
 		        }
 		        
@@ -318,6 +322,7 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 		                            + ": impossible to capture images with a colored sequence. Only Snap C are possible.";
 		                new AnnounceFrame("This sequence is not compatible" + toAdd,30);
 		                snapSuccess = false;
+		                snapWaiting = false;
 		                return;
 		            }
 		            catch(IndexOutOfBoundsException e2)
@@ -327,12 +332,14 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 		            }
 		        }
 		        snapSuccess = true;
+		        snapWaiting = false;
 		        return;
 	        }
 	        catch(Exception e)
 	        {
 	        	snapSuccess = false;
 	        }
+	        snapWaiting = false;
 		}  
 	}
 
@@ -497,10 +504,11 @@ public class EvaScanner extends EzPlug implements EzStoppable, ActionListener,Ez
 			  			retryCount++;
 			  			
 				  		success =waitUntilComplete();
-				  		
+				  		while(snapWaiting && !stopFlag) Thread.sleep(100); // waiting untile snap complete.				  		
 				  		if(success && snapSuccess)
 				  			break;
-				  		while(snapWaiting && !stopFlag) Thread.sleep(100); // waiting untile snap complete.
+				  		if(stopFlag)
+				  			break;
 				  		success = false;
 				  		//if not success, then redo
 				  		core.setProperty(xyStageParentLabel, "Command",lastG00);

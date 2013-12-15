@@ -1026,7 +1026,9 @@ void picoSetTimebase(UNIT *unit,unsigned long timebase_)
     //printf("Timebase used %lu = %ldns Sample Interval\n", timebase, timeInterval);
 	//oversample = TRUE;
 }
-void picoInitBlock(UNIT * unit)
+
+
+void picoInitRapidBlock(UNIT * unit,long sampleOffset_)
 {
 	long maxSamples;
     long sampleCount_= BUFFER_SIZE;
@@ -1065,11 +1067,11 @@ void picoInitBlock(UNIT * unit)
 	unit->channelSettings[0].enabled  = 1;
 	unit->channelSettings[1].enabled  = 0;
 
-	printf("Collect block triggered...\n");
-	printf("Collects when value rises past %d", scaleVoltages?
-		adc_to_mv(sourceDetails.thresholdUpper, unit->channelSettings[PS3000A_CHANNEL_A].range, unit)	// If scaleVoltages, print mV value
-		: sourceDetails.thresholdUpper);																// else print ADC Count
-	printf(scaleVoltages?"mV\n" : "ADC Counts\n");
+	//printf("Collect block triggered...\n");
+	//printf("Collects when value rises past %d", scaleVoltages?
+	//	adc_to_mv(sourceDetails.thresholdUpper, unit->channelSettings[PS3000A_CHANNEL_A].range, unit)	// If scaleVoltages, print mV value
+	//	: sourceDetails.thresholdUpper);																// else print ADC Count
+	//printf(scaleVoltages?"mV\n" : "ADC Counts\n");
 
 	//_getch();
 
@@ -1079,7 +1081,7 @@ void picoInitBlock(UNIT * unit)
 	* Rising edge
 	* Threshold = 1000mV */
 
-	SetTrigger(unit, &sourceDetails, 1, &conditions, 1, &directions, &pulseWidth, 0, 0, 0, 0, 0);
+	SetTrigger(unit, &sourceDetails, 1, &conditions, 1, &directions, &pulseWidth,sampleOffset_, 0, 0, 0, 0);
 
 	buffers[0] = (short*)malloc(BUFFER_SIZE * sizeof(short));
 	buffers[1] = (short*)malloc(BUFFER_SIZE * sizeof(short));
@@ -1094,7 +1096,273 @@ void picoInitBlock(UNIT * unit)
 	}
 
 }
-PICO_STATUS picoRunBlock(UNIT *unit,long sampleOffset_,long sampleLength_,unsigned long timeout,unsigned long *sampleCountRet)
+/****************************************************************************
+* picoRunRapidBlock
+*  this function demonstrates how to collect a set of captures using 
+*  rapid block mode.
+****************************************************************************/
+PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long nSamples,unsigned long timeout,unsigned long *CompletedNSample,unsigned long *nCompletedCaptures,short * pBuf)
+{
+	long timeIndisposed;
+	short  channel;
+	unsigned long capture;
+	short ***rapidBuffers;
+	short *overflow;
+	PICO_STATUS status;
+	unsigned long count=0;
+	short i;
+	unsigned long j;
+	long lIndex;
+	short retry;
+	unsigned short nCapturesWanted = nCaptures;
+	unsigned short nSampleWanted = nSamples;
+	long nMaxSamples;
+
+	//Segment the memory
+	status = ps3000aMemorySegments(unit->handle, nCaptures, &nMaxSamples);
+
+	if(nSamples>nMaxSamples)
+		nSamples = nMaxSamples;
+
+	//Set the number of captures
+	status = ps3000aSetNoOfCaptures(unit->handle, nCaptures);
+
+	//Run
+
+	do
+	{
+		retry = 0;
+		if((status = ps3000aRunBlock(unit->handle, 0, nSamples, timebase, 1, &timeIndisposed, 0, CallBackBlock, NULL)) != PICO_OK)
+		{
+			if(status == PICO_POWER_SUPPLY_CONNECTED || status == PICO_POWER_SUPPLY_NOT_CONNECTED)
+			{
+				status = ChangePowerSource(unit->handle, status);
+				retry = 1;
+			}
+			else
+			{
+				printf("BlockDataHandler:ps3000aRunBlock ------ 0x%08lx \n", status);
+				return status;
+			}
+		}
+	}
+	while(retry);
+
+	//Wait until data ready
+	g_ready = 0;
+	while (!g_ready && count< timeout )
+	{
+		if(count<0.9*timeout)
+		Sleep(0);
+		else
+		Sleep(nCaptures);
+		count++;
+	}
+
+	if(!g_ready)
+	{
+		//_getch();
+		status = ps3000aStop(unit->handle);
+		status = ps3000aGetNoOfCaptures(unit->handle, nCompletedCaptures);
+		//printf("Rapid capture aborted. %lu complete blocks were captured\n", *nCompletedCaptures);
+		//printf("\nPress any key...\n\n");
+		//_getch();
+
+		if(nCompletedCaptures == 0)
+			return 100;
+
+		//Only display the blocks that were captured
+		nCaptures = (unsigned short)(*nCompletedCaptures);
+
+	}
+
+	//Allocate memory
+	rapidBuffers = (short ***) calloc(unit->channelCount, sizeof(short*));
+	overflow = (short *) calloc(unit->channelCount * nCaptures, sizeof(short));
+
+	//for (channel = 0; channel < unit->channelCount; channel++) 
+	//{
+	//	rapidBuffers[channel] = (short **) calloc(nCaptures, sizeof(short*));
+	//}
+
+	//for (channel = 0; channel < unit->channelCount; channel++) 
+	//{	
+	//	if(unit->channelSettings[channel].enabled)
+	//	{
+	//		for (capture = 0; capture < nCaptures; capture++) 
+	//		{
+	//			rapidBuffers[channel][capture] = (short *) calloc(nSamples, sizeof(short));
+	//		}
+	//	}
+	//}
+
+	for (channel = 0; channel < unit->channelCount; channel++) 
+	{
+		if(unit->channelSettings[channel].enabled)
+		{
+			for (capture = 0; capture < nCaptures; capture++) 
+			{
+				status = ps3000aSetDataBuffer(unit->handle, (PS3000A_CHANNEL)channel, pBuf + nSampleWanted*capture, nSamples, capture, PS3000A_RATIO_MODE_NONE);
+			}
+		}
+	}
+
+	//Get data
+	status = ps3000aGetValuesBulk(unit->handle, CompletedNSample, 0, nCaptures - 1, 1, PS3000A_RATIO_MODE_NONE, overflow);
+	if (status == PICO_POWER_SUPPLY_CONNECTED || status == PICO_POWER_SUPPLY_NOT_CONNECTED)
+	{
+		printf("\nPower Source Changed. Data collection aborted.\n");
+		return status;
+	}
+	nSamples = *CompletedNSample;
+	if (status == PICO_OK)
+	{
+		//		//print first 10 samples from each capture
+		//for (capture = 0; capture < nCaptures; capture++)
+		//{
+		//	printf("\nCapture %d\n", capture + 1);
+		//	for (channel = 0; channel < unit->channelCount; channel++) 
+		//	{
+		//		printf("Channel %c:\t", 'A' + channel);
+		//	}
+		//	printf("\n");
+
+		//	for(i = 0; i < 10; i++)
+		//	{
+		//		for (channel = 0; channel < unit->channelCount; channel++) 
+		//		{
+		//			if(unit->channelSettings[channel].enabled)
+		//			{
+		//				printf("   %6d       ", scaleVoltages ? 
+		//					adc_to_mv(rapidBuffers[channel][capture][i], unit->channelSettings[PS3000A_CHANNEL_A +channel].range, unit)	// If scaleVoltages, print mV value
+		//					: rapidBuffers[channel][capture][i]);																	// else print ADC Count
+		//			}
+		//		}
+		//		printf("\n");
+		//	}
+		//}
+
+
+		//for (capture=0; capture<nCaptures; capture++)
+		//{ 		
+		//	for (j=0; j<nSamples; j++)
+		//	{
+		//		lIndex = nSampleWanted*capture + j;
+		//		*(pBuf + lIndex) = (unsigned short)(32768+rapidBuffers[0][capture][j]);
+		//		//printf("%ld:%d,",lIndex,buffers[0][j]);
+		//		// 
+		//	}
+		//	//printf("\n");
+
+		//}
+		for (capture=0; capture<nCaptures; capture++)
+		{ 		
+			for (j=0; j<nSamples; j++)
+			{
+				lIndex = nSampleWanted*capture + j;
+				*(pBuf + lIndex) = *(pBuf + lIndex)+32768;
+			}
+
+		}
+
+	}
+
+	//Stop
+	status = ps3000aStop(unit->handle);
+
+	//Free memory
+	free(overflow);
+
+	//for (channel = 0; channel < unit->channelCount; channel++) 
+	//{	
+	//	if(unit->channelSettings[channel].enabled)
+	//	{
+	//		for (capture = 0; capture < nCaptures; capture++) 
+	//		{
+	//			free(rapidBuffers[channel][capture]);
+	//		}
+	//	}
+	//}
+
+	//for (channel = 0; channel < unit->channelCount; channel++) 
+	//{
+	//	free(rapidBuffers[channel]);
+	//}
+	//free(rapidBuffers);
+
+	return status;
+}
+
+
+void picoInitBlock(UNIT * unit,long sampleOffset_)
+{
+	long maxSamples;
+    long sampleCount_= BUFFER_SIZE;
+	int i =0;
+	PICO_STATUS status;
+	short triggerVoltage = mv_to_adc(1000, unit->channelSettings[PS3000A_CHANNEL_A].range, unit);
+
+	struct tPS3000ATriggerChannelProperties sourceDetails = {	triggerVoltage,
+		256 * 10,
+		triggerVoltage,
+		256 * 10,
+		PS3000A_EXTERNAL,
+		PS3000A_LEVEL};
+
+	struct tPS3000ATriggerConditionsV2 conditions = {	PS3000A_CONDITION_DONT_CARE,
+		PS3000A_CONDITION_DONT_CARE,
+		PS3000A_CONDITION_DONT_CARE,
+		PS3000A_CONDITION_DONT_CARE,
+		PS3000A_CONDITION_TRUE,
+		PS3000A_CONDITION_DONT_CARE,
+		PS3000A_CONDITION_DONT_CARE,
+		PS3000A_CONDITION_DONT_CARE};
+
+	struct tPwq pulseWidth;
+
+	struct tTriggerDirections directions = {	PS3000A_NONE,
+		PS3000A_NONE,
+		PS3000A_NONE,
+		PS3000A_NONE,
+		PS3000A_RISING,
+		PS3000A_NONE };
+
+	memset(&pulseWidth, 0, sizeof(struct tPwq));
+
+
+	unit->channelSettings[0].enabled  = 1;
+	unit->channelSettings[1].enabled  = 0;
+
+	//printf("Collect block triggered...\n");
+	//printf("Collects when value rises past %d", scaleVoltages?
+	//	adc_to_mv(sourceDetails.thresholdUpper, unit->channelSettings[PS3000A_CHANNEL_A].range, unit)	// If scaleVoltages, print mV value
+	//	: sourceDetails.thresholdUpper);																// else print ADC Count
+	//printf(scaleVoltages?"mV\n" : "ADC Counts\n");
+
+	//_getch();
+
+	SetDefaults(unit);
+
+	/* Trigger enabled
+	* Rising edge
+	* Threshold = 1000mV */
+
+	SetTrigger(unit, &sourceDetails, 1, &conditions, 1, &directions, &pulseWidth,sampleOffset_, 0, 0, 0, 0);
+
+	buffers[0] = (short*)malloc(BUFFER_SIZE * sizeof(short));
+	buffers[1] = (short*)malloc(BUFFER_SIZE * sizeof(short));
+	status = ps3000aSetDataBuffers(unit->handle, (PS3000A_CHANNEL)i, buffers[0], buffers[1], BUFFER_SIZE, 0, PS3000A_RATIO_MODE_NONE);
+	printf(status?"BlockDataHandler:ps3000aSetDataBuffers(channel %d) ------ 0x%08lx \n":"", i, status);
+
+	/*  find the maximum number of samples, the time interval (in timeUnits),
+	*		 the most suitable time units, and the maximum oversample at the current timebase*/
+	while (ps3000aGetTimebase(unit->handle, timebase, sampleCount_, &timeInterval, oversample, &maxSamples, 0))
+	{
+		timebase++;
+	}
+
+}
+PICO_STATUS picoRunBlock(UNIT *unit,long sampleLength_,unsigned long timeout,unsigned long *sampleCountRet)
 {
 	int i, j;
 	//long timeInterval;
@@ -1103,7 +1371,7 @@ PICO_STATUS picoRunBlock(UNIT *unit,long sampleOffset_,long sampleLength_,unsign
 
 	long timeIndisposed;
 	unsigned long count=0;
-	unsigned long sampleCount = sampleOffset_ + sampleLength_;
+	unsigned long sampleCount = sampleLength_;
 	PICO_STATUS status;
 	short retry;
 		/* Start it collecting, then wait for completion*/
@@ -1146,7 +1414,7 @@ PICO_STATUS picoRunBlock(UNIT *unit,long sampleOffset_,long sampleLength_,unsign
 	
 	if(g_ready) 
 	{
-		if((status = ps3000aGetValues(unit->handle, sampleOffset_,  &sampleCount, 1, PS3000A_RATIO_MODE_NONE, 0, NULL)) != PICO_OK)
+		if((status = ps3000aGetValues(unit->handle, 0,  &sampleCount, 1, PS3000A_RATIO_MODE_NONE, 0, NULL)) != PICO_OK)
 		{
 			if(status == PICO_POWER_SUPPLY_CONNECTED || status == PICO_POWER_SUPPLY_NOT_CONNECTED || status == PICO_POWER_SUPPLY_UNDERVOLTAGE)
 			{
