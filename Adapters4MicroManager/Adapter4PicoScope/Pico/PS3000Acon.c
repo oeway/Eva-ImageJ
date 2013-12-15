@@ -1030,6 +1030,7 @@ void picoSetTimebase(UNIT *unit,unsigned long timebase_)
 
 void picoInitRapidBlock(UNIT * unit,long sampleOffset_)
 {
+
 	long maxSamples;
     long sampleCount_= BUFFER_SIZE;
 	int i =0;
@@ -1095,6 +1096,173 @@ void picoInitRapidBlock(UNIT * unit,long sampleOffset_)
 		timebase++;
 	}
 
+
+
+}
+/****************************************************************************
+* picoRunRapidBlock
+*  this function demonstrates how to collect a set of captures using 
+*  rapid block mode.
+****************************************************************************/
+PICO_STATUS picoStartRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long nSamples,unsigned long *CompletedNSample,unsigned long *nCompletedCaptures,long *nMaxSamples,short * pBuf)
+{
+	long timeIndisposed;
+	short  channel;
+	unsigned long capture;
+	short ***rapidBuffers;
+	short *overflow;
+	PICO_STATUS status;
+	unsigned long count=0;
+	short i;
+	unsigned long j;
+	long lIndex;
+	short retry;
+	unsigned short nCapturesWanted = nCaptures;
+	unsigned short nSampleWanted = nSamples;
+
+	//Segment the memory
+	status = ps3000aMemorySegments(unit->handle, nCaptures, nMaxSamples);
+	if(status != PICO_OK)
+		return status;
+	if(nSamples>*nMaxSamples)
+		nSamples = *nMaxSamples;
+
+	//Set the number of captures
+	status = ps3000aSetNoOfCaptures(unit->handle, nCaptures);
+	if(status != PICO_OK)
+		return status;
+	//Run
+
+	do
+	{
+		retry = 0;
+		g_ready = 0;
+		if((status = ps3000aRunBlock(unit->handle, 0, nSamples, timebase, 1, &timeIndisposed, 0, CallBackBlock, NULL)) != PICO_OK)
+		{
+			if(status == PICO_POWER_SUPPLY_CONNECTED || status == PICO_POWER_SUPPLY_NOT_CONNECTED)
+			{
+				status = ChangePowerSource(unit->handle, status);
+				retry = 1;
+			}
+			else
+			{
+				printf("BlockDataHandler:ps3000aRunBlock ------ 0x%08lx \n", status);
+				return status;
+			}
+		}
+	}
+	while(retry);
+
+	for (channel = 0; channel < unit->channelCount; channel++) 
+	{
+		if(unit->channelSettings[channel].enabled)
+		{
+			for (capture = 0; capture < nCaptures; capture++) 
+			{
+				status = ps3000aSetDataBuffer(unit->handle, (PS3000A_CHANNEL)channel, pBuf + nSampleWanted*capture, nSamples, capture, PS3000A_RATIO_MODE_NONE);
+				if(status != PICO_OK)
+					return status;
+			}
+		}
+	}
+	return status;
+}
+int picoWaitRapidBlockData(unsigned long timeout)
+{	unsigned long count=0;
+	while (!g_ready && count< timeout )
+	{
+		if(count<0.9*timeout)
+		Sleep(0);
+		else
+		Sleep(10);
+		count++;
+	}
+	return g_ready;
+}
+/****************************************************************************
+* picoRunRapidBlock
+*  this function demonstrates how to collect a set of captures using 
+*  rapid block mode.
+****************************************************************************/
+PICO_STATUS picoGetRapidBlockData(UNIT * unit,unsigned short nCaptures,unsigned long nSamples,unsigned long *CompletedNSample,unsigned long *nCompletedCaptures,short * pBuf)
+{
+		long timeIndisposed;
+	short  channel;
+	unsigned long capture;
+	short ***rapidBuffers;
+	short *overflow;
+	PICO_STATUS status;
+
+	short i;
+	unsigned long j;
+	long lIndex;
+	short retry;
+	unsigned short nCapturesWanted = nCaptures;
+	unsigned short nSampleWanted = nSamples;
+	long nMaxSamples;
+
+	//Wait until data ready
+
+	if(!g_ready)
+	{
+		//_getch();
+		status = ps3000aStop(unit->handle);
+		if(status != PICO_OK)
+			return status;
+		status = ps3000aGetNoOfCaptures(unit->handle, nCompletedCaptures);
+		if(status != PICO_OK)
+			return status;
+		//printf("Rapid capture aborted. %lu complete blocks were captured\n", *nCompletedCaptures);
+		//printf("\nPress any key...\n\n");
+		//_getch();
+
+		if(nCompletedCaptures == 0)
+			return 100;
+
+		//Only display the blocks that were captured
+		nCaptures = (unsigned short)(*nCompletedCaptures);
+
+	}
+
+	//Allocate memory
+	overflow = (short *) calloc(unit->channelCount * nCaptures, sizeof(short));
+
+	//Get data
+	status = ps3000aGetValuesBulk(unit->handle, CompletedNSample, 0, nCaptures - 1, 1, PS3000A_RATIO_MODE_NONE, overflow);
+	if (status == PICO_POWER_SUPPLY_CONNECTED || status == PICO_POWER_SUPPLY_NOT_CONNECTED)
+	{
+		printf("\nPower Source Changed. Data collection aborted.\n");
+		return status;
+	}
+	nSamples = *CompletedNSample;
+	if (status == PICO_OK)
+	{
+
+		for (capture=0; capture<nCaptures; capture++)
+		{ 		
+			for (j=0; j<nSamples; j++)
+			{
+				lIndex = nSampleWanted*capture + j;
+				*(pBuf + lIndex) = *(pBuf + lIndex)+32768;
+			}
+
+		}
+
+	}
+
+	//Stop
+	status = ps3000aStop(unit->handle);
+	//Free memory
+	free(overflow);
+
+	return status;
+}
+PICO_STATUS picoStopRapidBlock(UNIT * unit)
+{
+	PICO_STATUS status;
+	//Stop
+	status = ps3000aStop(unit->handle);
+	return status;
 }
 /****************************************************************************
 * picoRunRapidBlock
@@ -1148,6 +1316,17 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 	}
 	while(retry);
 
+		for (channel = 0; channel < unit->channelCount; channel++) 
+	{
+		if(unit->channelSettings[channel].enabled)
+		{
+			for (capture = 0; capture < nCaptures; capture++) 
+			{
+				status = ps3000aSetDataBuffer(unit->handle, (PS3000A_CHANNEL)channel, pBuf + nSampleWanted*capture, nSamples, capture, PS3000A_RATIO_MODE_NONE);
+			}
+		}
+	}
+
 	//Wait until data ready
 	g_ready = 0;
 	while (!g_ready && count< timeout )
@@ -1177,7 +1356,6 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 	}
 
 	//Allocate memory
-	rapidBuffers = (short ***) calloc(unit->channelCount, sizeof(short*));
 	overflow = (short *) calloc(unit->channelCount * nCaptures, sizeof(short));
 
 	//for (channel = 0; channel < unit->channelCount; channel++) 
@@ -1196,16 +1374,7 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 	//	}
 	//}
 
-	for (channel = 0; channel < unit->channelCount; channel++) 
-	{
-		if(unit->channelSettings[channel].enabled)
-		{
-			for (capture = 0; capture < nCaptures; capture++) 
-			{
-				status = ps3000aSetDataBuffer(unit->handle, (PS3000A_CHANNEL)channel, pBuf + nSampleWanted*capture, nSamples, capture, PS3000A_RATIO_MODE_NONE);
-			}
-		}
-	}
+
 
 	//Get data
 	status = ps3000aGetValuesBulk(unit->handle, CompletedNSample, 0, nCaptures - 1, 1, PS3000A_RATIO_MODE_NONE, overflow);
@@ -1217,44 +1386,7 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 	nSamples = *CompletedNSample;
 	if (status == PICO_OK)
 	{
-		//		//print first 10 samples from each capture
-		//for (capture = 0; capture < nCaptures; capture++)
-		//{
-		//	printf("\nCapture %d\n", capture + 1);
-		//	for (channel = 0; channel < unit->channelCount; channel++) 
-		//	{
-		//		printf("Channel %c:\t", 'A' + channel);
-		//	}
-		//	printf("\n");
 
-		//	for(i = 0; i < 10; i++)
-		//	{
-		//		for (channel = 0; channel < unit->channelCount; channel++) 
-		//		{
-		//			if(unit->channelSettings[channel].enabled)
-		//			{
-		//				printf("   %6d       ", scaleVoltages ? 
-		//					adc_to_mv(rapidBuffers[channel][capture][i], unit->channelSettings[PS3000A_CHANNEL_A +channel].range, unit)	// If scaleVoltages, print mV value
-		//					: rapidBuffers[channel][capture][i]);																	// else print ADC Count
-		//			}
-		//		}
-		//		printf("\n");
-		//	}
-		//}
-
-
-		//for (capture=0; capture<nCaptures; capture++)
-		//{ 		
-		//	for (j=0; j<nSamples; j++)
-		//	{
-		//		lIndex = nSampleWanted*capture + j;
-		//		*(pBuf + lIndex) = (unsigned short)(32768+rapidBuffers[0][capture][j]);
-		//		//printf("%ld:%d,",lIndex,buffers[0][j]);
-		//		// 
-		//	}
-		//	//printf("\n");
-
-		//}
 		for (capture=0; capture<nCaptures; capture++)
 		{ 		
 			for (j=0; j<nSamples; j++)
@@ -1269,27 +1401,8 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 
 	//Stop
 	status = ps3000aStop(unit->handle);
-
 	//Free memory
 	free(overflow);
-
-	//for (channel = 0; channel < unit->channelCount; channel++) 
-	//{	
-	//	if(unit->channelSettings[channel].enabled)
-	//	{
-	//		for (capture = 0; capture < nCaptures; capture++) 
-	//		{
-	//			free(rapidBuffers[channel][capture]);
-	//		}
-	//	}
-	//}
-
-	//for (channel = 0; channel < unit->channelCount; channel++) 
-	//{
-	//	free(rapidBuffers[channel]);
-	//}
-	//free(rapidBuffers);
-
 	return status;
 }
 
