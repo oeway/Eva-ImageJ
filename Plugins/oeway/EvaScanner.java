@@ -1330,5 +1330,5 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 		
 	}	
-
+	
 }
