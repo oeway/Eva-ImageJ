@@ -517,6 +517,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		EzVarFolder					targetFolder;
 
 
+		boolean isRunning=false;
 		Sequence controlPanel;
 		ROI2DPoint probePointRoi;
 	
@@ -643,6 +644,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		@Override
 		protected void execute()
 		{
+			isRunning = true;
 			if(_thread != null)
 			{
 				_thread.stopThread(); 
@@ -659,6 +661,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 
 			if(targetFolder.getValue() == null){
+				isRunning = false;
 				stopFlag = true;
 				new AnnounceFrame("Please select a target folder to store data!",5);
 				return;
@@ -668,6 +671,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			lastSeqName = "";
 			// main plugin code goes here, and runs in a separate thread
 			if(pathFile.getValue() == null){
+				isRunning = false;
 				new AnnounceFrame("Please select a path file!",5);
 				return;
 			}
@@ -914,6 +918,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 //				}
 			}
 			new AnnounceFrame("Task Over!",20);
+			isRunning = false;
 
 		}
 		
@@ -1297,9 +1302,9 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		}
 		@Override
 		public void roiChanged(ROIEvent event) {
-			if(!stopFlag)
+			if(isRunning)
 				return;
-			if(event.getType()== ROIEvent.ROIEventType.PROPERTY_CHANGED)
+			if(event.getType()== ROIEvent.ROIEventType.ROI_CHANGED)
 			{
 				if(controlPanel.getImage(0, 0).isInside(probePointRoi.getPosition()))
 				{
