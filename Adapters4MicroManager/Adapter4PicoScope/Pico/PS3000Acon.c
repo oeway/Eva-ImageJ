@@ -1167,16 +1167,9 @@ PICO_STATUS picoStartRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned lo
 	}
 	return status;
 }
-int picoWaitRapidBlockData(unsigned long timeout)
-{	unsigned long count=0;
-	while (!g_ready && count< timeout )
-	{
-		if(count<0.9*timeout)
-		Sleep(0);
-		else
-		Sleep(10);
-		count++;
-	}
+int picoCheckRapidBlockDataReady()
+{	
+	Sleep(1);
 	return g_ready;
 }
 /****************************************************************************

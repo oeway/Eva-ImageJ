@@ -36,7 +36,7 @@
 #include <iostream>
 #include "pico\PS3000Acon.c"
 #define MAX_SAMPLE_LENGTH 3000000
-#define PICO_RUM_TIME_OUT 500
+#define PICO_RUM_TIME_OUT 8000 
 #define WAIT_FOR_TRIGGER_FAIL_COUNT 2
 using namespace std;
 const double CEVA_NDE_PicoCamera::nominalPixelSizeUm_ = 1.0;
@@ -503,10 +503,10 @@ int CEVA_NDE_PicoCamera::SnapImage()
 	static int callCounter = 0;
 	++callCounter;
 	int count=0;
-   MM::MMTime startTime = GetCurrentMMTime();
 
-   //picoInitBlock(&unit);
-  // CollectBlockImmediate(&unit); 
+ //  MM::MMTime readoutTime(PICO_RUM_TIME_OUT_US+10*img_.Height());
+ //  //picoInitBlock(&unit);
+ // // CollectBlockImmediate(&unit); 
 
    //rapid block mode
    picoInitRapidBlock(&unit,sampleOffset_);
@@ -514,61 +514,63 @@ int CEVA_NDE_PicoCamera::SnapImage()
    MMThreadGuard g(imgPixelsLock_);
    short* pBuf = (short*) const_cast<unsigned char*>(img_.GetPixels());
 
-     char fmtStr[50];
+
 
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
+   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),PICO_RUM_TIME_OUT ,&nCompletedSamples,&nCompletedCaptures,pBuf);
 
-   long nMaxSamples=img_.Width();
+   char fmtStr[50];
+ //  long nMaxSamples=img_.Width();
 
-	ret=SetProperty("Status", "Start:0");
-	ret=UpdateStatus();
-   picoStartRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,&nMaxSamples,pBuf);
-   if(nMaxSamples < img_.Width())
-   {
-	   cameraCCDXSize_ = nMaxSamples;
-	   
-	   ResizeImageBuffer();
-	   ret=UpdateStatus();
-	   return DEVICE_ERR;
-   }
+	//ret=SetProperty("Status", "Start:0");
+	//ret=UpdateStatus();
+ //  picoStartRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,&nMaxSamples,pBuf);
+ //  if(nMaxSamples < img_.Width())
+ //  {
+	//   cameraCCDXSize_ = nMaxSamples;
+	//   
+	//   ResizeImageBuffer();
+	//   ret=UpdateStatus();
+	//   return DEVICE_ERR;
+ //  }
+
+ //  MM::MMTime startTime = GetCurrentMMTime();
+ //  	//Wait until data ready
+	// int ready=0;
+	// count =0;	
+	//while(!g_ready && readoutTime > (GetCurrentMMTime() - startTime))
+	//{
+	//	ready = picoCheckRapidBlockDataReady();
+	//	status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
+	//	sprintf(fmtStr, "Capturing:%d",nCompletedCaptures );
+	//	ret=SetProperty("Status", fmtStr);
+	//	ret=UpdateStatus();
+	//	count++;
+	//	if(status != PICO_OK)
+	//		break;
+	//}
+	//if(g_ready )
+	//{
+	//	ret=SetProperty("Status","Retrieving:0");
+	//	ret=UpdateStatus();
+	//	status = picoGetRapidBlockData(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
+	//	sprintf(fmtStr, "Finished:%d", img_.Height());
+	//	ret=SetProperty("Status", fmtStr);
+	//	//picoStopRapidBlock(&unit);
+	//	ret=UpdateStatus();
+	//}
+	//else
+	//{
+	//	status = picoStopRapidBlock(&unit);
+	//	status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
+	//	sprintf(fmtStr, "Error:%d",nCompletedCaptures );
+	//	ret=SetProperty("Status", fmtStr);
+	//	ret=UpdateStatus();
+	//	return DEVICE_ERR;
+	//}
 
 
-   	//Wait until data ready
-	 int ready=0;
-	 count =0;
-	while(!ready &&count< PICO_RUM_TIME_OUT)
-	{
-		ready = picoWaitRapidBlockData(10);
-		status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
-		sprintf(fmtStr, "Capturing:%d",nCompletedCaptures );
-		ret=SetProperty("Status", fmtStr);
-		ret=UpdateStatus();
-		count++;
-		if(status != PICO_OK)
-			break;
-	}
-	if(ready )
-	{
-		ret=SetProperty("Status","Retrieving:0");
-		ret=UpdateStatus();
-		status = picoGetRapidBlockData(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
-		sprintf(fmtStr, "Finished:%d", img_.Height());
-		ret=SetProperty("Status", fmtStr);
-		//picoStopRapidBlock(&unit);
-		ret=UpdateStatus();
-	}
-	else
-	{
-		status = picoStopRapidBlock(&unit);
-		status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
-		sprintf(fmtStr, "Error:%d",nCompletedCaptures );
-		ret=SetProperty("Status", fmtStr);
-		ret=UpdateStatus();
-		return DEVICE_ERR;
-	}
-
-   //ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),PICO_RUM_TIME_OUT ,&nCompletedSamples,&nCompletedCaptures,pBuf);
 
 
    //----Block Mode------
@@ -948,6 +950,10 @@ int CEVA_NDE_PicoCamera::StartSequenceAcquisition(long numImages, double interva
       return ret;
    sequenceStartTime_ = GetCurrentMMTime();
    imageCounter_ = 0;
+
+   //rapid block mode
+   picoInitRapidBlock(&unit,sampleOffset_);
+
    thd_->Start(numImages,interval_ms);
    stopOnOverflow_ = stopOnOverflow;
    return DEVICE_OK;
@@ -1011,68 +1017,17 @@ int CEVA_NDE_PicoCamera::ThreadRun (MM::MMTime startTime)
       return SIMULATED_ERROR;
 
    int ret=DEVICE_ERR;
-   
-  //picoInitBlock(&unit);
-  // CollectBlockImmediate(&unit); 
 
-   //rapid block mode
-   picoInitRapidBlock(&unit,sampleOffset_);
+
 
    MMThreadGuard g(imgPixelsLock_);
    short* pBuf = (short*) const_cast<unsigned char*>(img_.GetPixels());
 
-     char fmtStr[50];
+
 
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
-
-   long nMaxSamples=img_.Width();
-
-   picoStartRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,&nMaxSamples,pBuf);
-   if(nMaxSamples < img_.Width())
-   {
-	   cameraCCDXSize_ = nMaxSamples;
-	   
-	   ResizeImageBuffer();
-	   ret=UpdateStatus();
-	   return DEVICE_ERR;
-   }
-
-
-   	//Wait until data ready
-	 int ready=0;
-	 int count =0;
-	while(!ready &&count< PICO_RUM_TIME_OUT)
-	{
-		ready = picoWaitRapidBlockData(10);
-		status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
-		sprintf(fmtStr, "Capturing:%d",nCompletedCaptures );
-		ret=SetProperty("Status", fmtStr);
-		ret=UpdateStatus();
-		count++;
-		if(status != PICO_OK)
-			break;
-	}
-	if(ready )
-	{
-		ret=SetProperty("Status","Retrieving:0");
-		ret=UpdateStatus();
-		status = picoGetRapidBlockData(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
-		sprintf(fmtStr, "Finished:%d", img_.Height());
-		ret=SetProperty("Status", fmtStr);
-		//picoStopRapidBlock(&unit);
-		ret=UpdateStatus();
-	}
-	else
-	{
-		status = picoStopRapidBlock(&unit);
-		status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
-		sprintf(fmtStr, "Error:%d",nCompletedCaptures );
-		ret=SetProperty("Status", fmtStr);
-		ret=UpdateStatus();
-		//return DEVICE_ERR;
-	}
-
+   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),PICO_RUM_TIME_OUT ,&nCompletedSamples,&nCompletedCaptures,pBuf);
 
    if (ret != DEVICE_OK)
    {
