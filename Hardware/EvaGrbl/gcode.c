@@ -370,7 +370,7 @@ uint8_t gc_execute_line(char *line)
       break;
 	case NON_MODAL_SET_SYNC: 
 	  sync_step = to_millimeters(p) * settings.steps_per_mm[X_AXIS];
-	  half_sync_step = 0.5* sync_step;
+	  half_sync_step = sync_step>>1;
 	  if(q >= X_AXIS && q <= Z_AXIS)
 		sync_axis = q;
 	  else
@@ -417,7 +417,11 @@ uint8_t gc_execute_line(char *line)
       }
     }
 	bit_true(SYNC_CONTROL_PORT,bit(SYNC_CONTROL_BIT));
-	
+	if(gc.motion_mode !=MOTION_MODE_SEEK) 
+		half_sync_step = sync_step>>1;
+	else
+		half_sync_step = 0;  // seek mode, then disable sync pulse
+		
     switch (gc.motion_mode) {
       case MOTION_MODE_CANCEL: 
         if (axis_words) { FAIL(STATUS_INVALID_STATEMENT); } // No axis words allowed while active.

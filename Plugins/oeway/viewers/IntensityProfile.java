@@ -32,6 +32,8 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -91,22 +93,7 @@ public class IntensityProfile  {
 	IcyCanvas mainCanvas;
 	public int posX = 0;
 	public int posY = 0;
-	
-	public boolean timerTaskSet = false;
-    Timer timer;
-    public void PreventUpdateTimer(int seconds) {
-        timer = new Timer();
-        timerTaskSet = true;
-        timer.schedule(new TimerTestTask(), seconds*1000);
-    }
-    class TimerTestTask extends TimerTask {
-        public void run() {
-            System.out.println("In TimerTestTask, execute run method.");
-            timer.cancel(); 
-            timerTaskSet = false;
-        }
-    }
-	
+		
 	public IntensityProfile(IcyCanvas mainCav,Sequence seq){
 		
 		sequence = seq;
@@ -199,48 +186,10 @@ public class IntensityProfile  {
 				PlotOrientation.VERTICAL, false, true, true);
 		chartPanel = new PanningChartPanel(chart, 500, 200, 500, 200, 500, 500, false, false, true, false, true, true);		
 		
-		
-		chartPanel.addChartMouseListener(new ChartMouseListener() {
-
-            @Override
-            public void chartMouseClicked(final ChartMouseEvent event){
-
-            }
-
-            @Override
-            public void chartMouseMoved(final ChartMouseEvent event){
-                if(!timerTaskSet){
-                	PreventUpdateTimer(2);
-                }
-            	try
-            	{
-	                Point2D p = event.getTrigger().getPoint();
-	                Rectangle2D plotArea = chartPanel.getScreenDataArea();
-	                XYPlot plot = (XYPlot) chart.getPlot(); // your plot
-	                //get the actual cordinate
-	                double chartX = plot.getDomainAxis().java2DToValue(p.getX(), plotArea, plot.getDomainAxisEdge());
-	            	if(rowMode)
-	            	{
-	            		posX = (int) chartX;
-	            		mainCanvas.mouseImagePositionChanged(DimensionId.X);
-	            	}
-	            	else
-	            	{
-	            		posY = (int) chartX;
-	            		mainCanvas.mouseImagePositionChanged(DimensionId.Y);
-	            	}
-            	}
-    	        finally
-    	        {
-    	        	
-    	        }
-
-            }
-
-			
-        });
-		
-		
+		//disable autorange
+        chart.getXYPlot().getRangeAxis(0).setAutoRange(false);
+        chart.getXYPlot().getDomainAxis(0).setAutoRange(false);	
+        
 		mainCanvas = mainCav;
 		//add to canvas
 		mainCanvas.add( GuiUtil.createPageBoxPanel(optionComboBox,chartPanel,GuiUtil.createLineBoxPanel(rowOColBtn,slider,maxIndexLbl) )) ;
@@ -283,8 +232,6 @@ public class IntensityProfile  {
 	}
 	public void updateChart()
 	{
-		if(timerTaskSet)
-			return;
 		chart.setAntiAlias( true );
 		chart.setTextAntiAlias( true );
 		
@@ -309,6 +256,7 @@ public class IntensityProfile  {
 		ThreadUtil.bgRunSingle( updateRunnable );
 	}
 	
+	int runCount =0;
 	private void updateChartThreaded() { 	
 		
 		// check if ROI still exist in a sequence
@@ -372,12 +320,12 @@ public class IntensityProfile  {
 	        try
 	        {
 				Sequence sequence = associatedROI.getSequences().get( 0 );
-				if ( associatedROI instanceof ROI2DLine || associatedROI instanceof ROI2DPolyLine )
+
+				ROI2DShape roiShape = (ROI2DShape) associatedROI;
+				ArrayList<Point2D> pointList = roiShape.getPoints();
+				
+				if(pointList.size()>1)
 				{
-					
-					ROI2DShape roiShape = (ROI2DShape) associatedROI;
-					ArrayList<Point2D> pointList = roiShape.getPoints();
-					
 					computeLineProfile( pointList, currentT, currentZ , sequence );
 									
 					if ( optionComboBox.isItemSelected( OPTION_meanAlongZ ) )
@@ -388,36 +336,23 @@ public class IntensityProfile  {
 					{
 						computeTMeanLineProfile( pointList, currentZ , sequence );
 					}
-									
+					chart.fireChartChanged();
+
+				}
+				if(runCount >10)
+				{
+					//disable autorange
+					chart.getXYPlot().getRangeAxis(0).setAutoRange(false);
+					chart.getXYPlot().getDomainAxis(0).setAutoRange(false);	
+				}
+				else
+				{
+					//disable autorange
+					chart.getXYPlot().getRangeAxis(0).setAutoRange(true);
+					chart.getXYPlot().getDomainAxis(0).setAutoRange(true);	
+					runCount++;
 				}
 				
-				if ( associatedROI instanceof ROI2DRectangle 
-						||
-						associatedROI instanceof ROI2DEllipse
-						||
-						associatedROI instanceof ROI2DPolygon
-	//					||
-	//					associatedROI instanceof ROI2DArea
-						)
-				{
-					ROI2DShape roiShape = (ROI2DShape) associatedROI;
-					
-					BooleanMask2D boolMask = roiShape.getBooleanMask(true);
-					boolMask.intersect( new ROI2DRectangle( sequence.getBounds2D() ).getBooleanMask(true) );
-					
-					//computeSurfaceProfileAlongZ(boolMask, sequence, currentT)
-					
-					getValueForSurfaceAllComponent( boolMask , sequence.getImage( currentT, currentZ ) );
-					//computeSurfaceProfileAlongZ( boolMask , sequence , currentT );
-					if ( optionComboBox.isItemSelected( OPTION_meanAlongZ ) )
-					{
-						computeSurfaceProfileAlongZ( boolMask, sequence, currentT );
-					}
-					if ( optionComboBox.isItemSelected( OPTION_meanAlongT ) )
-					{
-						computeSurfaceProfileAlongT( boolMask, sequence, currentZ );
-					}
-				}
 				
 	        }
 	        finally
@@ -428,11 +363,8 @@ public class IntensityProfile  {
 			
 		}
 
-		chart.fireChartChanged();
-		//disable autorange
-        final XYPlot plot = chart.getXYPlot();
-        ValueAxis domainAxis = plot.getRangeAxis(0);
-        domainAxis.setAutoRange(false);	
+
+
         
 
 	}
@@ -649,7 +581,7 @@ public class IntensityProfile  {
 		Profile profile = getValueForPointList( pointList , sequence.getImage( currentT , currentZ ) );
 
 		drawVerticalROIBreakBar( profile );
-
+		
 		for( int c= 0 ; c < sequence.getSizeC() ; c++ )
 		{
 			XYSeries seriesXY = new XYSeries("Intensity c" +c + " t"+currentT + " z" +currentZ );		

@@ -267,9 +267,9 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			_capturedCount = 0;
 			super.run();
 
-			if (video == null) {
-					createVideo(_slices,_intervalxy);
-			} 
+			//if (video == null) {
+			createVideo(_slices,_intervalxy);
+			
 			try {
 				if (!alreadyCapturing)
 				{
@@ -295,7 +295,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				for (IcyBufferedImage img : video.getAllImage())
 					img.setAutoUpdateChannelBounds(true);
 				video.setAutoUpdateChannelBounds(true);
-				video = null;
+				//video = null;
 			}
 			_running = false;
 		}
@@ -514,7 +514,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		EzVarDouble					stepSize;
 
 		
-		
+		EzVarDouble					seekSpeed;
 		EzVarDouble					scanSpeed;
 		EzVarText					note;
 		EzVarFolder					targetFolder;
@@ -542,7 +542,8 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			reset = new EzButton("Reset", this);
 			homing = new EzButton("Homing", this);
 			generatePath = new EzButton("Generate Path", this);
-
+			
+			seekSpeed = new EzVarDouble("Seek Speed");
 			scanSpeed = new EzVarDouble("Scan Speed");
 			
 			note = new EzVarText("Scan Note", new String[] { "Test" }, 0, true);
@@ -554,7 +555,10 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			
 			// let's group other variables per type
 			stepSize.setValue(1.0);
+			
+			seekSpeed.setValue(7000.0);
 			scanSpeed.setValue(6000.0);
+			
 			EzGroup groupInit = new EzGroup("Scanner Initialization", homing,reset); //,getPos,posX,posY,gotoPostion
 			super.addEzComponent(groupInit);		
 			
@@ -564,7 +568,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			EzGroup groupSettings = new EzGroup("Settings",targetFolder,note); //TODO:add targetFolder
 			super.addEzComponent(groupSettings);
 			
-			EzGroup groupScanMap = new EzGroup("Scan Map",stepSize, scanSpeed,generatePath);
+			EzGroup groupScanMap = new EzGroup("Scan Map",stepSize,seekSpeed, scanSpeed,generatePath);
 			super.addEzComponent(groupScanMap);	
 			
 			core = MicroscopeCore.getCore();
@@ -688,7 +692,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 //				return;
 //			}
 
-
+			System.out.println(seekSpeed.name + " = " + seekSpeed.getValue());
 			System.out.println(scanSpeed.name + " = " + scanSpeed.getValue());
 			System.out.println(targetFolder.name + " = " + targetFolder.getValue());
 			System.out.println(note.name + " = " + note.getValue());
@@ -747,12 +751,12 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  			stepSize.setValue( Double.parseDouble(tmp[1]));
 					  			_intervalxy = stepSize.getValue();
 					  		}					  		
-//					  		else if(tmp[0].equals("sampleoffset")){
-//					  			core.setProperty(picoCameraLabel, "SampleOffset",tmp[1]);
-//					  		}
-//					  		else if(tmp[0].equals("samplelength")){
-//					  			core.setProperty(picoCameraLabel, "SampleLength",tmp[1]);
-//					  		}
+					  		else if(tmp[0].equals("sampleoffset")){
+					  			core.setProperty(picoCameraLabel, "SampleOffset",tmp[1]);
+					  		}
+					  		else if(tmp[0].equals("samplelength")){
+					  			core.setProperty(picoCameraLabel, "SampleLength",tmp[1]);
+					  		}
 					  		else if(tmp[0].equals("reset")){
 					  			if(tmp[1].equals("1"))
 					  			{
@@ -764,6 +768,28 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  			_thread = new Live3DThread();
 					  			createVideo(_slices,_intervalxy);
 								 _thread.start();	
+					  		}
+					  		else if(tmp[0].equals("save")){
+					  			if(video !=null){
+									try {
+										if(targetFolder.getValue() != null){
+											File f = new File(targetFolder.getValue(),video.getName()+".tiff");
+											Saver.save(video,f,false,true);
+											new AnnounceFrame(video.getName() + " saved!",10);
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										new AnnounceFrame("File haven't save!",10);
+									}
+									try {
+										copyFile(pathFile,targetFolder.getValue(),video.getName()+"_gcode.txt");
+									} catch (Exception e) {
+										e.printStackTrace();
+										new AnnounceFrame("Gcode can not be copied!",10);
+									}
+									//Close the input stream
+									video = null;				
+								}
 					  		}					  		
 					  		else{
 					  			new AnnounceFrame(tmp[0]+":"+tmp[1],5);
@@ -897,26 +923,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				} catch (Exception e2) {
 				} 
 				
-				if(video !=null){
-					try {
-						if(targetFolder.getValue() != null){
-							File f = new File(targetFolder.getValue(),video.getName()+".tiff");
-							Saver.save(video,f,false,true);
-							new AnnounceFrame(video.getName() + " saved!",10);
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						new AnnounceFrame("File haven't save!",10);
-					}
-					try {
-						copyFile(pathFile,targetFolder.getValue(),video.getName()+"_gcode.txt");
-					} catch (Exception e) {
-						e.printStackTrace();
-						new AnnounceFrame("Gcode can not be copied!",10);
-					}
-					//Close the input stream
-					video = null;				
-				}
+				
 //				try {
 //					core.setProperty(picoCameraLabel, "RowCount",oldRowCount);
 //				} catch (Exception e) {
@@ -989,46 +996,11 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			  try {
 					if(controlPanel != null)
 					{
-						   xyStageLabel = core.getXYStageDevice();
-						   
-						   try {
-							   xyStageParentLabel = core.getParentLabel(xyStageLabel);
-							} catch (Exception e1) {
-								new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-								return;
-							} 
-						   
-							try {
-								if(!core.hasProperty(xyStageParentLabel,"Command"))
-								  {
-									  new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-									  return;
-								  }
-							} catch (Exception e1) {
-								  new AnnounceFrame("XY Stage Error!",10);
-								  return;
-							}
-						double x0 = controlPanel.getWidth()-roi.getBounds().getMinX();
-						double y0 = roi.getBounds().getMinY();
-						double x1 = controlPanel.getWidth()-roi.getBounds().getMaxX();
-						double y1 = roi.getBounds().getMaxY();
-						
-						if(x0>controlPanel.getWidth()) x0 = controlPanel.getWidth()-1;
-						if(x1<0) x1 = 0;
-						if(y0>controlPanel.getHeight()) y0 = controlPanel.getHeight()-1;
-						if(y1<0) y1 = 0;
-						
-						
-						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y0));
-						
-						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x1)+" Y" + Double.toString(y0));
-						
-						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x1)+" Y" + Double.toString(y1));
-						
-						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y1));
-						
-						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y0));
-
+						probePointRoi.setPosition2D(new Point2D.Double(roi.getBounds().getMinX(),roi.getBounds().getMinY()));
+						probePointRoi.setPosition2D(new Point2D.Double(roi.getBounds().getMinX(),roi.getBounds().getMaxY()));
+						probePointRoi.setPosition2D(new Point2D.Double(roi.getBounds().getMaxX(),roi.getBounds().getMaxY()));
+						probePointRoi.setPosition2D(new Point2D.Double(roi.getBounds().getMaxX(),roi.getBounds().getMinY()));
+						probePointRoi.setPosition2D(new Point2D.Double(roi.getBounds().getMinX(),roi.getBounds().getMinY()));
 					}
 					// new AnnounceFrame("Bundle box complete!",5);
 				} catch (Exception e1) {
@@ -1145,9 +1117,11 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						
 						for(double b=y0;b<=y1;b+=stepSize.getValue())	
 						{
-							pw.printf("G00 X%f Y%f\n",x0,b);
+							pw.printf("G00 X%f Y%f F%f\n",x0,b,seekSpeed.getValue());
 							pw.printf("G01 X%f Y%f F%f\n",x1,b,scanSpeed.getValue());
 						}
+						pw.printf("(save=1)\n");
+						//pw.printf("(close=1)\n");
 					}	
 					//pw.printf("G00 X0 Y0\n");
 					pw.close();	
@@ -1186,7 +1160,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				}
 				addSequence(controlPanel);
 				
-				controlPanel.setImage(0, 0, new IcyBufferedImage(500, 800,1, DataType.BYTE ));
+				controlPanel.setImage(0, 0, new IcyBufferedImage(450, 750,1, DataType.BYTE ));
 				for(Viewer v:controlPanel.getViewers())
 				{
 					v.addKeyListener(this);
@@ -1335,66 +1309,75 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		}
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			Point2D p= probePointRoi.getPoint();
-			double step=5.0;
-			if(EventUtil.isShiftDown(arg0))
-				step *=10.0;
-			if(EventUtil.isControlDown(arg0))
-				step /=5.0;
-			if(EventUtil.isAltDown(arg0))
-				step *=50;			
-			switch(arg0.getKeyCode())
+			try
 			{
-//					keycode 37 = Left 
-//					keycode 38 = Up 
-//					keycode 39 = Right 
-//					keycode 40 = Down 
-//					keycode 32 = space space 
-//					keycode 10 = Enter
-				case 32:
-					mark();
-					break;
-				case 37:
-					probePointRoi.setPosition2D(new Point2D.Double(p.getX()-step,p.getY()));
-					break;
-				case 38:
-					probePointRoi.setPosition2D(new Point2D.Double(p.getX(),p.getY()-step));
-					break;
-				case 39:
-					probePointRoi.setPosition2D(new Point2D.Double(p.getX()+step,p.getY()));
-					break;
-				case 40:
-					probePointRoi.setPosition2D(new Point2D.Double(p.getX(),p.getY()+step));	
-					break;
-				case 10:
-					try
-					{
-						ArrayList<ROI2D> rois;	
-						rois= controlPanel.getROI2Ds();
-						  if(rois.size()<=0)
-					    {
-						  MessageDialog.showDialog("No roi found!",
-				                    MessageDialog.ERROR_MESSAGE);
-							  return;
-					    }
-						for(int i=0;i<rois.size();i++) 
+				Point2D p= probePointRoi.getPoint();
+				double step=5.0;
+				if(EventUtil.isShiftDown(arg0))
+					step *=10.0;
+				if(EventUtil.isControlDown(arg0))
+					step /=5.0;
+				if(EventUtil.isAltDown(arg0))
+					step *=50;			
+				switch(arg0.getKeyCode())
+				{
+	//					keycode 37 = Left 
+	//					keycode 38 = Up 
+	//					keycode 39 = Right 
+	//					keycode 40 = Down 
+	//					keycode 32 = space space 
+	//					keycode 10 = Enter
+					case 32:
+						mark();
+						break;
+					case 37:
+						probePointRoi.setPosition2D(new Point2D.Double(p.getX()-step,p.getY()));
+						break;
+					case 38:
+						probePointRoi.setPosition2D(new Point2D.Double(p.getX(),p.getY()-step));
+						break;
+					case 39:
+						probePointRoi.setPosition2D(new Point2D.Double(p.getX()+step,p.getY()));
+						break;
+					case 40:
+						probePointRoi.setPosition2D(new Point2D.Double(p.getX(),p.getY()+step));	
+						break;
+					case 10:
+						try
 						{
-							ROI2D roi = rois.get(i);
-							if(roi == probePointRoi||!roi.isSelected())
-								continue;
-							if(roi == currentMarkPolygon)
-								currentMarkPolygon = null;
-							runBundle(roi);
+							ArrayList<ROI2D> rois;	
+							rois= controlPanel.getROI2Ds();
+							  if(rois.size()<=0)
+						    {
+							  MessageDialog.showDialog("No roi found!",
+					                    MessageDialog.ERROR_MESSAGE);
+								  return;
+						    }
+							for(int i=0;i<rois.size();i++) 
+							{
+								ROI2D roi = rois.get(i);
+								if(roi == probePointRoi||!roi.isSelected())
+									continue;
+								if(roi == currentMarkPolygon)
+									currentMarkPolygon = null;
+								runBundle(roi);
+							}
 						}
-					}
-					catch (Exception e1)
-					{
-						MessageDialog.showDialog("Please add at least one 2d roi in the scan map sequence!",
-				                    MessageDialog.ERROR_MESSAGE);
-					}
-					
-					break;
-					
+						catch (Exception e1)
+						{
+							MessageDialog.showDialog("Please add at least one 2d roi in the scan map sequence!",
+					                    MessageDialog.ERROR_MESSAGE);
+						}
+						
+						break;
+						
+				}
+				probePointRoi.setSelected(true);
+				controlPanel.addROI(probePointRoi);
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.toString());
 			}
 		}
 		@Override

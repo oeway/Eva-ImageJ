@@ -102,8 +102,11 @@ int main(void)
       }
     }
     if(sys.state == STATE_IDLE && auto_sync_enable)
-		bit_toggle(SYNC_CONTROL_PORT,bit(SYNC_CONTROL_BIT));
-	
+	{
+		if(current_sync_step % 2000 ==0)
+			bit_toggle(SYNC_CONTROL_PORT,bit(SYNC_CONTROL_BIT));
+		current_sync_step++;
+	}
     protocol_execute_runtime();
     protocol_process(); // ... process the serial protocol
     
