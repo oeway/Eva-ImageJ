@@ -36,7 +36,6 @@
 #include <iostream>
 #include "pico\PS3000Acon.c"
 #define MAX_SAMPLE_LENGTH 3000000
-#define PICO_RUM_TIME_OUT 8000 
 #define WAIT_FOR_TRIGGER_FAIL_COUNT 2
 using namespace std;
 const double CEVA_NDE_PicoCamera::nominalPixelSizeUm_ = 1.0;
@@ -184,7 +183,8 @@ CEVA_NDE_PicoCamera::CEVA_NDE_PicoCamera() :
    saturatePixels_(false),
 	fractionOfPixelsToDropOrSaturate_(0.002),
    stopOnOverflow_(false),
-   sampleOffset_(0)
+   sampleOffset_(0),
+   timeout_(5000)
 {
 
    // call the base class method to set-up default error codes/messages
@@ -317,9 +317,16 @@ int CEVA_NDE_PicoCamera::Initialize()
    nRet = CreateProperty(MM::g_Keyword_Exposure, "10.0", MM::Float, false);
    assert(nRet == DEVICE_OK);
    SetPropertyLimits(MM::g_Keyword_Exposure, 0, 10000);
+
+   // timeout
+   nRet = CreateProperty("timeoutMs", "5000", MM::Integer, false);
+   assert(nRet == DEVICE_OK);
+   SetPropertyLimits("timeoutMs", 100, 100000);
+   SetProperty("timeoutMs", "5000");
+
       // sample offset
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnSampleOffset);
-   nRet = CreateProperty("SampleOffset", "0.0", MM::Integer, false, pAct);
+   nRet = CreateProperty("SampleOffset", "0", MM::Integer, false, pAct);
    assert(nRet == DEVICE_OK);
    //SetPropertyLimits("SampleOffset", 0, MAX_SAMPLE_LENGTH-1000);
 
@@ -507,9 +514,12 @@ int CEVA_NDE_PicoCamera::SnapImage()
  //  MM::MMTime readoutTime(PICO_RUM_TIME_OUT_US+10*img_.Height());
  //  //picoInitBlock(&unit);
  // // CollectBlockImmediate(&unit); 
+	   char buf[MM::MaxStrLength];
+	   unsigned long _timeout_=5000;
+
 
    //rapid block mode
-   picoInitRapidBlock(&unit,sampleOffset_);
+   picoInitRapidBlock(&unit,sampleOffset_,_timeout_);
 
    MMThreadGuard g(imgPixelsLock_);
    short* pBuf = (short*) const_cast<unsigned char*>(img_.GetPixels());
@@ -518,9 +528,21 @@ int CEVA_NDE_PicoCamera::SnapImage()
 
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
-   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),PICO_RUM_TIME_OUT ,&nCompletedSamples,&nCompletedCaptures,pBuf);
+   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
+   if(ret != PICO_OK)
+	   return DEVICE_ERR;
+	//if(nCompletedSamples != img_.Width())
+ //  {
+	//   cameraCCDXSize_ = nCompletedSamples;
+	//   ResizeImageBuffer();
+ //  }
+	//if(nCompletedCaptures != img_.Height())
+ //  {
+	//   cameraCCDYSize_ = nCompletedCaptures;
+	//   ResizeImageBuffer();
+ //  }
 
-   char fmtStr[50];
+   //char fmtStr[50];
  //  long nMaxSamples=img_.Width();
 
 	//ret=SetProperty("Status", "Start:0");
@@ -951,8 +973,15 @@ int CEVA_NDE_PicoCamera::StartSequenceAcquisition(long numImages, double interva
    sequenceStartTime_ = GetCurrentMMTime();
    imageCounter_ = 0;
 
+   char buf[MM::MaxStrLength];
+   unsigned long _timeout_=5000;
+
+   if(GetProperty("timeoutMs", buf)== DEVICE_OK)
+   {
+	  _timeout_ =(unsigned long)atof(buf); 
+   }
    //rapid block mode
-   picoInitRapidBlock(&unit,sampleOffset_);
+   picoInitRapidBlock(&unit,sampleOffset_,_timeout_);
 
    thd_->Start(numImages,interval_ms);
    stopOnOverflow_ = stopOnOverflow;
@@ -1027,7 +1056,7 @@ int CEVA_NDE_PicoCamera::ThreadRun (MM::MMTime startTime)
 
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
-   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),PICO_RUM_TIME_OUT ,&nCompletedSamples,&nCompletedCaptures,pBuf);
+   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),&nCompletedSamples,&nCompletedCaptures,pBuf);
 
    if (ret != DEVICE_OK)
    {

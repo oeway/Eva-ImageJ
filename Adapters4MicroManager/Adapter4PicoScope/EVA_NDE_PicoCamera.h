@@ -220,6 +220,7 @@ private:
    bool stopOnOverFlow_;
    bool initialized_;
    double readoutUs_;
+   long timeout_;
    MM::MMTime readoutStartTime_;
    long scanMode_;
    int bitDepth_;

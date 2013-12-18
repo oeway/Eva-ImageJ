@@ -561,7 +561,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			
 			EzGroup groupInit = new EzGroup("Scanner Initialization", homing,reset); //,getPos,posX,posY,gotoPostion
 			super.addEzComponent(groupInit);		
-			
+
 			EzGroup groupScanner = new EzGroup("Scanner Control", openCtrlPanel); //,getPos,posX,posY,gotoPostion
 			super.addEzComponent(groupScanner);	
 			
@@ -575,6 +575,20 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 			
 		}	
+		protected void setEnableGUI(boolean b)
+		{
+			stepSize.setEnabled(b);
+			openCtrlPanel.setEnabled(b);
+			reset .setEnabled(b);
+			homing.setEnabled(b);
+			generatePath.setEnabled(b);
+			seekSpeed .setEnabled(b);
+			scanSpeed.setEnabled(b);
+			
+			note.setEnabled(b);
+			
+			targetFolder.setEnabled(b);
+		}
 		protected boolean waitUntilComplete()
 		{
 			if(xyStageLabel.equals("")){
@@ -644,6 +658,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		@Override
 		protected void execute()
 		{
+			setEnableGUI(false);
 			scannerControlEnable = false;
 			if(_thread != null)
 			{
@@ -661,6 +676,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 
 			if(targetFolder.getValue() == null){
+				setEnableGUI(true);
 				scannerControlEnable = true;
 				stopFlag = true;
 				new AnnounceFrame("Please select a target folder to store data!",5);
@@ -676,6 +692,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			
 			if(!(pathFile.isFile() && pathFile.exists()))
 			{
+				setEnableGUI(true);
 				scannerControlEnable = true;
 				stopFlag = true;
 				new AnnounceFrame("Please select a target folder to store data!",5);
@@ -766,8 +783,8 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  		}
 					  		else if(tmp[0].equals("startacquisition")){
 					  			_thread = new Live3DThread();
-					  			createVideo(_slices,_intervalxy);
 								 _thread.start();	
+								 _thread.pauseThread(false); 
 					  		}
 					  		else if(tmp[0].equals("save")){
 					  			if(video !=null){
@@ -907,6 +924,12 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			}
 			finally{
 				
+				try {
+					core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
+				} catch (Exception e2) {
+					System.out.println(e2.toString());
+				}
+				
 				_thread.stopThread(); 
 				while(_thread.isRunning()) //wait until the thread is over
 				{
@@ -918,11 +941,26 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					}
 				}
 				
-				try {
-					core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
-				} catch (Exception e2) {
-				} 
-				
+				if(video !=null){
+					try {
+						if(targetFolder.getValue() != null){
+							File f = new File(targetFolder.getValue(),video.getName()+".tiff");
+							Saver.save(video,f,false,true);
+							new AnnounceFrame(video.getName() + " saved!",10);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						new AnnounceFrame("File haven't save!",10);
+					}
+					try {
+						copyFile(pathFile,targetFolder.getValue(),video.getName()+"_gcode.txt");
+					} catch (Exception e) {
+						e.printStackTrace();
+						new AnnounceFrame("Gcode can not be copied!",10);
+					}
+					//Close the input stream
+					video = null;				
+				}
 				
 //				try {
 //					core.setProperty(picoCameraLabel, "RowCount",oldRowCount);
@@ -932,6 +970,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			}
 			new AnnounceFrame("Task Over!",20);
 			scannerControlEnable =true;
+			setEnableGUI(true);
 
 		}
 		

@@ -1027,8 +1027,8 @@ void picoSetTimebase(UNIT *unit,unsigned long timebase_)
 	//oversample = TRUE;
 }
 
-
-void picoInitRapidBlock(UNIT * unit,long sampleOffset_)
+unsigned long _timeout=5000;
+void picoInitRapidBlock(UNIT * unit,long sampleOffset_,unsigned long timeout)
 {
 
 	long maxSamples;
@@ -1262,7 +1262,7 @@ PICO_STATUS picoStopRapidBlock(UNIT * unit)
 *  this function demonstrates how to collect a set of captures using 
 *  rapid block mode.
 ****************************************************************************/
-PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long nSamples,unsigned long timeout,unsigned long *CompletedNSample,unsigned long *nCompletedCaptures,short * pBuf)
+PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long nSamples,unsigned long *CompletedNSample,unsigned long *nCompletedCaptures,short * pBuf)
 {
 	long timeIndisposed;
 	short  channel;
@@ -1320,33 +1320,35 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 		}
 	}
 
+	_timeout += nCaptures/100;  //adjust timeout according to capture number
 	//Wait until data ready
 	g_ready = 0;
-	while (!g_ready && count< timeout )
+	while (!g_ready && count< _timeout )
 	{
-		if(count<0.9*timeout)
-		Sleep(0);
-		else
-		Sleep(nCaptures);
+		Sleep(1);
 		count++;
 	}
 
 	if(!g_ready)
 	{
-		//_getch();
+		////_getch();
+		//status = ps3000aStop(unit->handle);
+		//status = ps3000aGetNoOfCaptures(unit->handle, nCompletedCaptures);
+		////printf("Rapid capture aborted. %lu complete blocks were captured\n", *nCompletedCaptures);
+		////printf("\nPress any key...\n\n");
+		////_getch();
+
+		//if(nCompletedCaptures == 0)
+		//	return 100;
+
+		////Only display the blocks that were captured
+		//nCaptures = (unsigned short)(*nCompletedCaptures);
 		status = ps3000aStop(unit->handle);
-		status = ps3000aGetNoOfCaptures(unit->handle, nCompletedCaptures);
-		//printf("Rapid capture aborted. %lu complete blocks were captured\n", *nCompletedCaptures);
-		//printf("\nPress any key...\n\n");
-		//_getch();
-
-		if(nCompletedCaptures == 0)
-			return 100;
-
-		//Only display the blocks that were captured
-		nCaptures = (unsigned short)(*nCompletedCaptures);
-
+		return PICO_TRIGGER_ERROR;
 	}
+	status = ps3000aGetNoOfCaptures(unit->handle, nCompletedCaptures);
+	if(status != PICO_OK)
+		return PICO_TRIGGER_ERROR;
 
 	//Allocate memory
 	overflow = (short *) calloc(unit->channelCount * nCaptures, sizeof(short));
