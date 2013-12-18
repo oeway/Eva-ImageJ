@@ -5,12 +5,15 @@ import icy.gui.frame.progress.ToolTipFrame;
 import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceAdapter;
+import icy.sequence.SequenceListener;
 import icy.system.thread.ThreadUtil;
 import icy.type.DataType;
+import icy.util.EventUtil;
 
 import org.micromanager.utils.StateItem;
 
 import plugins.kernel.roi.roi2d.ROI2DPoint;
+import plugins.kernel.roi.roi2d.ROI2DPolygon;
 import plugins.tprovoost.Microscopy.MicroManagerForIcy.LiveSequence;
 import plugins.tprovoost.Microscopy.MicroManagerForIcy.MicroscopeImage;
 import plugins.tprovoost.Microscopy.MicroManagerForIcy.MicroscopePluginAcquisition;
@@ -31,8 +34,14 @@ import icy.roi.ROIEvent;
 import icy.roi.ROIListener;
 
 
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -489,35 +498,30 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 	 * @author Wei Ouyang
 	 * 
 	 */
-	public  class EVA_GUI extends EzPlug implements EzStoppable, ActionListener,EzVarListener<File>,ROIListener
+	public  class EVA_GUI extends EzPlug implements EzStoppable, ActionListener,EzVarListener<File>,ROIListener,KeyListener
 	{
 		
 
 		
 	    /** CoreSingleton instance */
 	    MicroscopeCore core;
-		EzButton 					markPos;
-		EzButton 					getPos;	
+
 		EzButton 					homing;	
 		EzButton 					reset;		
-		EzButton 					gotoPostion;
-		EzButton 					runBundlebox;
 		EzButton 					openCtrlPanel;		
-		
-		EzVarDouble					posX;
-		EzVarDouble					posY;	
+
 		EzButton 					generatePath;
 		EzVarDouble					stepSize;
 
 		
 		
 		EzVarDouble					scanSpeed;
-		EzVarFile					pathFile;
 		EzVarText					note;
 		EzVarFolder					targetFolder;
 
+		File pathFile;
 
-		boolean isRunning=false;
+		boolean scannerControlEnable=true;
 		Sequence controlPanel;
 		ROI2DPoint probePointRoi;
 	
@@ -534,19 +538,12 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			// 1) variables must be initialized
 
 			stepSize = new EzVarDouble("Step Size");
-			markPos = new EzButton("Mark Position", this);
-			gotoPostion = new EzButton("Goto Position", this);
 			openCtrlPanel = new EzButton("Control Panel", this);
 			reset = new EzButton("Reset", this);
 			homing = new EzButton("Homing", this);
 			generatePath = new EzButton("Generate Path", this);
-			runBundlebox = new EzButton("Run Bundle Box",this);
-			getPos = new EzButton("Get Position", this);		
-			posX = new EzVarDouble("X");
-			posY = new EzVarDouble("Y");		
-			
+
 			scanSpeed = new EzVarDouble("Scan Speed");
-			pathFile = new EzVarFile("Path File", null);
 			
 			note = new EzVarText("Scan Note", new String[] { "Test" }, 0, true);
 			
@@ -558,12 +555,11 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			// let's group other variables per type
 			stepSize.setValue(1.0);
 			scanSpeed.setValue(6000.0);
+			EzGroup groupInit = new EzGroup("Scanner Initialization", homing,reset); //,getPos,posX,posY,gotoPostion
+			super.addEzComponent(groupInit);		
 			
-			EzGroup groupInit= new EzGroup("Initialization", homing,reset);
-			super.addEzComponent(groupInit);			
-			
-			EzGroup groupMark = new EzGroup("Stage Control", openCtrlPanel,markPos,runBundlebox); //,getPos,posX,posY,gotoPostion
-			super.addEzComponent(groupMark);	
+			EzGroup groupScanner = new EzGroup("Scanner Control", openCtrlPanel); //,getPos,posX,posY,gotoPostion
+			super.addEzComponent(groupScanner);	
 			
 			EzGroup groupSettings = new EzGroup("Settings",targetFolder,note); //TODO:add targetFolder
 			super.addEzComponent(groupSettings);
@@ -644,7 +640,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		@Override
 		protected void execute()
 		{
-			isRunning = true;
+			scannerControlEnable = false;
 			if(_thread != null)
 			{
 				_thread.stopThread(); 
@@ -661,21 +657,31 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 
 			if(targetFolder.getValue() == null){
-				isRunning = false;
+				scannerControlEnable = true;
 				stopFlag = true;
 				new AnnounceFrame("Please select a target folder to store data!",5);
 				return;
 			}
+			
+			if(!(pathFile.isFile() && pathFile.exists()))
+			{	
+				new AnnounceFrame("No gcode file found, try to generate gcode file!",2);
+				generatePath();
+
+			}
+			
+			if(!(pathFile.isFile() && pathFile.exists()))
+			{
+				scannerControlEnable = true;
+				stopFlag = true;
+				new AnnounceFrame("Please select a target folder to store data!",5);
+				return;
+			}			
+			
 			long cpt = 0;
 			stopFlag = false;
 			lastSeqName = "";
-			// main plugin code goes here, and runs in a separate thread
-			if(pathFile.getValue() == null){
-				isRunning = false;
-				new AnnounceFrame("Please select a path file!",5);
-				return;
-			}
-				
+			
 			
 //			if(targetFolder.getValue() == null){
 //				new AnnounceFrame("Please select a target folder to store data!");
@@ -684,7 +690,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 
 			System.out.println(scanSpeed.name + " = " + scanSpeed.getValue());
-			System.out.println(pathFile.name + " = " + pathFile.getValue());
 			System.out.println(targetFolder.name + " = " + targetFolder.getValue());
 			System.out.println(note.name + " = " + note.getValue());
 			
@@ -697,7 +702,8 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			try{
 			  // Open the file that is the first 
 			  // command line parameter
-			  FileInputStream fstream = new FileInputStream(pathFile.getValue());
+				
+			  FileInputStream fstream = new FileInputStream(pathFile);
 			  // Get the object of DataInputStream
 			  DataInputStream in = new DataInputStream(fstream);
 			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -903,7 +909,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						new AnnounceFrame("File haven't save!",10);
 					}
 					try {
-						copyFile(pathFile.getValue(),targetFolder.getValue(),video.getName()+"_gcode.txt");
+						copyFile(pathFile,targetFolder.getValue(),video.getName()+"_gcode.txt");
 					} catch (Exception e) {
 						e.printStackTrace();
 						new AnnounceFrame("Gcode can not be copied!",10);
@@ -918,7 +924,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 //				}
 			}
 			new AnnounceFrame("Task Over!",20);
-			isRunning = false;
+			scannerControlEnable =true;
 
 		}
 		
@@ -938,171 +944,261 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			stopFlag = true;
 			_thread.stopThread();
 		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			core = MicroscopeCore.getCore();
-			if (((JButton)e.getSource()).getText().equals(markPos.name)) {
-						
-			   xyStageLabel = core.getXYStageDevice();
-				try {
-					double[] x_stage = {0.0};
-					double[] y_stage = {0.0};
-					core.getXYPosition(xyStageLabel, x_stage, y_stage);
-					posX.setValue(x_stage[0]/1000.0);
-					posY.setValue(y_stage[0]/1000.0);
+		ROI2DPolygon currentMarkPolygon;
+		public void mark()
+		{
+			
+		    xyStageLabel = core.getXYStageDevice();
+			try {
+				double[] x_stage = {0.0};
+				double[] y_stage = {0.0};
+				core.getXYPosition(xyStageLabel, x_stage, y_stage);
+				double x =controlPanel.getWidth()- x_stage[0]/1000;
+				double y = y_stage[0]/1000;
+				if(controlPanel != null)
+				{
+//					IcyBufferedImage image = controlPanel.getImage( 0 , 0, 0 );
+//					image.setData(image.getSizeX()-(int)x_stage[0]/1000,(int)y_stage[0]/1000,0,100);
+//					image.setData(image.getSizeX()-(int)x_stage[0]/1000+1,(int)y_stage[0]/1000,0,100);
+//					image.setData(image.getSizeX()-(int)x_stage[0]/1000,(int)y_stage[0]/1000+1,0,100);
+//					image.setData(image.getSizeX()-(int)x_stage[0]/1000+1,(int)y_stage[0]/1000+1,0,100);
+					if(currentMarkPolygon == null || !controlPanel.contains(currentMarkPolygon) )
+					{
+						currentMarkPolygon = new ROI2DPolygon(new Point2D.Double(x,y));
+						controlPanel.addROI(currentMarkPolygon);
+					}
+					else
+						currentMarkPolygon.addPoint(new Point2D.Double(x,y), true);
+					currentMarkPolygon.setSelected(true);
+					
+				}
+				else
+				{
+					  new AnnounceFrame("No sequence selected!",10);
+					  return;
+				}
+			} catch (Exception e1) {
+				  new AnnounceFrame("Marking on sequence failed!",10);
+				  e1.printStackTrace();
+				  return;
+			}
+		}
+		public void runBundle(ROI2D roi)
+		{
+			System.out.println("Run bundle box ...");
+			  try {
 					if(controlPanel != null)
 					{
-						IcyBufferedImage image = controlPanel.getImage( 0 , 0, 0 );
-						image.setData(image.getSizeX()-(int)x_stage[0]/1000,(int)y_stage[0]/1000,0,100);
+						   xyStageLabel = core.getXYStageDevice();
+						   
+						   try {
+							   xyStageParentLabel = core.getParentLabel(xyStageLabel);
+							} catch (Exception e1) {
+								new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
+								return;
+							} 
+						   
+							try {
+								if(!core.hasProperty(xyStageParentLabel,"Command"))
+								  {
+									  new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
+									  return;
+								  }
+							} catch (Exception e1) {
+								  new AnnounceFrame("XY Stage Error!",10);
+								  return;
+							}
+						double x0 = controlPanel.getWidth()-roi.getBounds().getMinX();
+						double y0 = roi.getBounds().getMinY();
+						double x1 = controlPanel.getWidth()-roi.getBounds().getMaxX();
+						double y1 = roi.getBounds().getMaxY();
+						
+						if(x0>controlPanel.getWidth()) x0 = controlPanel.getWidth()-1;
+						if(x1<0) x1 = 0;
+						if(y0>controlPanel.getHeight()) y0 = controlPanel.getHeight()-1;
+						if(y1<0) y1 = 0;
+						
+						
+						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y0));
+						
+						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x1)+" Y" + Double.toString(y0));
+						
+						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x1)+" Y" + Double.toString(y1));
+						
+						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y1));
+						
+						core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y0));
+
+					}
+					// new AnnounceFrame("Bundle box complete!",5);
+				} catch (Exception e1) {
+					  new AnnounceFrame("Error when run bundle box!",10);
+					  return;
+				}
+	  		
+		}
+		public void homing()
+		{
+			class MyRunner implements Runnable{
+	    		  public void run(){
+		    		    	try {
+		    		    		 xyStageLabel = core.getXYStageDevice();
+		    					   try {
+		    						   xyStageParentLabel = core.getParentLabel(xyStageLabel);
+		    						} catch (Exception e1) {
+		    							new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
+		    							return;
+		    						} 
+		    					core.setProperty(xyStageParentLabel, "Command","$H");
+		    					
+		    					new AnnounceFrame("Homing completed!",5);
+		    				} catch (Exception e1) {
+		    					 new AnnounceFrame("Homing error,try to restart controller!",10);
+		    				}
+	    		  		}
+	    		}
+	    	     MyRunner myRunner = new MyRunner(); 
+	    	     Thread myThread = new Thread(myRunner);
+	    	     myThread.start();
+
+		}
+		public void generatePath()
+		{
+			if(controlPanel == null)
+			{
+				MessageDialog.showDialog("No valid ROI found in control panel!",
+	                    MessageDialog.ERROR_MESSAGE);
+				return;	
+			}
+			System.out.println("Generate Path ...");
+			picoCameraLabel = core.getCameraDevice();
+			try {
+					if(stepSize.getValue()<=0.0)
+					{
+						  new AnnounceFrame("Step size error!",20);
+						  return;
+					}
+					
+					ArrayList<ROI2D> rois;	
+					PrintWriter pw ;
+					try
+					{
+						rois= controlPanel.getROI2Ds();
+					}
+					catch (Exception e1)
+					{
+						MessageDialog.showDialog("Please add at least one 2d ROI in the scan map sequence!",
+				                    MessageDialog.ERROR_MESSAGE);
+						return;	
+					}
+					if(rois.size()<=0 )
+				    {
+					  MessageDialog.showDialog("No ROI found!",
+			                    MessageDialog.ERROR_MESSAGE);
+						  return;
+				    }
+					if(rois.size()==1 && rois.get(0)==probePointRoi )
+				    {
+					  MessageDialog.showDialog("No valid ROI  found!",
+			                    MessageDialog.ERROR_MESSAGE);
+						  return;
+				    }
+					if(pathFile != null)
+					{
+						pw = new PrintWriter(new FileWriter(pathFile));
 					}
 					else
 					{
-						  new AnnounceFrame("No sequence selected!",10);
+						  MessageDialog.showDialog("Please select the 'Target Folder'!",
+			                    MessageDialog.ERROR_MESSAGE);
 						  return;
 					}
-				} catch (Exception e1) {
-					  new AnnounceFrame("Marking on sequence failed!",10);
-					  e1.printStackTrace();
-					  return;
-				}
-				
-			}
-			else if (((JButton)e.getSource()).getText().equals(gotoPostion.name)) {
-					try {
-						core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
-					} catch (Exception e2) {
-					} 
-					try {
-						xyStageLabel = core.getXYStageDevice();
-						core.setXYPosition(xyStageLabel, posX.getValue()*1000.0, posY.getValue()*1000.0);
-						//new AnnounceFrame("Goto position...!",5);
-					} catch (Exception e1) {
-						  new AnnounceFrame("Goto position failed!",10);
-						  return;
-					}
-			}
-			else if (((JButton)e.getSource()).getText().equals(getPos.name)) {
-				   xyStageLabel = core.getXYStageDevice();
-					try {
-						double[] x_stage = {0.0};
-						double[] y_stage = {0.0};
-						core.getXYPosition(xyStageLabel, x_stage, y_stage);
-						posX.setValue(x_stage[0]/1000.0);
-						posY.setValue(y_stage[0]/1000.0);
-					} catch (Exception e1) {
-						  new AnnounceFrame("Get position failed!",10);
-						  return;
-					}
-			}
-			else if (((JButton)e.getSource()).getText().equals(runBundlebox.name)) {
-			    	System.out.println("Run bundle box ...");
-			    	class MyRunner implements Runnable{
-			    		  public void run(){
-						      try {
-									if(controlPanel != null)
-									{
-										   xyStageLabel = core.getXYStageDevice();
-										   
-										   try {
-											   xyStageParentLabel = core.getParentLabel(xyStageLabel);
-											} catch (Exception e1) {
-												new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-												return;
-											} 
-										   
-											try {
-												if(!core.hasProperty(xyStageParentLabel,"Command"))
-												  {
-													  new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-													  return;
-												  }
-											} catch (Exception e1) {
-												  new AnnounceFrame("XY Stage Error!",10);
-												  return;
-											}
-											
-				
-										
-										ArrayList<ROI2D> rois;	
-									
-										try
-										{
-											rois= controlPanel.getROI2Ds();
-										}
-										catch (Exception e1)
-										{
-											new AnnounceFrame("Please add at least one 2d roi in the scan map sequence!",10);
-											return;	
-										}
-										  if(rois.size()<=0)
-										    {
-										    	  new AnnounceFrame("No roi found!",5);
-												  return;
-										    }
-									    core.setProperty(xyStageParentLabel, "Command","G90");
-										for(int i=0;i<rois.size();i++) 
-										{
-											ROI2D roi = rois.get(i);
-											if(roi == probePointRoi)
-												continue;
-											double x0 = controlPanel.getWidth()-roi.getBounds().getMinX();
-											double y0 = roi.getBounds().getMinY();
-											double x1 = controlPanel.getWidth()-roi.getBounds().getMaxX();
-											double y1 = roi.getBounds().getMaxY();
-											
-											if(x0>controlPanel.getWidth()) x0 = controlPanel.getWidth();
-											if(x1<0) x1 = 0;
-											if(y0>controlPanel.getHeight()) y0 = controlPanel.getWidth();
-											if(y1<0) y1 = 0;
-											
-											
-											core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y0));
-											
-											core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x1)+" Y" + Double.toString(y0));
-											
-											core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x1)+" Y" + Double.toString(y1));
-											
-											core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y1));
-											
-											core.setProperty(xyStageParentLabel, "Command","G00 X" + Double.toString(x0)+" Y" + Double.toString(y0));
-											waitUntilComplete();
-										}	
+				  
+					for(int i=0;i<rois.size();i++) 
+					{
+						ROI2D roi = rois.get(i);
+						if(roi == probePointRoi)
+							continue;
+						double x0 = controlPanel.getWidth()-roi.getBounds().getMinX();
+						double y0 = roi.getBounds().getMinY();
+						double x1 = controlPanel.getWidth()-roi.getBounds().getMaxX();
+						double y1 = roi.getBounds().getMaxY();
+						
+						if(x0>controlPanel.getWidth()) x0 = controlPanel.getWidth()-1;
+						if(x1<0) x1 = 0;
+						if(y0>controlPanel.getHeight()) y0 = controlPanel.getHeight()-1;
+						if(y1<0) y1 = 0;
+						
+						
+						//for(double a=x0;a<=x1;a+=stepSize.getValue())
+						pw.printf("(newSequence=%s-%d)\n",roi.getName(),i);
+						pw.printf("(location=%d,%d)\n",(int)x0,(int)y0);
+						pw.printf("(width=%d)\n",(int)((double)(x0-x1)/stepSize.getValue()));	
+						pw.printf("(height=%d)\n",(int)((double)(y1-y0)/stepSize.getValue()));	
+						pw.printf("(sampleOffset=%s)\n",core.getProperty(picoCameraLabel, "SampleOffset"));
+						pw.printf("(sampleLength=%s)\n",core.getProperty(picoCameraLabel, "SampleLength"));
+						pw.printf("(stepSize=%s)\n",stepSize.getValue());
+						pw.printf("(reset=1)\n");	
+						pw.printf("(startAcquisition=1)\n");
+						pw.printf("G90\n");		
+						pw.printf("M108 P%f Q%d\n",stepSize.getValue(),0);
+						
+						for(double b=y0;b<=y1;b+=stepSize.getValue())	
+						{
+							pw.printf("G00 X%f Y%f\n",x0,b);
+							pw.printf("G01 X%f Y%f F%f\n",x1,b,scanSpeed.getValue());
+						}
+					}	
+					//pw.printf("G00 X0 Y0\n");
+					pw.close();	
 					
-				
-									}
-									 new AnnounceFrame("Bundle box complete!",5);
-								} catch (Exception e1) {
-									  new AnnounceFrame("Error when run bundle box!",10);
-									  return;
-								}
-			    		  }
-			    		}
-			    	     MyRunner myRunner = new MyRunner(); 
-			    	     Thread myThread = new Thread(myRunner);
-			    	   
-			    	     myThread.start();
-			    	    
-			    	    	
+					File old = pathFile;
+
+					new AnnounceFrame("Generated successfully!",5);
+
+			} catch (Exception e1) {
+				  MessageDialog.showDialog("Error when generate path file!",
+		                    MessageDialog.ERROR_MESSAGE);
+				  return;
 			}
-			else if (((JButton)e.getSource()).getText().equals(openCtrlPanel.name)) {	
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			core = MicroscopeCore.getCore();
+			if (((JButton)e.getSource()).getText().equals(openCtrlPanel.name)) {	
 			
 				if(controlPanel == null)
 				{
 					controlPanel = new Sequence();
 					controlPanel.setName("Control Panel");
+					new AnnounceFrame("Would you like to do homing?", "Yes", new Runnable()
+		            {
+		        		IntensityInRectanglePainter Pt;
+		                @Override
+		                public void run()
+		                {
+		                	homing();
+		                }
+		                public Runnable init() {
+		                    return(this);
+		                }
+		            }.init(), 15);
 				}
 				addSequence(controlPanel);
-				if(controlPanel.getSizeZ()==0)
+				
+				controlPanel.setImage(0, 0, new IcyBufferedImage(500, 800,1, DataType.BYTE ));
+				for(Viewer v:controlPanel.getViewers())
 				{
-					controlPanel.addImage(new IcyBufferedImage(500, 800,1, DataType.BYTE ));
+					v.addKeyListener(this);
 				}
 				if(probePointRoi == null)
+				{
 					probePointRoi = new ROI2DPoint(0,0);
+					probePointRoi.setColor(Color.ORANGE);
+				}
 				probePointRoi.setSelected(true);
 				if(!controlPanel.contains(probePointRoi))
 				{
-
 					controlPanel.addROI(probePointRoi);
 					probePointRoi.addListener(this);
 				}
@@ -1112,8 +1208,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					double[] x_stage = {controlPanel.getWidth()};
 					double[] y_stage = {0.0};
 					core.getXYPosition(xyStageLabel, x_stage, y_stage);
-					posX.setValue(x_stage[0]/1000.0);
-					posY.setValue(y_stage[0]/1000.0);
 					probePointRoi.setPosition2D(new Point2D.Double(controlPanel.getWidth()-x_stage[0]/1000.0,y_stage[0]/1000.0));
 				} catch (Exception e1) {
 				
@@ -1139,121 +1233,10 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		    }
 		    else if (((JButton)e.getSource()).getText().equals(homing.name)) {	
 		    	
-		    	class MyRunner implements Runnable{
-		    		  public void run(){
-			    		    	try {
-			    		    		 xyStageLabel = core.getXYStageDevice();
-			    					   try {
-			    						   xyStageParentLabel = core.getParentLabel(xyStageLabel);
-			    						} catch (Exception e1) {
-			    							new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-			    							return;
-			    						} 
-			    					core.setProperty(xyStageParentLabel, "Command","$H");
-			    					
-			    					new AnnounceFrame("Homing completed!",5);
-			    				} catch (Exception e1) {
-			    					 new AnnounceFrame("Homing error,try to restart controller!",10);
-			    				}
-		    		  		}
-		    		}
-		    	     MyRunner myRunner = new MyRunner(); 
-		    	     Thread myThread = new Thread(myRunner);
-		    	     myThread.start();
-
+		    	homing();
 		    }
 		    else if (((JButton)e.getSource()).getText().equals(generatePath.name)) {		
-				System.out.println("Generate Path ...");
-				picoCameraLabel = core.getCameraDevice();
-				try {
-					if(controlPanel != null)
-					{
-						if(stepSize.getValue()<=0.0)
-						{
-							  new AnnounceFrame("Step size error!",20);
-							  return;
-						}
-						
-						ArrayList<ROI2D> rois;	
-						PrintWriter pw ;
-						try
-						{
-							rois= controlPanel.getROI2Ds();
-						}
-						catch (Exception e1)
-						{
-							MessageDialog.showDialog("Please add at least one 2d roi in the scan map sequence!",
-					                    MessageDialog.ERROR_MESSAGE);
-							
-							return;	
-						}
-						  if(rois.size()<=0)
-						    {
-							  MessageDialog.showDialog("No roi found!",
-					                    MessageDialog.ERROR_MESSAGE);
-								  return;
-						    }
-						if(pathFile.getValue() != null)
-						{
-							pw = new PrintWriter(new FileWriter(pathFile.getValue()));
-						}
-						else
-						{
-							  MessageDialog.showDialog("Please select the 'Target Folder'!",
-				                    MessageDialog.ERROR_MESSAGE);
-							  return;
-						}
-					  
-						for(int i=0;i<rois.size();i++) 
-						{
-							ROI2D roi = rois.get(i);
-							if(roi == probePointRoi)
-								continue;
-							double x0 = controlPanel.getWidth()-roi.getBounds().getMinX();
-							double y0 = roi.getBounds().getMinY();
-							double x1 = controlPanel.getWidth()-roi.getBounds().getMaxX();
-							double y1 = roi.getBounds().getMaxY();
-							
-							if(x0>controlPanel.getWidth()) x0 = controlPanel.getWidth();
-							if(x1<0) x1 = 0;
-							if(y0>controlPanel.getHeight()) y0 = controlPanel.getWidth();
-							if(y1<0) y1 = 0;
-							
-							
-							//for(double a=x0;a<=x1;a+=stepSize.getValue())
-							pw.printf("(newSequence=%s-%d)\n",roi.getName(),i);
-							pw.printf("(location=%d,%d)\n",(int)x0,(int)y0);
-							pw.printf("(width=%d)\n",(int)((double)(x1-x0)/stepSize.getValue()));	
-							pw.printf("(height=%d)\n",(int)((double)(y1-y0)/stepSize.getValue()));	
-							pw.printf("(sampleOffset=%s)\n",core.getProperty(picoCameraLabel, "SampleOffset"));
-							pw.printf("(sampleLength=%s)\n",core.getProperty(picoCameraLabel, "SampleLength"));
-							pw.printf("(stepSize=%s)\n",stepSize.getValue());
-							pw.printf("(reset=1)\n");	
-							pw.printf("(startAcquisition=1)\n");
-							pw.printf("G90\n");		
-							pw.printf("M108 P%f Q%d\n",stepSize.getValue(),0);
-							
-							for(double b=y0;b<=y1;b+=stepSize.getValue())	
-							{
-								pw.printf("G00 X%f Y%f\n",x0,b);
-								pw.printf("G01 X%f Y%f F%f\n",x1,b,scanSpeed.getValue());
-							}
-						}	
-						//pw.printf("G00 X0 Y0\n");
-						pw.close();	
-						
-						File old = pathFile.getValue();
-						pathFile.setValue(pathFile.getValue()); //set the path as the default value.
-						pathFile.valueChanged(null,old, pathFile.getValue());
-						new AnnounceFrame("Generated successfully!",5);
-						
-
-					}
-				} catch (Exception e1) {
-					  MessageDialog.showDialog("Error when generate path file!",
-			                    MessageDialog.ERROR_MESSAGE);
-					  return;
-				}
+				generatePath();
 				
 			}
 		}
@@ -1262,8 +1245,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			if(newValue != null)
 			{
 				try{
-					File f = new File(newValue.getPath(),"gcode.txt");
-					pathFile.setValue(f);
+					pathFile = new File(newValue.getPath(),"gcode.txt");
 				}catch(Exception e){
 					 new AnnounceFrame("Error path",20);
 				}
@@ -1300,16 +1282,19 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			}
 			return copySizes;
 		}
+		
 		@Override
 		public void roiChanged(ROIEvent event) {
-			if(isRunning)
+			if(!scannerControlEnable)
 				return;
 			if(event.getType()== ROIEvent.ROIEventType.ROI_CHANGED)
 			{
 				if(controlPanel.getImage(0, 0).isInside(probePointRoi.getPosition()))
 				{
-					double x =controlPanel.getSizeX()-probePointRoi.getPosition().getX();
-					double y = probePointRoi.getPosition().getY();
+					double x = controlPanel.getWidth()-probePointRoi.getPosition().getX();
+					double y = probePointRoi.getPosition().getY();			
+					
+					
 					try {
 						core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
 					} catch (Exception e2) {
@@ -1319,16 +1304,105 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						core.setXYPosition(xyStageLabel, x*1000.0, y*1000.0);
 						//new AnnounceFrame("Goto position...!",5);
 					} catch (Exception e1) {
-						  new AnnounceFrame("Goto position failed!",10);
+						  //new AnnounceFrame("Goto position failed!",10);
 						  return;
 					}
 					
 				}
+				else
+				{
+					double x = probePointRoi.getPosition().getX();
+					double y = probePointRoi.getPosition().getY();
+					
+					if(x>controlPanel.getWidth()) x = controlPanel.getWidth()-1;
+					if(x<0) x = 0;
+					if(y>controlPanel.getHeight()) y = controlPanel.getHeight()-1;
+					if(y<0) y = 0;
+					probePointRoi.setPosition2D(new Point2D.Double(x,y));
+				}
+
+			}
+			if(event.getType()== ROIEvent.ROIEventType.SELECTION_CHANGED)
+			{
+				probePointRoi.setSelected(true);
 			}
 			
+			
+		}
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+
+		}
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			Point2D p= probePointRoi.getPoint();
+			double step=5.0;
+			if(EventUtil.isShiftDown(arg0))
+				step *=10.0;
+			if(EventUtil.isControlDown(arg0))
+				step /=5.0;
+			if(EventUtil.isAltDown(arg0))
+				step *=50;			
+			switch(arg0.getKeyCode())
+			{
+//					keycode 37 = Left 
+//					keycode 38 = Up 
+//					keycode 39 = Right 
+//					keycode 40 = Down 
+//					keycode 32 = space space 
+//					keycode 10 = Enter
+				case 32:
+					mark();
+					break;
+				case 37:
+					probePointRoi.setPosition2D(new Point2D.Double(p.getX()-step,p.getY()));
+					break;
+				case 38:
+					probePointRoi.setPosition2D(new Point2D.Double(p.getX(),p.getY()-step));
+					break;
+				case 39:
+					probePointRoi.setPosition2D(new Point2D.Double(p.getX()+step,p.getY()));
+					break;
+				case 40:
+					probePointRoi.setPosition2D(new Point2D.Double(p.getX(),p.getY()+step));	
+					break;
+				case 10:
+					try
+					{
+						ArrayList<ROI2D> rois;	
+						rois= controlPanel.getROI2Ds();
+						  if(rois.size()<=0)
+					    {
+						  MessageDialog.showDialog("No roi found!",
+				                    MessageDialog.ERROR_MESSAGE);
+							  return;
+					    }
+						for(int i=0;i<rois.size();i++) 
+						{
+							ROI2D roi = rois.get(i);
+							if(roi == probePointRoi||!roi.isSelected())
+								continue;
+							if(roi == currentMarkPolygon)
+								currentMarkPolygon = null;
+							runBundle(roi);
+						}
+					}
+					catch (Exception e1)
+					{
+						MessageDialog.showDialog("Please add at least one 2d roi in the scan map sequence!",
+				                    MessageDialog.ERROR_MESSAGE);
+					}
+					
+					break;
+					
+			}
+		}
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+
 		}
 
 		
 	}	
-	
+
 }
