@@ -1068,7 +1068,7 @@ void picoInitRapidBlock(UNIT * unit,long sampleOffset_,unsigned long timeout)
 	unit->channelSettings[0].enabled  = 1;
 	unit->channelSettings[1].enabled  = 0;
 
-	_timeout = timeout/10;
+	_timeout = timeout;
 	//printf("Collect block triggered...\n");
 	//printf("Collects when value rises past %d", scaleVoltages?
 	//	adc_to_mv(sourceDetails.thresholdUpper, unit->channelSettings[PS3000A_CHANNEL_A].range, unit)	// If scaleVoltages, print mV value
