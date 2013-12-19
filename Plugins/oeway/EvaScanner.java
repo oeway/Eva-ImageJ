@@ -87,9 +87,10 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 	private double _intervalxy =1.0D;
 	private String currentSeqName="";
 	private int _rowCount=1;
+	private double _scanSpeed=1000.0;
+	private double _stepSize=1.0;
 	EVA_GUI gui;
 	
-	private String lastSeqName = "";
 	private String xyStageLabel ="";
 	private String xyStageParentLabel ="";
 	private String picoCameraLabel ="";
@@ -168,10 +169,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 	        video.setPixelSizeY(_intervalxy);
 	        video.setPixelSizeZ(_intervalz);
 	        
-	        //OMEXMLMetadataImpl md = video.getMetadata();
-	        //md.setImageDescription(note.getValue(), 0);
-			
-			//video.setName("Live 3D");
 			video.setAutoUpdateChannelBounds(false);
 			// sets listener on the frame in order to remove this plugin
 			// from the GUI when the frame is closed
@@ -221,17 +218,12 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 	 */
 	class Live3DThread extends Thread {
 
-		/** Name of the focus device */
-		private String _nameZ;
 		/** Used to pause the thread */
 		private boolean _please_wait = false;
 		/** Stops the thread */
 		private boolean _stop = false;
 		/** Access boolean to captureStacks */
 		private boolean alreadyCapturing = false;
-		/** Absolute position of the focus device. */
-		private double absoluteZ = 0;
-		
 		private boolean _snapFailed = false;		
 		private int _capturedCount = 0;
 
@@ -240,13 +232,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		 * This method will return the Z Stage to its original position, before
 		 * the thread was started.
 		 */
-		public void backToOriginalPosition() {
-			try {
-				mCore.setPosition(_nameZ, absoluteZ);
-				mCore.waitForDevice(_nameZ);
-			} catch (Exception e) {
-			}
-		}
 
 		public synchronized boolean isPaused() {
 			return !alreadyCapturing;
@@ -267,7 +252,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			_capturedCount = 0;
 			super.run();
 
-			//if (video == null) {
 			createVideo(_slices,_intervalxy);
 			
 			try {
@@ -284,10 +268,8 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				try {
 					video.notifyListeners();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
-				
 			}
 			notifyAcquisitionOver();
 			if(video!=null)
@@ -295,7 +277,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				for (IcyBufferedImage img : video.getAllImage())
 					img.setAutoUpdateChannelBounds(true);
 				video.setAutoUpdateChannelBounds(true);
-				//video = null;
 			}
 			_running = false;
 		}
@@ -310,22 +291,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		 */
 		synchronized void pauseThread(boolean b) {
 			_please_wait = b;
-//			if (_slices <= 1) {
-//				try {
-//					MathTools.waitFor((long) (mCore.getExposure() + 200));
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			} else {
-//				// waiting for 3D the end of the capture
-//				while (alreadyCapturing) {
-//					try {
-//						Thread.sleep(50);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
 		}
 
 		/**
@@ -340,7 +305,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		 * Thread safe method to find the thread is running
 		 */
 		synchronized boolean isRunning() {
-			return !_stop;
+			return _running;
 
 		}
 		/**
@@ -376,114 +341,104 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				e3.printStackTrace();
 			}
 			
-			MicroscopeImage img;
-			notifyAcquisitionStarted(true);
-			setAlreadyCapturing(true);
-			//int wantedSlices = _slices;
-			//int wantedDistribution = 1;
-			//double wantedInterval = _interval_;
-			//double supposedLastPosition = 0;
-//			_nameZ = mCore.getFocusDevice();
-//			try {
-//				absoluteZ = mCore.getPosition(_nameZ);
-//				supposedLastPosition = absoluteZ + ((wantedDistribution - 1) * wantedInterval);
-//				//StageMover.moveZRelative(-((wantedSlices - wantedDistribution) * wantedInterval));
-//				// mCore.waitForDevice(_nameZ);
-//				s.getImage(0, 0).setDataXYAsShort(0, ImageGetter.snapImageToShort(mCore));
-//			} catch (Exception e) {
-//				new AnnounceFrame("Error wile moving");
-//				return;
-//			}
-			int z = 0;
-			while (!_stop)
-			{
-				if(_capturedCount>=_slices)
-				{
-					_stop = true; //finished, then stop the thread
-					break;
-				}
-				while (_please_wait) {
-					if (alreadyCapturing)
-						setAlreadyCapturing(false);
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e1) {
-					}
-				}
-				if (!alreadyCapturing)
-					setAlreadyCapturing(true);
-				try {
-					//StageMover.moveZRelative(wantedInterval);
-					// mCore.waitForDevice(_nameZ);
-					//s.getImage(0, z).setDataXYAsShort(0, ImageGetter.snapImageToShort(mCore));
-		            try
-		            {
-		            	video.beginUpdate();	
-		            	img = ImageGetter.snapImage(mCore);
-		            	if(img == null)
-		            	{
-		            		_snapFailed = true;
-		            	}
-		            	else
-		            	{
-			            	video.addImage(((Viewer) video.getViewers().get(0)).getT(),img );
-							_snapFailed = false;
-							_capturedCount +=1;
-							z +=1;
-							double progress = 1D * z / _slices * 100D;
-							notifyProgress((int) progress);
-		            	}
-		            }
-		            catch (IllegalArgumentException e)
-		            {
-		            	_snapFailed = true;
-		                String toAdd = "";
-		                if (video.getSizeC() > 0)
-		                    toAdd = toAdd
-		                            + ": impossible to capture images with a colored sequence. Only Snap C are possible.";
-		                new AnnounceFrame("This sequence is not compatible" + toAdd,30);
-		            }
-		            catch(IndexOutOfBoundsException e2)
-		            {
-		            	_snapFailed = true;
-		            	new AnnounceFrame("IndexOutOfBoundsException,create new sequence instead!",5);
-		            }
-		            finally
-		            {
-		            	pauseThread( true);
-						video.endUpdate();
-		            }
-
-				} catch (Exception e) {
-					_snapFailed = true;
-					//break;					
-				}
-				finally
-	            {
-					pauseThread( true);
-	            }
-			}
-//			try {
-//				if (absoluteZ != 0) {
-//					// mCore.waitForDevice(_nameZ);
-//					if (supposedLastPosition != 0) {
-//						double actualPos = mCore.getPosition(_nameZ);
-//						absoluteZ += actualPos - supposedLastPosition;
-//					}
-//					backToOriginalPosition();
-//				}
-//			} catch (Exception e) {
-//				new AnnounceFrame("Error while moving");
-//			}
-			setAlreadyCapturing(false);
-			notifyAcquisitionOver();
 			try {
-				mCore.setProperty(picoCameraLabel, "RowCount",oldRowCount);
+				mCore.setProperty(picoCameraLabel, "timeoutMs",3000+60.0*1000*((_rowCount*_stepSize)/_scanSpeed));
 			} catch (Exception e3) {
 				// TODO Auto-generated catch block
 				e3.printStackTrace();
+			}	
+			try
+			{
+				
+				MicroscopeImage img;
+				notifyAcquisitionStarted(true);
+				setAlreadyCapturing(true);
+				int z = 0;
+				while (!_stop)
+				{
+					if(_capturedCount>=_slices)
+					{
+						_stop = true; //finished, then stop the thread
+						break;
+					}
+					while (_please_wait) {
+						if (alreadyCapturing)
+							setAlreadyCapturing(false);
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e1) {
+						}
+					}
+					if (!alreadyCapturing)
+						setAlreadyCapturing(true);
+					try {
+			            try
+			            {
+			            	video.beginUpdate();	
+			            	img = ImageGetter.snapImage(mCore);
+			            	if(img == null)
+			            	{
+			            		_snapFailed = true;
+			            	}
+			            	else
+			            	{
+				            	video.addImage(img );
+								_snapFailed = false;
+								_capturedCount +=1;
+								z +=1;
+								double progress = 1D * z / _slices * 100D;
+								notifyProgress((int) progress);
+			            	}
+			            }
+			            catch (IllegalArgumentException e)
+			            {
+			            	_snapFailed = true;
+			                String toAdd = "";
+			                if (video.getSizeC() > 0)
+			                    toAdd = toAdd
+			                            + ": impossible to capture images with a colored sequence. Only Snap C are possible.";
+			                new AnnounceFrame("This sequence is not compatible" + toAdd,30);
+			            }
+			            catch(IndexOutOfBoundsException e2)
+			            {
+			            	_snapFailed = true;
+			            	new AnnounceFrame("IndexOutOfBoundsException,create new sequence instead!",5);
+			            }
+			            finally
+			            {
+			            	pauseThread( true);
+							video.endUpdate();
+			            }
+	
+					} catch (Exception e) {
+						_snapFailed = true;					
+					}
+					finally
+		            {
+						pauseThread( true);
+		            }
+				}
+				setAlreadyCapturing(false);
+				notifyAcquisitionOver();
 			}
+			finally
+			{
+				try {
+					mCore.setProperty(picoCameraLabel, "RowCount",oldRowCount);
+				} catch (Exception e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
+				try {
+					mCore.setProperty(picoCameraLabel, "timeoutMs",5000);
+				} catch (Exception e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
+			}
+			
 		}
+	
 	}
 
 	@Override
@@ -500,11 +455,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 	 */
 	public  class EVA_GUI extends EzPlug implements EzStoppable, ActionListener,EzVarListener<File>,ROIListener,KeyListener
 	{
-		
-
-		
-	    /** CoreSingleton instance */
-	    MicroscopeCore core;
 
 		EzButton 					homing;	
 		EzButton 					reset;		
@@ -514,7 +464,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		EzVarDouble					stepSize;
 
 		
-		EzVarDouble					seekSpeed;
 		EzVarDouble					scanSpeed;
 		EzVarText					note;
 		EzVarFolder					targetFolder;
@@ -543,7 +492,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			homing = new EzButton("Homing", this);
 			generatePath = new EzButton("Generate Path", this);
 			
-			seekSpeed = new EzVarDouble("Seek Speed");
 			scanSpeed = new EzVarDouble("Scan Speed");
 			
 			note = new EzVarText("Scan Note", new String[] { "Test" }, 0, true);
@@ -556,7 +504,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			// let's group other variables per type
 			stepSize.setValue(1.0);
 			
-			seekSpeed.setValue(7000.0);
 			scanSpeed.setValue(6000.0);
 			
 			EzGroup groupInit = new EzGroup("Scanner Initialization", homing,reset); //,getPos,posX,posY,gotoPostion
@@ -565,13 +512,14 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			EzGroup groupScanner = new EzGroup("Scanner Control", openCtrlPanel); //,getPos,posX,posY,gotoPostion
 			super.addEzComponent(groupScanner);	
 			
-			EzGroup groupSettings = new EzGroup("Settings",targetFolder,note); //TODO:add targetFolder
+			EzGroup groupSettings = new EzGroup("Settings",targetFolder,note);
 			super.addEzComponent(groupSettings);
 			
-			EzGroup groupScanMap = new EzGroup("Scan Map",stepSize,seekSpeed, scanSpeed,generatePath);
+			EzGroup groupScanMap = new EzGroup("Scan Map",stepSize, scanSpeed,generatePath);
 			super.addEzComponent(groupScanMap);	
 			
-			core = MicroscopeCore.getCore();
+			//getUI().setParametersIOVisible(false);
+			
 
 			
 		}	
@@ -582,7 +530,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			reset .setEnabled(b);
 			homing.setEnabled(b);
 			generatePath.setEnabled(b);
-			seekSpeed .setEnabled(b);
 			scanSpeed.setEnabled(b);
 			
 			note.setEnabled(b);
@@ -592,14 +539,14 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		protected boolean waitUntilComplete()
 		{
 			if(xyStageLabel.equals("")){
-				 xyStageLabel = core.getXYStageDevice();
-		    try {
-			   xyStageParentLabel = core.getParentLabel(xyStageLabel);
-			} catch (Exception e1) {
-				new AnnounceFrame("XY Stage Error!",5);
-				System.out.println("XY Stage Error...");
-				return false;
-			} 
+				 xyStageLabel = mCore.getXYStageDevice();
+			    try {
+				   xyStageParentLabel = mCore.getParentLabel(xyStageLabel);
+				} catch (Exception e1) {
+					new AnnounceFrame("XY Stage Error!",5);
+					System.out.println("XY Stage Error...");
+					return false;
+				} 
 			}
 	  		String status = "";
 	  		//wait until movement complete
@@ -607,7 +554,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 	  		int retry= 0;
 	  		while(!stopFlag){
 	  			try {
-					status = core.getProperty(xyStageParentLabel, "Status");
+					status = mCore.getProperty(xyStageParentLabel, "Status");
 				} catch (Exception e) {
 					if(retry++<100)
 					{
@@ -658,8 +605,15 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		@Override
 		protected void execute()
 		{
-			setEnableGUI(false);
-			scannerControlEnable = false;
+			if(mCore.isSequenceRunning())
+			{
+				stopFlag = true;
+  				MessageDialog.showDialog("Please close other acquisition section first!",
+  						MessageDialog.ERROR_MESSAGE);
+  				return;
+			}
+			
+
 			if(_thread != null)
 			{
 				_thread.stopThread(); 
@@ -668,16 +622,13 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
 
-
 			if(targetFolder.getValue() == null){
-				setEnableGUI(true);
-				scannerControlEnable = true;
+
 				stopFlag = true;
 				new AnnounceFrame("Please select a target folder to store data!",5);
 				return;
@@ -692,33 +643,22 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			
 			if(!(pathFile.isFile() && pathFile.exists()))
 			{
-				setEnableGUI(true);
-				scannerControlEnable = true;
+
 				stopFlag = true;
 				new AnnounceFrame("Please select a target folder to store data!",5);
 				return;
 			}			
 			
+			setEnableGUI(false);
+			scannerControlEnable = false;
+			
+			
 			long cpt = 0;
 			stopFlag = false;
-			lastSeqName = "";
 			
-			
-//			if(targetFolder.getValue() == null){
-//				new AnnounceFrame("Please select a target folder to store data!");
-//				return;
-//			}
-
-			System.out.println(seekSpeed.name + " = " + seekSpeed.getValue());
 			System.out.println(scanSpeed.name + " = " + scanSpeed.getValue());
 			System.out.println(targetFolder.name + " = " + targetFolder.getValue());
 			System.out.println(note.name + " = " + note.getValue());
-			
-
-			try {
-				core.setProperty(xyStageParentLabel, "Command","M109 P0");//disable auto sync
-			} catch (Exception e2) {
-			} 
 			
 			try{
 			  // Open the file that is the first 
@@ -729,11 +669,10 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			  DataInputStream in = new DataInputStream(fstream);
 			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			  String strLine;
-			  //Read File Line By Line
-			  HashMap<String , String> settings = new HashMap<String , String>();  
+
 			  
 			  int lastZcount =0;
-			  int maxRetryCount = 3;
+			  int maxRetryCount = 5;
 			  String lastG00="";
 			  super.getUI().setProgressBarMessage("Action...");
 			  
@@ -748,13 +687,11 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				  		String tmp[] = strLine.split("=");
 				  		tmp[0] = tmp[0].trim().toLowerCase();
 				  		tmp[1] = tmp[1].trim().toLowerCase();
-				  		settings.put(tmp[0],tmp[1]);
 				  		
 				  	   try{
 					  		if(tmp[0].equals("newsequence") ){
 					  			currentSeqName = tmp[1];
 					  			cpt =0;
-					  			
 					  		}
 					  		else if(tmp[0].equals("width")){
 					  			rowCount = Integer.parseInt(tmp[1]);
@@ -765,26 +702,31 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  			_slices = (int) frameCount;
 					  		}
 					  		else if(tmp[0].equals("stepsize")){
-					  			stepSize.setValue( Double.parseDouble(tmp[1]));
 					  			_intervalxy = stepSize.getValue();
+					  			_stepSize =  Double.parseDouble(tmp[1]);
+					  			stepSize.setValue(_stepSize);	
 					  		}					  		
-					  		else if(tmp[0].equals("sampleoffset")){
-					  			core.setProperty(picoCameraLabel, "SampleOffset",tmp[1]);
-					  		}
-					  		else if(tmp[0].equals("samplelength")){
-					  			core.setProperty(picoCameraLabel, "SampleLength",tmp[1]);
-					  		}
+//					  		else if(tmp[0].equals("sampleoffset")){
+//					  			core.setProperty(picoCameraLabel, "SampleOffset",tmp[1]);
+//					  		}
+//					  		else if(tmp[0].equals("samplelength")){
+//					  			core.setProperty(picoCameraLabel, "SampleLength",tmp[1]);
+//					  		}
 					  		else if(tmp[0].equals("reset")){
 					  			if(tmp[1].equals("1"))
 					  			{
 					  				String a = String.valueOf(Character.toChars(18));
-					  				core.setProperty(xyStageParentLabel, "Command",a);
+					  				mCore.setProperty(xyStageParentLabel, "Command",a);
 					  			}
 					  		}
+					  		else if(tmp[0].equals("scanspeed")){
+					  			_scanSpeed = Double.parseDouble(tmp[1]);
+					  		}					  		
 					  		else if(tmp[0].equals("startacquisition")){
 					  			_thread = new Live3DThread();
+					  			_thread.pauseThread(true);  //pause acq thread
 								 _thread.start();	
-								 _thread.pauseThread(false); 
+								 
 					  		}
 					  		else if(tmp[0].equals("save")){
 					  			if(video !=null){
@@ -809,7 +751,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 								}
 					  		}					  		
 					  		else{
-					  			new AnnounceFrame(tmp[0]+":"+tmp[1],5);
+					  			//new AnnounceFrame(tmp[0]+":"+tmp[1],5);
 					  		}
 				  		}
 						catch (Exception e){//Catch exception if any
@@ -824,67 +766,66 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 
 				  		while(retryCount<maxRetryCount && !success && !stopFlag){
 
-			  				//System.out.println("snapping");
-					  		//excute command
-				  			core.setProperty(xyStageParentLabel, "Command",strLine);			  			
+				  			_thread.pauseThread(false);  // restart the acquisition thread
+				  			Thread.sleep(10);
+				  			mCore.setProperty(xyStageParentLabel, "Command",strLine);			  			
 				  			retryCount++;
 					  		success =waitUntilComplete();
-					  		if(stopFlag)
+					  		if(success)
 					  		{
-					  			success = false;
-					  			break;
-					  		}
-					  		int count = _thread.getCapturedCount();
-					  		if(count>=frameCount)
-					  		{
-					  			success = true;
-					  			break;
-					  		}
-					  		
-					  		while(!_thread.isPaused()&&!stopFlag) Thread.sleep(10);// wait until done
-					  		
-					  		if(count<=lastZcount)
-					  		{
-					  			if(_thread.isSnapFailed() || _thread.isRunning())
-					  			{
-					  				success = false;
-					  				if(! _thread.isRunning())
-					  				{
-					  					System.out.println("acq thread is over!");
-					  					break;
-					  				}
-					  				
-					  				
-					  			}
-					  			count = _thread.getCapturedCount();
-						  		if(count>lastZcount)
+
+						  		while(!_thread.isPaused()&&!stopFlag) Thread.sleep(10);// wait until done
+
+						  		int count = _thread.getCapturedCount();
+						  		if(count>=frameCount)  //task done!
 						  		{
-						  			lastZcount = count;
 						  			success = true;
 						  			break;
 						  		}
-						  		
+						  		if(count<=lastZcount) // if no new image snapped
+						  		{
+						  			success = false;
+						  			if(_thread.isSnapFailed() || _thread.isRunning())
+						  			{
+						  				if(! _thread.isRunning())
+						  				{
+						  					System.out.println("acq thread is over!");
+						  					break;
+						  				}
+						  				
+						  				
+						  			}
+						  		}
+						  		else  //we got a new image
+						  		{
+							  		lastZcount = count;
+							  		break;
+						  		}
 					  		}
-					  		lastZcount = count;
-					  		if(success)
+					  		if(stopFlag)
 					  			break;
-					  		//System.out.println(core.getProperty(picoCameraLabel, "Status"));
-					  		success = false;
-					  		_thread.pauseThread(false);  // restart the acquisition thread
+					  		new AnnounceFrame("Snap failed, redoing",5);
+					  		//Failed, then redo
+							try {
+								mCore.setProperty(xyStageParentLabel, "Command","M109 P1000 Q80");//set auto sync step 2000, timeout 80
+							} catch (Exception e2) {
+							} 
+//					  		_thread.pauseThread(false);  // restart the acquisition thread
 					  		//if not success, then redo
-					  		core.setProperty(xyStageParentLabel, "Command",lastG00);
+							mCore.setProperty(xyStageParentLabel, "Command",lastG00);
 					  		
 					  		if(! waitUntilComplete()){
 					  			super.getUI().setProgressBarMessage("error!");
 								System.out.println("Error when waiting for the stage to complete");
 					  			break;
 					  		}
-
-					  		if(stopFlag)
-					  			break;
+					  		
 				  		}
 				  		if(!success){
-				  			new AnnounceFrame("Error when snapping image!",10);
+				  			//new AnnounceFrame("Error when snapping image!",10);
+				  			if(!stopFlag)
+				  				MessageDialog.showDialog("Error when snapping image!!",
+				  						MessageDialog.ERROR_MESSAGE);
 				  			break; //exit current progress!
 				  		}
 				  		cpt++;
@@ -894,21 +835,32 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				  				  	
 				  	else{
 				  	     if (strLine.startsWith("G00"))
-				  	    _thread.pauseThread(false);  // restart the acquisition thread
-				   		lastG00 = strLine;		
+				  	     {
+				  	    	 lastG00 = strLine;
+							try 
+							{
+								mCore.setProperty(xyStageParentLabel, "Command","M109 P1000 Q80");//set auto sync step 2000, timeout 80
+							} 
+							catch (Exception e2) 
+							{
+							} 
+//							_thread.pauseThread(false);  // restart the acquisition thread
+				  	     }
+				  	     
 				  	     try
 				  	     {
-				  	    	 core.setProperty(xyStageParentLabel, "Command",strLine);
+				  	    	mCore.setProperty(xyStageParentLabel, "Command",strLine);
 				  	     }
-				  		catch (Exception e)//Catch exception if any
-				  			{
-				  				e.printStackTrace();
-				  			}
-				  		
+				  		 catch (Exception e)//Catch exception if any
+				  		 {
+				  			 e.printStackTrace();
+				  		 }
+
 				  		if(! waitUntilComplete()){
 				  			super.getUI().setProgressBarMessage("error!");
 				  			break;
 				  		}
+					  	
 				  	}
 				  }
 		
@@ -923,23 +875,21 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				  e.printStackTrace();
 			}
 			finally{
-				
-				try {
-					core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
-				} catch (Exception e2) {
-					System.out.println(e2.toString());
-				}
-				
+								
 				_thread.stopThread(); 
-				while(_thread.isRunning()) //wait until the thread is over
-				{
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				try {
+					mCore.setProperty(xyStageParentLabel, "Command","M109 P1000 Q0");//set auto sync step 1000, start auto sync immediately
+				} catch (Exception e2) {
+				} 
+//				while(_thread.isRunning()) //wait until the thread is over
+//				{
+//					try {
+//						Thread.sleep(100);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
 				
 				if(video !=null){
 					try {
@@ -961,12 +911,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					//Close the input stream
 					video = null;				
 				}
-				
-//				try {
-//					core.setProperty(picoCameraLabel, "RowCount",oldRowCount);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
 			}
 			new AnnounceFrame("Task Over!",20);
 			scannerControlEnable =true;
@@ -994,20 +938,14 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		public void mark()
 		{
 			
-		    xyStageLabel = core.getXYStageDevice();
 			try {
 				double[] x_stage = {0.0};
 				double[] y_stage = {0.0};
-				core.getXYPosition(xyStageLabel, x_stage, y_stage);
+				mCore.getXYPosition(xyStageLabel, x_stage, y_stage);
 				double x =controlPanel.getWidth()- x_stage[0]/1000;
 				double y = y_stage[0]/1000;
 				if(controlPanel != null)
 				{
-//					IcyBufferedImage image = controlPanel.getImage( 0 , 0, 0 );
-//					image.setData(image.getSizeX()-(int)x_stage[0]/1000,(int)y_stage[0]/1000,0,100);
-//					image.setData(image.getSizeX()-(int)x_stage[0]/1000+1,(int)y_stage[0]/1000,0,100);
-//					image.setData(image.getSizeX()-(int)x_stage[0]/1000,(int)y_stage[0]/1000+1,0,100);
-//					image.setData(image.getSizeX()-(int)x_stage[0]/1000+1,(int)y_stage[0]/1000+1,0,100);
 					if(currentMarkPolygon == null || !controlPanel.contains(currentMarkPolygon) )
 					{
 						currentMarkPolygon = new ROI2DPolygon(new Point2D.Double(x,y));
@@ -1053,15 +991,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			class MyRunner implements Runnable{
 	    		  public void run(){
 		    		    	try {
-		    		    		 xyStageLabel = core.getXYStageDevice();
-		    					   try {
-		    						   xyStageParentLabel = core.getParentLabel(xyStageLabel);
-		    						} catch (Exception e1) {
-		    							new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-		    							return;
-		    						} 
-		    					core.setProperty(xyStageParentLabel, "Command","$H");
-		    					
+		    					   mCore.setProperty(xyStageParentLabel, "Command","$H");
 		    					new AnnounceFrame("Homing completed!",5);
 		    				} catch (Exception e1) {
 		    					 new AnnounceFrame("Homing error,try to restart controller!",10);
@@ -1082,7 +1012,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				return;	
 			}
 			System.out.println("Generate Path ...");
-			picoCameraLabel = core.getCameraDevice();
 			try {
 					if(stepSize.getValue()<=0.0)
 					{
@@ -1140,15 +1069,14 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						if(y0>controlPanel.getHeight()) y0 = controlPanel.getHeight()-1;
 						if(y1<0) y1 = 0;
 						
-						
-						//for(double a=x0;a<=x1;a+=stepSize.getValue())
 						pw.printf("(newSequence=%s-%d)\n",roi.getName(),i);
 						pw.printf("(location=%d,%d)\n",(int)x0,(int)y0);
 						pw.printf("(width=%d)\n",(int)((double)(x0-x1)/stepSize.getValue()));	
 						pw.printf("(height=%d)\n",(int)((double)(y1-y0)/stepSize.getValue()));	
-						pw.printf("(sampleOffset=%s)\n",core.getProperty(picoCameraLabel, "SampleOffset"));
-						pw.printf("(sampleLength=%s)\n",core.getProperty(picoCameraLabel, "SampleLength"));
+						pw.printf("(sampleOffset=%s)\n",mCore.getProperty(picoCameraLabel, "SampleOffset"));
+						pw.printf("(sampleLength=%s)\n",mCore.getProperty(picoCameraLabel, "SampleLength"));
 						pw.printf("(stepSize=%s)\n",stepSize.getValue());
+						pw.printf("(scanSpeed=%s)\n",scanSpeed.getValue());
 						pw.printf("(reset=1)\n");	
 						pw.printf("(startAcquisition=1)\n");
 						pw.printf("G90\n");		
@@ -1156,13 +1084,12 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						
 						for(double b=y0;b<=y1;b+=stepSize.getValue())	
 						{
-							pw.printf("G00 X%f Y%f F%f\n",x0,b,seekSpeed.getValue());
+							pw.printf("G00 X%f Y%f\n",x0,b);
 							pw.printf("G01 X%f Y%f F%f\n",x1,b,scanSpeed.getValue());
 						}
 						pw.printf("(save=1)\n");
 						//pw.printf("(close=1)\n");
 					}	
-					//pw.printf("G00 X0 Y0\n");
 					pw.close();	
 					
 					File old = pathFile;
@@ -1177,7 +1104,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			core = MicroscopeCore.getCore();
 			if (((JButton)e.getSource()).getText().equals(openCtrlPanel.name)) {	
 			
 				if(controlPanel == null)
@@ -1217,29 +1143,17 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				}
 
 				try {
-					xyStageLabel = core.getXYStageDevice();
 					double[] x_stage = {controlPanel.getWidth()};
 					double[] y_stage = {0.0};
-					core.getXYPosition(xyStageLabel, x_stage, y_stage);
+					mCore.getXYPosition(xyStageLabel, x_stage, y_stage);
 					probePointRoi.setPosition2D(new Point2D.Double(controlPanel.getWidth()-x_stage[0]/1000.0,y_stage[0]/1000.0));
 				} catch (Exception e1) {
 				
 				}
-
-				
-				
-				
 			}
 			else if (((JButton)e.getSource()).getText().equals(reset.name)) {	
 		    	try {
-		    		 xyStageLabel = core.getXYStageDevice();
-					   try {
-						   xyStageParentLabel = core.getParentLabel(xyStageLabel);
-						} catch (Exception e1) {
-							new AnnounceFrame("Please select 'EVA_NDE_Grbl' as the default XY Stage!",20);
-							return;
-						} 
-					core.setProperty(xyStageParentLabel, "Command",String.valueOf((char)0x18));
+					 mCore.setProperty(xyStageParentLabel, "Command",String.valueOf((char)0x18));
 				} catch (Exception e1) {
 					 new AnnounceFrame("Reset failed!",10);
 				}
@@ -1306,15 +1220,9 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				{
 					double x = controlPanel.getWidth()-probePointRoi.getPosition().getX();
 					double y = probePointRoi.getPosition().getY();			
-					
-					
+
 					try {
-						core.setProperty(xyStageParentLabel, "Command","M109 P1");//enable auto sync
-					} catch (Exception e2) {
-					} 
-					try {
-						xyStageLabel = core.getXYStageDevice();
-						core.setXYPosition(xyStageLabel, x*1000.0, y*1000.0);
+						mCore.setXYPosition(xyStageLabel, x*1000.0, y*1000.0);
 						//new AnnounceFrame("Goto position...!",5);
 					} catch (Exception e1) {
 						  //new AnnounceFrame("Goto position failed!",10);
@@ -1344,10 +1252,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 		}
 		@Override
 		public void keyPressed(KeyEvent arg0) {
-
-		}
-		@Override
-		public void keyReleased(KeyEvent arg0) {
 			try
 			{
 				Point2D p= probePointRoi.getPoint();
@@ -1360,12 +1264,12 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					step *=50;			
 				switch(arg0.getKeyCode())
 				{
-	//					keycode 37 = Left 
-	//					keycode 38 = Up 
-	//					keycode 39 = Right 
-	//					keycode 40 = Down 
-	//					keycode 32 = space space 
-	//					keycode 10 = Enter
+					//keycode 37 = Left 
+					//keycode 38 = Up 
+					//keycode 39 = Right 
+					//keycode 40 = Down 
+					//keycode 32 = space space 
+					//keycode 10 = Enter
 					case 32:
 						mark();
 						break;
@@ -1418,6 +1322,10 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			{
 				System.out.println(e.toString());
 			}
+		}
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+		
 		}
 		@Override
 		public void keyTyped(KeyEvent arg0) {

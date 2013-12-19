@@ -205,6 +205,7 @@ public:
    int OnTimeInterval(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnRowCount(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnInputRange(MM::PropertyBase* pProp, MM::ActionType eAct);
+   int OnTimeoutMs(MM::PropertyBase* pProp, MM::ActionType eAct);
 private:
    int SetAllowedBinning();
    void TestResourceLocking(const bool);

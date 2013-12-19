@@ -377,7 +377,20 @@ uint8_t gc_execute_line(char *line)
 		sync_axis = X_AXIS;
       break;
 	case NON_MODAL_SET_AUTO_SYNC:
-	  auto_sync_enable = p;
+	  auto_sync_delay = p;  //if>0 auto sync frequency   if ==0 disable auto sync
+	  auto_sync_wait = q;  //auto sync after some time
+	  if(auto_sync_wait!=0) //scan mode, auto sync after timeout
+	  {
+		  auto_sync_start =0;
+		  auto_sync_count =0;
+		  auto_sync_count2 =0;
+	  }
+	  else
+	  {
+		  auto_sync_start =1;
+		  auto_sync_count =0;
+		  auto_sync_count2 =0;
+	  }
 	  break;
   }
 
@@ -417,11 +430,17 @@ uint8_t gc_execute_line(char *line)
       }
     }
 	bit_true(SYNC_CONTROL_PORT,bit(SYNC_CONTROL_BIT));
-	if(gc.motion_mode !=MOTION_MODE_SEEK) 
+	
+	if(auto_sync_wait !=0)  //scan mode, auto sync after timeout
+	{
+		if(gc.motion_mode !=MOTION_MODE_SEEK) 
+			half_sync_step = sync_step>>1;
+		else
+			half_sync_step = 0;  // seeking , then disable sync pulse
+	}
+	else //normal mode
 		half_sync_step = sync_step>>1;
-	else
-		half_sync_step = 0;  // seek mode, then disable sync pulse
-		
+	
     switch (gc.motion_mode) {
       case MOTION_MODE_CANCEL: 
         if (axis_words) { FAIL(STATUS_INVALID_STATEMENT); } // No axis words allowed while active.

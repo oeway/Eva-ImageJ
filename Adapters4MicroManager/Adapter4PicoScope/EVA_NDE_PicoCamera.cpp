@@ -319,10 +319,10 @@ int CEVA_NDE_PicoCamera::Initialize()
    SetPropertyLimits(MM::g_Keyword_Exposure, 0, 10000);
 
    // timeout
-   nRet = CreateProperty("timeoutMs", "5000", MM::Integer, false);
+   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnTimeoutMs);
+   nRet = CreateProperty("timeoutMs", "500", MM::Integer, false,pAct);
    assert(nRet == DEVICE_OK);
-   SetPropertyLimits("timeoutMs", 100, 100000);
-   SetProperty("timeoutMs", "5000");
+   SetPropertyLimits("timeoutMs", 10, 100000);
 
       // sample offset
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnSampleOffset);
@@ -510,127 +510,33 @@ int CEVA_NDE_PicoCamera::SnapImage()
 	static int callCounter = 0;
 	++callCounter;
 	int count=0;
-
  //  MM::MMTime readoutTime(PICO_RUM_TIME_OUT_US+10*img_.Height());
  //  //picoInitBlock(&unit);
  // // CollectBlockImmediate(&unit); 
-	   char buf[MM::MaxStrLength];
-	   unsigned long _timeout_=5000;
-
-
+   char buf[MM::MaxStrLength];
    //rapid block mode
-   picoInitRapidBlock(&unit,sampleOffset_,_timeout_);
-
+   try
+   {
+	  picoInitRapidBlock(&unit,sampleOffset_,timeout_);
+   }
+   catch( CMMError& e){
+	   return DEVICE_ERR;
+   }
    MMThreadGuard g(imgPixelsLock_);
    short* pBuf = (short*) const_cast<unsigned char*>(img_.GetPixels());
 
-
-
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
-   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
+    try
+   {
+		ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
+   }
+   catch( CMMError& e){
+	   return DEVICE_ERR;
+   }
+
    if(ret != PICO_OK)
 	   return DEVICE_ERR;
-	//if(nCompletedSamples != img_.Width())
- //  {
-	//   cameraCCDXSize_ = nCompletedSamples;
-	//   ResizeImageBuffer();
- //  }
-	//if(nCompletedCaptures != img_.Height())
- //  {
-	//   cameraCCDYSize_ = nCompletedCaptures;
-	//   ResizeImageBuffer();
- //  }
-
-   //char fmtStr[50];
- //  long nMaxSamples=img_.Width();
-
-	//ret=SetProperty("Status", "Start:0");
-	//ret=UpdateStatus();
- //  picoStartRapidBlock(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,&nMaxSamples,pBuf);
- //  if(nMaxSamples < img_.Width())
- //  {
-	//   cameraCCDXSize_ = nMaxSamples;
-	//   
-	//   ResizeImageBuffer();
-	//   ret=UpdateStatus();
-	//   return DEVICE_ERR;
- //  }
-
- //  MM::MMTime startTime = GetCurrentMMTime();
- //  	//Wait until data ready
-	// int ready=0;
-	// count =0;	
-	//while(!g_ready && readoutTime > (GetCurrentMMTime() - startTime))
-	//{
-	//	ready = picoCheckRapidBlockDataReady();
-	//	status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
-	//	sprintf(fmtStr, "Capturing:%d",nCompletedCaptures );
-	//	ret=SetProperty("Status", fmtStr);
-	//	ret=UpdateStatus();
-	//	count++;
-	//	if(status != PICO_OK)
-	//		break;
-	//}
-	//if(g_ready )
-	//{
-	//	ret=SetProperty("Status","Retrieving:0");
-	//	ret=UpdateStatus();
-	//	status = picoGetRapidBlockData(&unit,img_.Height(),img_.Width() ,&nCompletedSamples,&nCompletedCaptures,pBuf);
-	//	sprintf(fmtStr, "Finished:%d", img_.Height());
-	//	ret=SetProperty("Status", fmtStr);
-	//	//picoStopRapidBlock(&unit);
-	//	ret=UpdateStatus();
-	//}
-	//else
-	//{
-	//	status = picoStopRapidBlock(&unit);
-	//	status = ps3000aGetNoOfCaptures(unit.handle, &nCompletedCaptures);
-	//	sprintf(fmtStr, "Error:%d",nCompletedCaptures );
-	//	ret=SetProperty("Status", fmtStr);
-	//	ret=UpdateStatus();
-	//	return DEVICE_ERR;
-	//}
-
-
-
-
-   //----Block Mode------
-//   picoInitBlock(&unit,sampleOffset_);
-//	for (unsigned long k=0; k<img_.Height(); k++)
-//{ 		
-//	unsigned long j=0;
-//     try
-//	{
-//		int retryCount =0;
-//		int ret = DEVICE_ERR;
-//		unsigned long sampleCaptured=0;
-//  		while(ret != DEVICE_OK && retryCount++ < WAIT_FOR_TRIGGER_FAIL_COUNT){
-//			ret = picoRunBlock(&unit,cameraCCDXSize_,PICO_RUM_TIME_OUT, &sampleCaptured);
-//			//
-//		}
-//		if(ret != DEVICE_OK || sampleCaptured<0)
-//			return DEVICE_SNAP_IMAGE_FAILED;
-//	   //void* pBuf = const_cast<void*>((void*)buffers);
-//	   //img_.SetPixels(pBuf);
-//	     MMThreadGuard g(imgPixelsLock_);
-//		  for (j=0; j<sampleCaptured; j++)
-//		  {
-//				long lIndex = img_.Width()*k + j;
-//				*(pBuf + lIndex) = (unsigned short)(32768+buffers[0][j]);
-//				//printf("%ld:%d,",lIndex,buffers[0][j]);
-//				// 
-//		  }
-//		  //printf("\n");
-//	  }	
-//	 catch(...)
-//	{
-//		 LogMessage("memory overflow!", false);
-//		 return DEVICE_OUT_OF_MEMORY;
-//	}
-//   //GenerateSyntheticImage(img_, exp);
-// }
-
 
    readoutStartTime_ = GetCurrentMMTime();
 
@@ -973,15 +879,8 @@ int CEVA_NDE_PicoCamera::StartSequenceAcquisition(long numImages, double interva
    sequenceStartTime_ = GetCurrentMMTime();
    imageCounter_ = 0;
 
-   char buf[MM::MaxStrLength];
-   unsigned long _timeout_=5000;
-
-   if(GetProperty("timeoutMs", buf)== DEVICE_OK)
-   {
-	  _timeout_ =(unsigned long)atof(buf); 
-   }
    //rapid block mode
-   picoInitRapidBlock(&unit,sampleOffset_,_timeout_);
+   picoInitRapidBlock(&unit,sampleOffset_,timeout_);
 
    thd_->Start(numImages,interval_ms);
    stopOnOverflow_ = stopOnOverflow;
@@ -1056,8 +955,13 @@ int CEVA_NDE_PicoCamera::ThreadRun (MM::MMTime startTime)
 
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
-   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),&nCompletedSamples,&nCompletedCaptures,pBuf);
-
+   try
+   {
+	   ret = picoRunRapidBlock(&unit,img_.Height(),img_.Width(),&nCompletedSamples,&nCompletedCaptures,pBuf);
+   }
+   catch( CMMError& e){
+	   return DEVICE_ERR;
+   }
    if (ret != DEVICE_OK)
    {
       return ret;
@@ -1629,6 +1533,27 @@ int CEVA_NDE_PicoCamera::OnTimeInterval(MM::PropertyBase* pProp, MM::ActionType 
    else if (eAct == MM::BeforeGet)
    {
 	pProp->Set((long)timeInterval);
+   }
+
+   return DEVICE_OK;
+}/**
+* Handles "TimeoutMs" property.
+*/
+int CEVA_NDE_PicoCamera::OnTimeoutMs(MM::PropertyBase* pProp, MM::ActionType eAct)
+{
+   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
+   if (pHub && pHub->GenerateRandomError())
+      return SIMULATED_ERROR;
+
+   if (eAct == MM::AfterSet)
+   {
+	  long value;
+      pProp->Get(value);
+	  timeout_=value;
+   }
+   else if (eAct == MM::BeforeGet)
+   {
+	pProp->Set(timeout_);
    }
 
    return DEVICE_OK;

@@ -1027,7 +1027,7 @@ void picoSetTimebase(UNIT *unit,unsigned long timebase_)
 	//oversample = TRUE;
 }
 
-unsigned long _timeout=5000;
+unsigned long _timeout=500; // 5s
 void picoInitRapidBlock(UNIT * unit,long sampleOffset_,unsigned long timeout)
 {
 
@@ -1068,6 +1068,7 @@ void picoInitRapidBlock(UNIT * unit,long sampleOffset_,unsigned long timeout)
 	unit->channelSettings[0].enabled  = 1;
 	unit->channelSettings[1].enabled  = 0;
 
+	_timeout = timeout/10;
 	//printf("Collect block triggered...\n");
 	//printf("Collects when value rises past %d", scaleVoltages?
 	//	adc_to_mv(sourceDetails.thresholdUpper, unit->channelSettings[PS3000A_CHANNEL_A].range, unit)	// If scaleVoltages, print mV value
@@ -1290,6 +1291,7 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 
 	//Run
 
+	g_ready = 0;
 	do
 	{
 		retry = 0;
@@ -1309,20 +1311,9 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 	}
 	while(retry);
 
-		for (channel = 0; channel < unit->channelCount; channel++) 
-	{
-		if(unit->channelSettings[channel].enabled)
-		{
-			for (capture = 0; capture < nCaptures; capture++) 
-			{
-				status = ps3000aSetDataBuffer(unit->handle, (PS3000A_CHANNEL)channel, pBuf + nSampleWanted*capture, nSamples, capture, PS3000A_RATIO_MODE_NONE);
-			}
-		}
-	}
-
-	_timeout += nCaptures/100;  //adjust timeout according to capture number
+	//_timeout += nCaptures/100;  //adjust timeout according to capture number
 	//Wait until data ready
-	g_ready = 0;
+
 	while (!g_ready && count< _timeout )
 	{
 		Sleep(1);
@@ -1346,9 +1337,23 @@ PICO_STATUS picoRunRapidBlock(UNIT * unit,unsigned short nCaptures,unsigned long
 		status = ps3000aStop(unit->handle);
 		return PICO_TRIGGER_ERROR;
 	}
+
 	status = ps3000aGetNoOfCaptures(unit->handle, nCompletedCaptures);
 	if(status != PICO_OK)
 		return PICO_TRIGGER_ERROR;
+
+		for (channel = 0; channel < unit->channelCount; channel++) 
+	{
+		if(unit->channelSettings[channel].enabled)
+		{
+			for (capture = 0; capture < nCaptures; capture++) 
+			{
+				status = ps3000aSetDataBuffer(unit->handle, (PS3000A_CHANNEL)channel, pBuf + nSampleWanted*capture, nSamples, capture, PS3000A_RATIO_MODE_NONE);
+			}
+		}
+	}
+
+
 
 	//Allocate memory
 	overflow = (short *) calloc(unit->channelCount * nCaptures, sizeof(short));

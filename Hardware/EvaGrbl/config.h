@@ -126,13 +126,13 @@
 // Minimum planner junction speed. Sets the default minimum speed the planner plans for at the end
 // of the buffer and all stops. This should not be much greater than zero and should only be changed
 // if unwanted behavior is observed on a user's machine when running at very slow speeds.
-#define MINIMUM_PLANNER_SPEED 0.0 // (mm/min)
+#define MINIMUM_PLANNER_SPEED 500 // (mm/min)
 
 // Minimum stepper rate. Sets the absolute minimum stepper rate in the stepper program and never runs
 // slower than this value, except when sleeping. This parameter overrides the minimum planner speed.
 // This is primarily used to guarantee that the end of a movement is always reached and not stop to
 // never reach its target. This parameter should always be greater than zero.
-#define MINIMUM_STEPS_PER_MINUTE 20000 // (steps/min) - Integer value only
+#define MINIMUM_STEPS_PER_MINUTE 100000 // (steps/min) - Integer value only
 
 // Time delay increments performed during a dwell. The default value is set at 50ms, which provides
 // a maximum time delay of roughly 55 minutes, more than enough for most any application. Increasing

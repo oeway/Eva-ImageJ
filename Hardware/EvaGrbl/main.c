@@ -101,11 +101,38 @@ int main(void)
         protocol_execute_startup(); 
       }
     }
-    if(sys.state == STATE_IDLE && auto_sync_enable)
+    if(sys.state == STATE_IDLE && auto_sync_delay)  //// if ==0 disable auto sync
 	{
-		if(current_sync_step % 2000 ==0)
-			bit_toggle(SYNC_CONTROL_PORT,bit(SYNC_CONTROL_BIT));
-		current_sync_step++;
+		if(auto_sync_start)
+		{
+			if(auto_sync_count % auto_sync_delay ==0)
+				bit_toggle(SYNC_CONTROL_PORT,bit(SYNC_CONTROL_BIT));
+		}
+		else
+		{
+			if(auto_sync_count2>auto_sync_wait)  //wait until time out
+			{
+				auto_sync_wait = 0;  // exit scan mode
+				auto_sync_start=1;
+			}
+		}
+		if(auto_sync_count++ % 1000 ==0)
+		{
+			auto_sync_count2++;
+		}
+	}
+	else
+	{
+		if(auto_sync_wait!=0) //scan mode, auto sync after timeout
+		{
+			auto_sync_start =0;
+			auto_sync_count =0;
+			auto_sync_count2 =0;
+		}
+		else  //normal mode
+		{
+			auto_sync_start =1;
+		}
 	}
     protocol_execute_runtime();
     protocol_process(); // ... process the serial protocol

@@ -26,7 +26,11 @@ extern uint32_t sync_step;
 extern uint8_t sync_axis;
 extern uint32_t current_sync_step;
 extern uint32_t half_sync_step;
-extern uint8_t auto_sync_enable;
+extern uint32_t auto_sync_count;
+extern uint32_t auto_sync_count2;
+extern uint32_t auto_sync_wait; //auto sync after some time  
+extern uint32_t auto_sync_delay;  //if>0 auto sync frequency   if ==0 disable auto sync
+extern uint8_t auto_sync_start;
 void sync_init();
 //void sync_set();
 //void sync_reset();
