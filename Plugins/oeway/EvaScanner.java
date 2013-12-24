@@ -421,18 +421,19 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				setAlreadyCapturing(false);
 				notifyAcquisitionOver();
 			}
+			catch (Exception e3) {
+				e3.printStackTrace();
+			}
 			finally
 			{
 				try {
 					mCore.setProperty(picoCameraLabel, "RowCount",oldRowCount);
 				} catch (Exception e3) {
-					// TODO Auto-generated catch block
 					e3.printStackTrace();
 				}
 				try {
 					mCore.setProperty(picoCameraLabel, "timeoutMs",5000);
 				} catch (Exception e3) {
-					// TODO Auto-generated catch block
 					e3.printStackTrace();
 				}
 			}
@@ -614,19 +615,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			}
 			
 
-			if(_thread != null)
-			{
-				_thread.stopThread(); 
-				while(_thread.isRunning()) //wait until the thread is over
-				{
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
 			if(targetFolder.getValue() == null){
 
 				stopFlag = true;
@@ -674,6 +662,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 			  int lastZcount =0;
 			  int maxRetryCount = 5;
 			  String lastG00="";
+			  boolean makesureNotPaused = false;
 			  super.getUI().setProgressBarMessage("Action...");
 			  
 			  
@@ -692,6 +681,9 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  		if(tmp[0].equals("newsequence") ){
 					  			currentSeqName = tmp[1];
 					  			cpt =0;
+								lastZcount =0;
+								lastG00="";
+								makesureNotPaused = false;
 					  		}
 					  		else if(tmp[0].equals("width")){
 					  			rowCount = Integer.parseInt(tmp[1]);
@@ -723,6 +715,22 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  			_scanSpeed = Double.parseDouble(tmp[1]);
 					  		}					  		
 					  		else if(tmp[0].equals("startacquisition")){
+								if(_thread != null)
+								{
+									_thread.stopThread(); 
+									try {
+										mCore.setProperty(xyStageParentLabel, "Command","M109 P1000 Q0");//set auto sync step 1000, start auto sync immediately
+									} catch (Exception e2) {
+									} 
+									while(_thread.isRunning()) //wait until the thread is over
+									{
+										try {
+											Thread.sleep(10);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+								}
 					  			_thread = new Live3DThread();
 					  			_thread.pauseThread(true);  //pause acq thread
 								 _thread.start();	
@@ -757,7 +765,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						catch (Exception e){//Catch exception if any
 							new AnnounceFrame("Error when parsing line:"+strLine,10);
 						}
-				  		
+		
 				  	}
 				  	else if (strLine.startsWith("G01")){
 				  		boolean success = false;
@@ -767,14 +775,15 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 				  		while(retryCount<maxRetryCount && !success && !stopFlag){
 
 				  			_thread.pauseThread(false);  // restart the acquisition thread
-				  			Thread.sleep(10);
+				  			while(_thread.isPaused()&&!stopFlag && _thread.isRunning()) Thread.sleep(10);// wait until done
 				  			mCore.setProperty(xyStageParentLabel, "Command",strLine);			  			
 				  			retryCount++;
 					  		success =waitUntilComplete();
 					  		if(success)
 					  		{
 
-						  		while(!_thread.isPaused()&&!stopFlag) Thread.sleep(10);// wait until done
+					  			if(makesureNotPaused)
+					  				while(!_thread.isPaused()&&!stopFlag&& _thread.isRunning()) Thread.sleep(10);// wait until done
 
 						  		int count = _thread.getCapturedCount();
 						  		if(count>=frameCount)  //task done!
@@ -792,8 +801,6 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 						  					System.out.println("acq thread is over!");
 						  					break;
 						  				}
-						  				
-						  				
 						  			}
 						  		}
 						  		else  //we got a new image
@@ -804,13 +811,15 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					  		}
 					  		if(stopFlag)
 					  			break;
-					  		new AnnounceFrame("Snap failed, redoing",5);
+					  		new AnnounceFrame("Snap failed, redoing:"+ lastZcount,5);
+					  		System.err.println("Snap failed, redoing:" + lastZcount);
+					  		makesureNotPaused = true; //open paused make sure
 					  		//Failed, then redo
 							try {
 								mCore.setProperty(xyStageParentLabel, "Command","M109 P1000 Q80");//set auto sync step 2000, timeout 80
 							} catch (Exception e2) {
 							} 
-//					  		_thread.pauseThread(false);  // restart the acquisition thread
+					  		//_thread.pauseThread(false);  // restart the acquisition thread
 					  		//if not success, then redo
 							mCore.setProperty(xyStageParentLabel, "Command",lastG00);
 					  		
@@ -819,6 +828,11 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 								System.out.println("Error when waiting for the stage to complete");
 					  			break;
 					  		}
+					  		try
+					  		{
+					  			Thread.sleep(200);
+					  		}catch (Exception e2) {
+							} 
 					  		
 				  		}
 				  		if(!success){
@@ -844,7 +858,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 							catch (Exception e2) 
 							{
 							} 
-//							_thread.pauseThread(false);  // restart the acquisition thread
+							//_thread.pauseThread(false);  // restart the acquisition thread
 				  	     }
 				  	     
 				  	     try
@@ -881,15 +895,7 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					mCore.setProperty(xyStageParentLabel, "Command","M109 P1000 Q0");//set auto sync step 1000, start auto sync immediately
 				} catch (Exception e2) {
 				} 
-//				while(_thread.isRunning()) //wait until the thread is over
-//				{
-//					try {
-//						Thread.sleep(100);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
+
 				
 				if(video !=null){
 					try {
@@ -910,8 +916,20 @@ public class EvaScanner extends MicroscopePluginAcquisition {
 					}
 					//Close the input stream
 					video = null;				
+				}			
+				while(_thread.isRunning()) //wait until the thread is over
+				{
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-			}
+			}	
+			
+
+			
 			new AnnounceFrame("Task Over!",20);
 			scannerControlEnable =true;
 			setEnableGUI(true);
