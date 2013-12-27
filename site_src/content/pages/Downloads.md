@@ -1,5 +1,6 @@
 Title: Downloads
 Slug: downloads
+Lang: en
 
 ## Source Code
 All the source code of EVA project is available on github: [EVA project](https://github.com/oeway/EVA/).

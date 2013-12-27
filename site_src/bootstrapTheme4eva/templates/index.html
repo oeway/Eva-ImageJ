@@ -35,6 +35,13 @@
 
 {% endblock %}
 {% block content %}
+{% for page in pages %}
+{% if page.slug == 'promote' %}
+<div class='page'>
+{{ page.content }}
+</div>
+{% endif %}
+{% endfor %}
 <script src="{{ SITEURL }}/theme/js/jquery.js"></script>
 <div id="videogfw">
     <script type="text/javascript">
@@ -45,7 +52,7 @@
             $("#videogfw").append(video);
         }
         var youtube_src = "//www.youtube.com/embed/pN5v-2BKSbE"
-        var youku_src = "http://player.youku.com/embed/XNjM3OTMyNTM2"
+        var youku_src = "http://player.youku.com/embed/XNjUxNzE0NzMy"
         try
         {
             jQuery.getJSON('http://freegeoip.net/json/', function(location) {

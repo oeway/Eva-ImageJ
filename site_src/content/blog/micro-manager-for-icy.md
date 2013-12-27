@@ -1,7 +1,8 @@
 Title: Hardware connection with Micro-Manager
 Date: 2013-9-27 10:30
 Tags: plugin
-Slug: 2013-9-27
+Slug: micro-manager-for-icy
+Lang: en
 Author: Will Ouyang
 Summary:
 
