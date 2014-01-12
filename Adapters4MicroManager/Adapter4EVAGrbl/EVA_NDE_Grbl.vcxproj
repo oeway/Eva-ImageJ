@@ -224,7 +224,6 @@ copy "$(TargetPath)" "D:\Projects\EVA-NDE\icy"</Command>
     <ClCompile Include="XYStage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AsioClient.h" />
     <ClInclude Include="EVA_NDE_Grbl.h" />
     <ClInclude Include="..\..\MMDevice\DeviceBase.h" />
     <ClInclude Include="..\..\MMDevice\ModuleInterface.h" />

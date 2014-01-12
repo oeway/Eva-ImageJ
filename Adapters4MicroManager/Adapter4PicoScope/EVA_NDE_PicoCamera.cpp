@@ -89,12 +89,9 @@ BOOL APIENTRY DllMain( HANDLE /*hModule*/,
 MODULE_API void InitializeModuleData()
 {
    AddAvailableDeviceName(g_CameraDeviceName, "EVA_NDE_Pico camera");
-   AddAvailableDeviceName("TransposeProcessor", "TransposeProcessor");
-   AddAvailableDeviceName("ImageFlipX", "ImageFlipX");
-   AddAvailableDeviceName("ImageFlipY", "ImageFlipY");
    AddAvailableDeviceName("MedianFilter", "MedianFilter");
    AddAvailableDeviceName(g_DADeviceName, "EVA_NDE_Pico DA");
-   AddAvailableDeviceName(g_HubDeviceName, "DHub");
+   AddAvailableDeviceName(g_HubDeviceName, "EVA_NDE_Pico hub");
 }
 
 MODULE_API MM::Device* CreateDevice(const char* deviceName)
@@ -112,18 +109,6 @@ MODULE_API MM::Device* CreateDevice(const char* deviceName)
    {
       // create DA
       return new EVA_NDE_PicoDA();
-   }
-   else if(strcmp(deviceName, "TransposeProcessor") == 0)
-   {
-      return new TransposeProcessor();
-   }
-   else if(strcmp(deviceName, "ImageFlipX") == 0)
-   {
-      return new ImageFlipX();
-   }
-   else if(strcmp(deviceName, "ImageFlipY") == 0)
-   {
-      return new ImageFlipY();
    }
    else if(strcmp(deviceName, "MedianFilter") == 0)
    {
@@ -161,9 +146,6 @@ CEVA_NDE_PicoCamera::CEVA_NDE_PicoCamera() :
    CCameraBase<CEVA_NDE_PicoCamera> (),
    dPhase_(0),
    initialized_(false),
-   readoutUs_(0.0),
-   scanMode_(1),
-   bitDepth_(16),
    roiX_(0),
    roiY_(0),
    sequenceStartTime_(0),
@@ -171,17 +153,13 @@ CEVA_NDE_PicoCamera::CEVA_NDE_PicoCamera() :
    sequenceMaxLength_(100),
    sequenceRunning_(false),
    sequenceIndex_(0),
-	binSize_(1),
-	cameraCCDXSize_(512),//BUFFER_SIZE/2),
-	cameraCCDYSize_(1),
+   binSize_(1),
+   image_width(512),
+   image_height(1),
    ccdT_ (0.0),
    nComponents_(1),
    pEVA_NDE_PicoResourceLock_(0),
    triggerDevice_(""),
-	dropPixels_(false),
-   fastImage_(false),
-   saturatePixels_(false),
-	fractionOfPixelsToDropOrSaturate_(0.002),
    stopOnOverflow_(false),
    sampleOffset_(0),
    timeout_(5000)
@@ -189,10 +167,8 @@ CEVA_NDE_PicoCamera::CEVA_NDE_PicoCamera() :
 
    // call the base class method to set-up default error codes/messages
    InitializeDefaultErrorMessages();
-   readoutStartTime_ = GetCurrentMMTime();
    pEVA_NDE_PicoResourceLock_ = new MMThreadLock();
    thd_ = new MySequenceThread(this);
-
    // parent ID display
    CreateHubIDProperty();
 }
@@ -238,8 +214,6 @@ int CEVA_NDE_PicoCamera::Initialize()
    EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
    if (pHub)
    {
-      if (pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
       char hubLabel[MM::MaxStrLength];
       pHub->GetLabel(hubLabel);
       SetParentID(hubLabel); // for backward comp.
@@ -283,33 +257,13 @@ int CEVA_NDE_PicoCamera::Initialize()
       return nRet;
 
    // pixel type
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnPixelType);
-   nRet = CreateProperty(MM::g_Keyword_PixelType, g_PixelType_16bit, MM::String, false, pAct);
+   nRet = CreateProperty(MM::g_Keyword_PixelType, g_PixelType_16bit, MM::String, false);
    assert(nRet == DEVICE_OK);
-
    vector<string> pixelTypeValues;
    pixelTypeValues.push_back(g_PixelType_8bit);
    pixelTypeValues.push_back(g_PixelType_16bit); 
-   //pixelTypeValues.push_back(::g_PixelType_32bit);
-
-   	SetProperty(MM::g_Keyword_PixelType, g_PixelType_16bit);
-
+   SetProperty(MM::g_Keyword_PixelType, g_PixelType_16bit);
    nRet = SetAllowedValues(MM::g_Keyword_PixelType, pixelTypeValues);
-   if (nRet != DEVICE_OK)
-      return nRet;
-
-   // Bit depth
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnBitDepth);
-   nRet = CreateProperty("BitDepth", "8", MM::Integer, false, pAct);
-   assert(nRet == DEVICE_OK);
-
-   vector<string> bitDepths;
-   bitDepths.push_back("8");
-   bitDepths.push_back("10");
-   bitDepths.push_back("12");
-   bitDepths.push_back("14");
-   bitDepths.push_back("16");
-   nRet = SetAllowedValues("BitDepth", bitDepths);
    if (nRet != DEVICE_OK)
       return nRet;
 
@@ -324,45 +278,27 @@ int CEVA_NDE_PicoCamera::Initialize()
    assert(nRet == DEVICE_OK);
    SetPropertyLimits("timeoutMs", 10, 100000);
 
-      // sample offset
+    // sample offset
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnSampleOffset);
    nRet = CreateProperty("SampleOffset", "0", MM::Integer, false, pAct);
    assert(nRet == DEVICE_OK);
    //SetPropertyLimits("SampleOffset", 0, MAX_SAMPLE_LENGTH-1000);
 
-      //sample length
+   //sample length
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnSampleLength);
    nRet = CreateProperty("SampleLength", "10.0", MM::Integer, false, pAct);
    assert(nRet == DEVICE_OK);
    //SetPropertyLimits("SampleLength", 0, MAX_SAMPLE_LENGTH);
 
-      //timebase
+   //timebase
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnTimebase);
    nRet = CreateProperty("Timebase", "10", MM::Integer, false, pAct);
    assert(nRet == DEVICE_OK);
 
-    //timeInterval
+   //timeInterval
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnTimeInterval);
    nRet = CreateProperty("TimeIntervalNs", "0", MM::Integer, true, pAct);
    assert(nRet == DEVICE_OK);
-
-
-   //SetPropertyLimits("SampleLength", 0, MAX_SAMPLE_LENGTH);
-	CPropertyActionEx *pActX = 0;
-	// create an extended (i.e. array) properties 1 through 4
-
-   //pAct = new CPropertyAction(this, &CEVA_NDE_PicoCamera::OnSwitch);
-   //nRet = CreateProperty("Switch", "0", MM::Integer, false, pAct);
-   //SetPropertyLimits("Switch", 8, 1004);
-	
-	
-	// scan mode
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnScanMode);
-   nRet = CreateProperty("ScanMode", "1", MM::Integer, false, pAct);
-   assert(nRet == DEVICE_OK);
-   AddAllowedValue("ScanMode","1");
-   AddAllowedValue("ScanMode","2");
-   AddAllowedValue("ScanMode","3");
 
    // camera gain
    nRet = CreateProperty(MM::g_Keyword_Gain, "0", MM::Integer, false);
@@ -372,51 +308,6 @@ int CEVA_NDE_PicoCamera::Initialize()
    // camera offset
    nRet = CreateProperty(MM::g_Keyword_Offset, "0", MM::Integer, false);
    assert(nRet == DEVICE_OK);
-
-   // camera temperature
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnCCDTemp);
-   nRet = CreateProperty(MM::g_Keyword_CCDTemperature, "0", MM::Float, false, pAct);
-   assert(nRet == DEVICE_OK);
-   SetPropertyLimits(MM::g_Keyword_CCDTemperature, -100, 10);
-
-   // camera temperature RO
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnCCDTemp);
-   nRet = CreateProperty("CCDTemperature RO", "0", MM::Float, true, pAct);
-   assert(nRet == DEVICE_OK);
-
-   // readout time
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnReadoutTime);
-   nRet = CreateProperty(MM::g_Keyword_ReadoutTime, "0", MM::Float, false, pAct);
-   assert(nRet == DEVICE_OK);
-
-   // CCD size of the camera we are modeling
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnCameraCCDXSize);
-   CreateProperty("OnCameraCCDXSize", "512", MM::Integer, false, pAct);
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnCameraCCDYSize);
-   CreateProperty("OnCameraCCDYSize", "512", MM::Integer, false, pAct);
-
-   // Trigger device
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnTriggerDevice);
-   CreateProperty("TriggerDevice","", MM::String, false, pAct);
-
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnDropPixels);
-	CreateProperty("DropPixels", "0", MM::Integer, false, pAct);
-   AddAllowedValue("DropPixels", "0");
-   AddAllowedValue("DropPixels", "1");
-
-	pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnSaturatePixels);
-	CreateProperty("SaturatePixels", "0", MM::Integer, false, pAct);
-   AddAllowedValue("SaturatePixels", "0");
-   AddAllowedValue("SaturatePixels", "1");
-
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnFastImage);
-	CreateProperty("FastImage", "0", MM::Integer, false, pAct);
-   AddAllowedValue("FastImage", "0");
-   AddAllowedValue("FastImage", "1");
-
-   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnFractionOfPixelsToDropOrSaturate);
-	CreateProperty("FractionOfPixelsToDropOrSaturate", "0.002", MM::Float, false, pAct);
-	SetPropertyLimits("FractionOfPixelsToDropOrSaturate", 0., 0.1);
 
    // Whether or not to use exposure time sequencing
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnIsSequenceable);
@@ -455,8 +346,6 @@ int CEVA_NDE_PicoCamera::Initialize()
 	picoInitBlock(&unit,sampleOffset_);
    // initialize image buffer
    GenerateEmptyImage(img_);
-
-
    pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnInputRange);
    CreateProperty("InputRange", "0", MM::Integer, false, pAct);
    //add input range
@@ -464,13 +353,6 @@ int CEVA_NDE_PicoCamera::Initialize()
 	{
 		AddAllowedValue("InputRange",  CDeviceUtils::ConvertToString(inputRanges[i]));
 	}
-
-
-
-
-
-
-
   initialized_ = true;
    return DEVICE_OK;
 }
@@ -485,9 +367,6 @@ int CEVA_NDE_PicoCamera::Initialize()
 */
 int CEVA_NDE_PicoCamera::Shutdown()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    CloseDevice(&unit);
 
@@ -503,9 +382,6 @@ int CEVA_NDE_PicoCamera::Shutdown()
 */
 int CEVA_NDE_PicoCamera::SnapImage()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
    int ret = DEVICE_ERR;
 	static int callCounter = 0;
 	++callCounter;
@@ -538,8 +414,6 @@ int CEVA_NDE_PicoCamera::SnapImage()
    if(ret != PICO_OK)
 	   return DEVICE_ERR;
 
-   readoutStartTime_ = GetCurrentMMTime();
-
    return DEVICE_OK;
 }
 
@@ -556,13 +430,8 @@ int CEVA_NDE_PicoCamera::SnapImage()
 */
 const unsigned char* CEVA_NDE_PicoCamera::GetImageBuffer()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return 0;
 
-   MMThreadGuard g(imgPixelsLock_);
-   MM::MMTime readoutTime(readoutUs_);
-   while (readoutTime > (GetCurrentMMTime() - readoutStartTime_)) {}		
+   MMThreadGuard g(imgPixelsLock_);	
    unsigned char *pB = (unsigned char*)(img_.GetPixels());
    return pB;
 }
@@ -573,10 +442,6 @@ const unsigned char* CEVA_NDE_PicoCamera::GetImageBuffer()
 */
 unsigned CEVA_NDE_PicoCamera::GetImageWidth() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return 0;
-
    return img_.Width();
 }
 
@@ -586,10 +451,6 @@ unsigned CEVA_NDE_PicoCamera::GetImageWidth() const
 */
 unsigned CEVA_NDE_PicoCamera::GetImageHeight() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return 0;
-
    return img_.Height();
 }
 
@@ -599,10 +460,6 @@ unsigned CEVA_NDE_PicoCamera::GetImageHeight() const
 */
 unsigned CEVA_NDE_PicoCamera::GetImageBytesPerPixel() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return 0;
-
    return img_.Depth();
 } 
 
@@ -614,11 +471,7 @@ unsigned CEVA_NDE_PicoCamera::GetImageBytesPerPixel() const
 */
 unsigned CEVA_NDE_PicoCamera::GetBitDepth() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return 0;
-
-   return bitDepth_;
+   return 8;
 }
 
 /**
@@ -627,9 +480,6 @@ unsigned CEVA_NDE_PicoCamera::GetBitDepth() const
 */
 long CEVA_NDE_PicoCamera::GetImageBufferSize() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return 0;
 
    return img_.Width() * img_.Height() * GetImageBytesPerPixel();
 }
@@ -650,9 +500,6 @@ long CEVA_NDE_PicoCamera::GetImageBufferSize() const
 */
 int CEVA_NDE_PicoCamera::SetROI(unsigned x, unsigned y, unsigned xSize, unsigned ySize)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (xSize == 0 && ySize == 0)
    {
@@ -677,9 +524,6 @@ int CEVA_NDE_PicoCamera::SetROI(unsigned x, unsigned y, unsigned xSize, unsigned
 */
 int CEVA_NDE_PicoCamera::GetROI(unsigned& x, unsigned& y, unsigned& xSize, unsigned& ySize)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    x = roiX_;
    y = roiY_;
@@ -696,9 +540,6 @@ int CEVA_NDE_PicoCamera::GetROI(unsigned& x, unsigned& y, unsigned& xSize, unsig
 */
 int CEVA_NDE_PicoCamera::ClearROI()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    ResizeImageBuffer();
    roiX_ = 0;
@@ -713,9 +554,6 @@ int CEVA_NDE_PicoCamera::ClearROI()
 */
 double CEVA_NDE_PicoCamera::GetExposure() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    char buf[MM::MaxStrLength];
    int ret = GetProperty(MM::g_Keyword_Exposure, buf);
@@ -758,9 +596,6 @@ void CEVA_NDE_PicoCamera::SetExposure(double exp)
 */
 int CEVA_NDE_PicoCamera::GetBinning() const
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    char buf[MM::MaxStrLength];
    int ret = GetProperty(MM::g_Keyword_Binning, buf);
@@ -775,9 +610,6 @@ int CEVA_NDE_PicoCamera::GetBinning() const
 */
 int CEVA_NDE_PicoCamera::SetBinning(int binF)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    return SetProperty(MM::g_Keyword_Binning, CDeviceUtils::ConvertToString(binF));
 }
@@ -802,25 +634,11 @@ int CEVA_NDE_PicoCamera::AddToExposureSequence(double exposureTime_ms)
 
 int CEVA_NDE_PicoCamera::SetAllowedBinning() 
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    vector<string> binValues;
    binValues.push_back("1");
    binValues.push_back("2");
-   if (scanMode_ < 3)
-      binValues.push_back("4");
-   if (scanMode_ < 2)
-      binValues.push_back("8");
-   if (binSize_ == 8 && scanMode_ == 3) {
-      SetProperty(MM::g_Keyword_Binning, "2");
-   } else if (binSize_ == 8 && scanMode_ == 2) {
-      SetProperty(MM::g_Keyword_Binning, "4");
-   } else if (binSize_ == 4 && scanMode_ == 3) {
-      SetProperty(MM::g_Keyword_Binning, "2");
-   }
-      
+
    LogMessage("Setting Allowed Binning settings", true);
    return SetAllowedValues(MM::g_Keyword_Binning, binValues);
 }
@@ -832,9 +650,6 @@ int CEVA_NDE_PicoCamera::SetAllowedBinning()
  * The Base class implementation is deprecated and will be removed shortly
  */
 int CEVA_NDE_PicoCamera::StartSequenceAcquisition(double interval) {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    return StartSequenceAcquisition(LONG_MAX, interval, false);            
 }
@@ -844,12 +659,9 @@ int CEVA_NDE_PicoCamera::StartSequenceAcquisition(double interval) {
 */                                                                        
 int CEVA_NDE_PicoCamera::StopSequenceAcquisition()                                     
 {
-   if (IsCallbackRegistered())
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-   }
+   //if (IsCallbackRegistered())
+   //{
+   //}
 
    if (!thd_->IsStopped()) {
       thd_->Stop();                                                       
@@ -866,9 +678,6 @@ int CEVA_NDE_PicoCamera::StopSequenceAcquisition()
 */
 int CEVA_NDE_PicoCamera::StartSequenceAcquisition(long numImages, double interval_ms, bool stopOnOverflow)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (IsCapturing())
       return DEVICE_CAMERA_BUSY_ACQUIRING;
@@ -892,9 +701,6 @@ int CEVA_NDE_PicoCamera::StartSequenceAcquisition(long numImages, double interva
  */
 int CEVA_NDE_PicoCamera::InsertImage()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    MM::MMTime timeStamp = this->GetCurrentMMTime();
    char label[MM::MaxStrLength];
@@ -915,7 +721,6 @@ int CEVA_NDE_PicoCamera::InsertImage()
    md.put(MM::g_Keyword_Binning, buf);
 
    MMThreadGuard g(imgPixelsLock_);
-
    const unsigned char* pI;
    pI = GetImageBuffer();
 
@@ -940,18 +745,11 @@ int CEVA_NDE_PicoCamera::InsertImage()
  */
 int CEVA_NDE_PicoCamera::ThreadRun (MM::MMTime startTime)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    int ret=DEVICE_ERR;
 
-
-
    MMThreadGuard g(imgPixelsLock_);
    short* pBuf = (short*) const_cast<unsigned char*>(img_.GetPixels());
-
-
 
    unsigned long nCompletedSamples;
    unsigned long nCompletedCaptures;
@@ -1098,10 +896,6 @@ int MySequenceThread::svc(void) throw()
 */
 int CEVA_NDE_PicoCamera::OnBinning(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
    int ret = DEVICE_ERR;
    switch(eAct)
    {
@@ -1116,7 +910,7 @@ int CEVA_NDE_PicoCamera::OnBinning(MM::PropertyBase* pProp, MM::ActionType eAct)
          pProp->Get(binFactor);
 			if(binFactor > 0 && binFactor < 10)
 			{
-				img_.Resize(cameraCCDXSize_/binFactor, cameraCCDYSize_/binFactor);
+				img_.Resize(image_width/binFactor, image_height/binFactor);
 				binSize_ = binFactor;
             std::ostringstream os;
             os << binSize_;
@@ -1137,13 +931,10 @@ int CEVA_NDE_PicoCamera::OnBinning(MM::PropertyBase* pProp, MM::ActionType eAct)
 */
 int CEVA_NDE_PicoCamera::OnRowCount(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::BeforeGet)
    {
-		pProp->Set(cameraCCDYSize_);
+		pProp->Set(image_height);
    }
    else if (eAct == MM::AfterSet)
    {
@@ -1151,301 +942,19 @@ int CEVA_NDE_PicoCamera::OnRowCount(MM::PropertyBase* pProp, MM::ActionType eAct
       pProp->Get(value);
 		if ( (value < 1) || (MAX_SAMPLE_LENGTH < value))
 			return DEVICE_ERR;  // invalid image size
-		if( value != cameraCCDYSize_)
+		if( value != image_height)
 		{
-			cameraCCDYSize_ = value;
-			img_.Resize(cameraCCDXSize_/binSize_, cameraCCDYSize_/binSize_);
+			image_height = value;
+			img_.Resize(image_width/binSize_, image_height/binSize_);
 		}
    }
 	return DEVICE_OK; 
 }
 /**
-* Handles "PixelType" property.
-*/
-int CEVA_NDE_PicoCamera::OnPixelType(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   int ret = DEVICE_ERR;
-   switch(eAct)
-   {
-   case MM::AfterSet:
-      {
-         if(IsCapturing())
-            return DEVICE_CAMERA_BUSY_ACQUIRING;
-
-         string pixelType;
-         pProp->Get(pixelType);
-
-         if (pixelType.compare(g_PixelType_8bit) == 0)
-         {
-            nComponents_ = 1;
-            img_.Resize(img_.Width(), img_.Height(), 1);
-            bitDepth_ = 8;
-            ret=DEVICE_OK;
-         }
-         else if (pixelType.compare(g_PixelType_16bit) == 0)
-         {
-            nComponents_ = 1;
-            img_.Resize(img_.Width(), img_.Height(), 2);
-            ret=DEVICE_OK;
-         }
-	
-         else
-         {
-            // on error switch to default pixel type
-            nComponents_ = 1;
-            img_.Resize(img_.Width(), img_.Height(), 1);
-            pProp->Set(g_PixelType_8bit);
-            ret = ERR_UNKNOWN_MODE;
-         }
-      } break;
-   case MM::BeforeGet:
-      {
-         long bytesPerPixel = GetImageBytesPerPixel();
-         if (bytesPerPixel == 1)
-         	pProp->Set(g_PixelType_8bit);
-         else if (bytesPerPixel == 2)
-         	pProp->Set(g_PixelType_16bit);
-     		else
-				pProp->Set(g_PixelType_8bit);
-         ret=DEVICE_OK;
-      }break;
-   }
-   return ret; 
-}
-
-/**
-* Handles "BitDepth" property.
-*/
-int CEVA_NDE_PicoCamera::OnBitDepth(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   int ret = DEVICE_ERR;
-   switch(eAct)
-   {
-   case MM::AfterSet:
-      {
-         if(IsCapturing())
-            return DEVICE_CAMERA_BUSY_ACQUIRING;
-
-         long bitDepth;
-         pProp->Get(bitDepth);
-
-			unsigned int bytesPerComponent;
-
-         switch (bitDepth) {
-            case 8:
-					bytesPerComponent = 1;
-               bitDepth_ = 8;
-               ret=DEVICE_OK;
-            break;
-            case 10:
-					bytesPerComponent = 2;
-               bitDepth_ = 10;
-               ret=DEVICE_OK;
-            break;
-            case 12:
-					bytesPerComponent = 2;
-               bitDepth_ = 12;
-               ret=DEVICE_OK;
-            break;
-            case 14:
-					bytesPerComponent = 2;
-               bitDepth_ = 14;
-               ret=DEVICE_OK;
-            break;
-            case 16:
-					bytesPerComponent = 2;
-               bitDepth_ = 16;
-               ret=DEVICE_OK;
-            break;
-            default: 
-               // on error switch to default pixel type
-					bytesPerComponent = 1;
-
-               pProp->Set((long)8);
-               bitDepth_ = 8;
-               ret = ERR_UNKNOWN_MODE;
-            break;
-         }
-			char buf[MM::MaxStrLength];
-			GetProperty(MM::g_Keyword_PixelType, buf);
-			std::string pixelType(buf);
-			unsigned int bytesPerPixel = 1;
-			
-
-         // automagickally change pixel type when bit depth exceeds possible value
-         if (pixelType.compare(g_PixelType_8bit) == 0)
-         {
-				if( 2 == bytesPerComponent)
-				{
-					SetProperty(MM::g_Keyword_PixelType, g_PixelType_16bit);
-					bytesPerPixel = 2;
-				}
-				else
-				{
-				   bytesPerPixel = 1;
-				}
-         }
-         else if (pixelType.compare(g_PixelType_16bit) == 0)
-         {
-				bytesPerPixel = 2;
-         }
-
-			img_.Resize(img_.Width(), img_.Height(), bytesPerPixel);
-
-      } break;
-   case MM::BeforeGet:
-      {
-         pProp->Set((long)bitDepth_);
-         ret=DEVICE_OK;
-      }break;
-   }
-   return ret; 
-}
-/**
-* Handles "ReadoutTime" property.
-*/
-int CEVA_NDE_PicoCamera::OnReadoutTime(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::AfterSet)
-   {
-      double readoutMs;
-      pProp->Get(readoutMs);
-
-      readoutUs_ = readoutMs * 1000.0;
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(readoutUs_ / 1000.0);
-   }
-
-   return DEVICE_OK;
-}
-
-int CEVA_NDE_PicoCamera::OnDropPixels(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::AfterSet)
-   {
-      long tvalue = 0;
-      pProp->Get(tvalue);
-		dropPixels_ = (0==tvalue)?false:true;
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(dropPixels_?1L:0L);
-   }
-
-   return DEVICE_OK;
-}
-
-int CEVA_NDE_PicoCamera::OnFastImage(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::AfterSet)
-   {
-      long tvalue = 0;
-      pProp->Get(tvalue);
-		fastImage_ = (0==tvalue)?false:true;
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(fastImage_?1L:0L);
-   }
-
-   return DEVICE_OK;
-}
-
-int CEVA_NDE_PicoCamera::OnSaturatePixels(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::AfterSet)
-   {
-      long tvalue = 0;
-      pProp->Get(tvalue);
-		saturatePixels_ = (0==tvalue)?false:true;
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(saturatePixels_?1L:0L);
-   }
-
-   return DEVICE_OK;
-}
-
-int CEVA_NDE_PicoCamera::OnFractionOfPixelsToDropOrSaturate(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::AfterSet)
-   {
-      double tvalue = 0;
-      pProp->Get(tvalue);
-		fractionOfPixelsToDropOrSaturate_ = tvalue;
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(fractionOfPixelsToDropOrSaturate_);
-   }
-
-   return DEVICE_OK;
-}
-
-/*
-* Handles "ScanMode" property.
-* Changes allowed Binning values to test whether the UI updates properly
-*/
-int CEVA_NDE_PicoCamera::OnScanMode(MM::PropertyBase* pProp, MM::ActionType eAct)
-{ 
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::AfterSet) {
-      pProp->Get(scanMode_);
-      SetAllowedBinning();
-      if (initialized_) {
-         int ret = OnPropertiesChanged();
-         if (ret != DEVICE_OK)
-            return ret;
-      }
-   } else if (eAct == MM::BeforeGet) {
-      LogMessage("Reading property ScanMode", true);
-      pProp->Set(scanMode_);
-   }
-   return DEVICE_OK;
-}
-
-/**
 * Handles "Input Range" property.
 */
 int CEVA_NDE_PicoCamera::OnInputRange(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::AfterSet)
    {
@@ -1476,9 +985,6 @@ int CEVA_NDE_PicoCamera::OnInputRange(MM::PropertyBase* pProp, MM::ActionType eA
 */
 int CEVA_NDE_PicoCamera::OnSampleLength(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::AfterSet)
    {
@@ -1486,15 +992,15 @@ int CEVA_NDE_PicoCamera::OnSampleLength(MM::PropertyBase* pProp, MM::ActionType 
       pProp->Get(value);
 		if ( (value < 1) || (MAX_SAMPLE_LENGTH < value))
 			return DEVICE_ERR;  // invalid image size
-		if( value != cameraCCDXSize_)
+		if( value != image_width)
 		{
-			cameraCCDXSize_ = value;
-			img_.Resize(cameraCCDXSize_/binSize_, cameraCCDYSize_/binSize_);
+			image_width = value;
+			img_.Resize(image_width/binSize_, image_height/binSize_);
 		}
    }
    else if (eAct == MM::BeforeGet)
    {
-	pProp->Set(cameraCCDXSize_);
+	pProp->Set(image_width);
    }
 
    return DEVICE_OK;
@@ -1505,9 +1011,6 @@ int CEVA_NDE_PicoCamera::OnSampleLength(MM::PropertyBase* pProp, MM::ActionType 
 */
 int CEVA_NDE_PicoCamera::OnTimebase(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::AfterSet)
    {
@@ -1527,10 +1030,8 @@ int CEVA_NDE_PicoCamera::OnTimebase(MM::PropertyBase* pProp, MM::ActionType eAct
 */
 int CEVA_NDE_PicoCamera::OnTimeInterval(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-   else if (eAct == MM::BeforeGet)
+
+   if (eAct == MM::BeforeGet)
    {
 	pProp->Set((long)timeInterval);
    }
@@ -1541,9 +1042,6 @@ int CEVA_NDE_PicoCamera::OnTimeInterval(MM::PropertyBase* pProp, MM::ActionType 
 */
 int CEVA_NDE_PicoCamera::OnTimeoutMs(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::AfterSet)
    {
@@ -1563,9 +1061,6 @@ int CEVA_NDE_PicoCamera::OnTimeoutMs(MM::PropertyBase* pProp, MM::ActionType eAc
 */
 int CEVA_NDE_PicoCamera::OnSampleOffset(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::AfterSet)
    {
@@ -1580,63 +1075,9 @@ int CEVA_NDE_PicoCamera::OnSampleOffset(MM::PropertyBase* pProp, MM::ActionType 
 
    return DEVICE_OK;
 }
-int CEVA_NDE_PicoCamera::OnCameraCCDXSize(MM::PropertyBase* pProp , MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::BeforeGet)
-   {
-		pProp->Set(cameraCCDXSize_);
-   }
-   else if (eAct == MM::AfterSet)
-   {
-      long value;
-      pProp->Get(value);
-		if ( (value < 1) || (MAX_SAMPLE_LENGTH < value))
-			return DEVICE_ERR;  // invalid image size
-		if( value != cameraCCDXSize_)
-		{
-			cameraCCDXSize_ = value;
-			img_.Resize(cameraCCDXSize_/binSize_, cameraCCDYSize_/binSize_);
-		}
-   }
-	return DEVICE_OK;
-
-}
-
-int CEVA_NDE_PicoCamera::OnCameraCCDYSize(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::BeforeGet)
-   {
-		pProp->Set(cameraCCDYSize_);
-   }
-   else if (eAct == MM::AfterSet)
-   {
-      long value;
-      pProp->Get(value);
-		if ( (value < 1) || (MAX_SAMPLE_LENGTH < value))
-			return DEVICE_ERR;  // invalid image size
-		if( value != cameraCCDYSize_)
-		{
-			cameraCCDYSize_ = value;
-			img_.Resize(cameraCCDXSize_/binSize_, cameraCCDYSize_/binSize_);
-		}
-   }
-	return DEVICE_OK;
-
-}
 
 int CEVA_NDE_PicoCamera::OnTriggerDevice(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::BeforeGet)
    {
@@ -1649,19 +1090,6 @@ int CEVA_NDE_PicoCamera::OnTriggerDevice(MM::PropertyBase* pProp, MM::ActionType
    return DEVICE_OK;
 }
 
-
-int CEVA_NDE_PicoCamera::OnCCDTemp(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(ccdT_);
-   }
-   else if (eAct == MM::AfterSet)
-   {
-      pProp->Get(ccdT_);
-   }
-   return DEVICE_OK;
-}
 
 int CEVA_NDE_PicoCamera::OnIsSequenceable(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
@@ -1697,10 +1125,6 @@ int CEVA_NDE_PicoCamera::OnIsSequenceable(MM::PropertyBase* pProp, MM::ActionTyp
 */
 int CEVA_NDE_PicoCamera::ResizeImageBuffer()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
    char buf[MM::MaxStrLength];
    int ret = GetProperty(MM::g_Keyword_Binning, buf);
    if (ret != DEVICE_OK)
@@ -1724,7 +1148,7 @@ int CEVA_NDE_PicoCamera::ResizeImageBuffer()
    }
 
 
-   img_.Resize(cameraCCDXSize_/binSize_, cameraCCDYSize_/binSize_, byteDepth);
+   img_.Resize(image_width/binSize_, image_height/binSize_, byteDepth);
    return DEVICE_OK;
 }
 
@@ -1736,111 +1160,6 @@ void CEVA_NDE_PicoCamera::GenerateEmptyImage(ImgBuffer& img)
    unsigned char* pBuf = const_cast<unsigned char*>(img.GetPixels());
    memset(pBuf, 0, img.Height()*img.Width()*img.Depth());
 }
-
-
-
-/**
-* Generate a spatial sine wave.
-*/
-void CEVA_NDE_PicoCamera::GenerateSyntheticImage(ImgBuffer& img, double exp)
-{ 
-  
-   MMThreadGuard g(imgPixelsLock_);
-
-	//std::string pixelType;
-	char buf[MM::MaxStrLength];
-   GetProperty(MM::g_Keyword_PixelType, buf);
-	std::string pixelType(buf);
-
-	if (img.Height() == 0 || img.Width() == 0 || img.Depth() == 0)
-      return;
-
-   const double cPi = 3.14159265358979;
-   long lPeriod = img.Width()/2;
-   double dLinePhase = 0.0;
-   const double dAmp = exp;
-   const double cLinePhaseInc = 2.0 * cPi / 4.0 / img.Height();
-
-   static bool debugRGB = false;
-#ifdef TIFFEVA_NDE_Pico
-	debugRGB = true;
-#endif
-   static  unsigned char* pDebug  = NULL;
-   static unsigned long dbgBufferSize = 0;
-   static long iseq = 1;
-
- 
-
-	// for integer images: bitDepth_ is 8, 10, 12, 16 i.e. it is depth per component
-   long maxValue = (1L << bitDepth_)-1;
-
-	long pixelsToDrop = 0;
-	if( dropPixels_)
-		pixelsToDrop = (long)(0.5 + fractionOfPixelsToDropOrSaturate_*img.Height()*img.Width());
-	long pixelsToSaturate = 0;
-	if( saturatePixels_)
-		pixelsToSaturate = (long)(0.5 + fractionOfPixelsToDropOrSaturate_*img.Height()*img.Width());
-
-   unsigned j, k;
-   if (pixelType.compare(g_PixelType_8bit) == 0)
-   {
-      double pedestal = 127 * exp / 100.0 * GetBinning() * GetBinning();
-      unsigned char* pBuf = const_cast<unsigned char*>(img.GetPixels());
-      for (j=0; j<img.Height(); j++)
-      {
-         for (k=0; k<img.Width(); k++)
-         {
-            long lIndex = img.Width()*j + k;
-            *(pBuf + lIndex) = (unsigned char) (g_IntensityFactor_ * min(255.0, (pedestal + dAmp * sin(dPhase_ + dLinePhase + (2.0 * cPi * k) / lPeriod))));
-         }
-         dLinePhase += cLinePhaseInc;
-      }
-	   for(int snoise = 0; snoise < pixelsToSaturate; ++snoise)
-		{
-			j = (unsigned)( (double)(img.Height()-1)*(double)rand()/(double)RAND_MAX);
-			k = (unsigned)( (double)(img.Width()-1)*(double)rand()/(double)RAND_MAX);
-			*(pBuf + img.Width()*j + k) = (unsigned char)maxValue;
-		}
-		int pnoise;
-		for(pnoise = 0; pnoise < pixelsToDrop; ++pnoise)
-		{
-			j = (unsigned)( (double)(img.Height()-1)*(double)rand()/(double)RAND_MAX);
-			k = (unsigned)( (double)(img.Width()-1)*(double)rand()/(double)RAND_MAX);
-			*(pBuf + img.Width()*j + k) = 0;
-		}
-
-   }
-   else if (pixelType.compare(g_PixelType_16bit) == 0)
-   {
-      double pedestal = maxValue/2 * exp / 100.0 * GetBinning() * GetBinning();
-      double dAmp16 = dAmp * maxValue/255.0; // scale to behave like 8-bit
-      unsigned short* pBuf = (unsigned short*) const_cast<unsigned char*>(img.GetPixels());
-      for (j=0; j<img.Height(); j++)
-      {
-         for (k=0; k<img.Width(); k++)
-         {
-            long lIndex = img.Width()*j + k;
-            *(pBuf + lIndex) = (unsigned short) (g_IntensityFactor_ * min((double)maxValue, pedestal + dAmp16 * sin(dPhase_ + dLinePhase + (2.0 * cPi * k) / lPeriod)));
-         }
-         dLinePhase += cLinePhaseInc;
-      }         
-	   for(int snoise = 0; snoise < pixelsToSaturate; ++snoise)
-		{
-			j = (unsigned)(0.5 + (double)img.Height()*(double)rand()/(double)RAND_MAX);
-			k = (unsigned)(0.5 + (double)img.Width()*(double)rand()/(double)RAND_MAX);
-			*(pBuf + img.Width()*j + k) = (unsigned short)maxValue;
-		}
-		int pnoise;
-		for(pnoise = 0; pnoise < pixelsToDrop; ++pnoise)
-		{
-			j = (unsigned)(0.5 + (double)img.Height()*(double)rand()/(double)RAND_MAX);
-			k = (unsigned)(0.5 + (double)img.Width()*(double)rand()/(double)RAND_MAX);
-			*(pBuf + img.Width()*j + k) = 0;
-		}
-	
-	}
-}
-
 
 void CEVA_NDE_PicoCamera::TestResourceLocking(const bool recurse)
 {
@@ -1864,7 +1183,7 @@ sequenceIndex_(0),
 sentSequence_(vector<double>()),
 nascentSequence_(vector<double>())
 {
-   SetErrorText(SIMULATED_ERROR, "Random, simluated error");
+   SetErrorText(HUB_NOT_AVAILABLE, "Hub is not available");
    SetErrorText(ERR_SEQUENCE_INACTIVE, "Sequence triggered, but sequence is not running");
 
    // parent ID display
@@ -1884,8 +1203,6 @@ int EVA_NDE_PicoDA::Initialize()
    EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
    if (pHub)
    {
-      if (pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
       char hubLabel[MM::MaxStrLength];
       pHub->GetLabel(hubLabel);
       SetParentID(hubLabel); // for backward comp.
@@ -1911,10 +1228,6 @@ int EVA_NDE_PicoDA::Initialize()
 
 int EVA_NDE_PicoDA::SetGateOpen(bool open) 
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
    open_ = open; 
    if (open_) 
       gatedVolts_ = volt_; 
@@ -1931,9 +1244,6 @@ int EVA_NDE_PicoDA::GetGateOpen(bool& open)
 }
 
 int EVA_NDE_PicoDA::SetSignal(double volts) {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    volt_ = volts; 
    if (open_)
@@ -1946,9 +1256,6 @@ int EVA_NDE_PicoDA::SetSignal(double volts) {
 
 int EVA_NDE_PicoDA::GetSignal(double& volts) 
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    volts = volt_; 
    return DEVICE_OK;
@@ -1956,9 +1263,6 @@ int EVA_NDE_PicoDA::GetSignal(double& volts)
 
 int EVA_NDE_PicoDA::SendDASequence() 
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    (const_cast<EVA_NDE_PicoDA*> (this))->SetSentSequence();
    return DEVICE_OK;
@@ -1973,18 +1277,12 @@ void EVA_NDE_PicoDA::SetSentSequence()
 
 int EVA_NDE_PicoDA::ClearDASequence()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    nascentSequence_.clear();
    return DEVICE_OK;
 }
 
 int EVA_NDE_PicoDA::AddToDASequence(double voltage) {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    nascentSequence_.push_back(voltage);
    return DEVICE_OK;
@@ -1992,9 +1290,6 @@ int EVA_NDE_PicoDA::AddToDASequence(double voltage) {
 
 int EVA_NDE_PicoDA::OnTrigger(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
    if (eAct == MM::BeforeGet)
    {
@@ -2047,261 +1342,6 @@ int EVA_NDE_PicoDA::OnRealVoltage(MM::PropertyBase* pProp, MM::ActionType eAct)
       pProp->Set(gatedVolts_);
    }
    return DEVICE_OK;
-}
-
-
-
-int TransposeProcessor::Initialize()
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub)
-   {
-      if (pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-      char hubLabel[MM::MaxStrLength];
-      pHub->GetLabel(hubLabel);
-      SetParentID(hubLabel); // for backward comp.
-   }
-   else
-      LogMessage(NoHubError);
-
-   if( NULL != this->pTemp_)
-   {
-      free(pTemp_);
-      pTemp_ = NULL;
-      this->tempSize_ = 0;
-   }
-    CPropertyAction* pAct = new CPropertyAction (this, &TransposeProcessor::OnInPlaceAlgorithm);
-   (void)CreateProperty("InPlaceAlgorithm", "0", MM::Integer, false, pAct); 
-   return DEVICE_OK;
-}
-
-   // action interface
-   // ----------------
-int TransposeProcessor::OnInPlaceAlgorithm(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(this->inPlace_?1L:0L);
-   }
-   else if (eAct == MM::AfterSet)
-   {
-      long ltmp;
-      pProp->Get(ltmp);
-      inPlace_ = (0==ltmp?false:true);
-   }
-
-   return DEVICE_OK;
-}
-
-
-int TransposeProcessor::Process(unsigned char *pBuffer, unsigned int width, unsigned int height, unsigned int byteDepth)
-{
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
-
-   int ret = DEVICE_OK;
-   // 
-   if( width != height)
-      return DEVICE_NOT_SUPPORTED; // problem with tranposing non-square images is that the image buffer
-   // will need to be modified by the image processor.
-   if(busy_)
-      return DEVICE_ERR;
- 
-   busy_ = true;
-
-   if( inPlace_)
-   {
-      if(  sizeof(unsigned char) == byteDepth)
-      {
-         TransposeSquareInPlace( (unsigned char*)pBuffer, width);
-      }
-      else if( sizeof(unsigned short) == byteDepth)
-      {
-         TransposeSquareInPlace( (unsigned short*)pBuffer, width);
-      }
-      else if( sizeof(unsigned long) == byteDepth)
-      {
-         TransposeSquareInPlace( (unsigned long*)pBuffer, width);
-      }
-      else if( sizeof(unsigned long long) == byteDepth)
-      {
-         TransposeSquareInPlace( (unsigned long long*)pBuffer, width);
-      }
-      else 
-      {
-         ret = DEVICE_NOT_SUPPORTED;
-      }
-   }
-   else
-   {
-      if( sizeof(unsigned char) == byteDepth)
-      {
-         ret = TransposeRectangleOutOfPlace( (unsigned char*)pBuffer, width, height);
-      }
-      else if( sizeof(unsigned short) == byteDepth)
-      {
-         ret = TransposeRectangleOutOfPlace( (unsigned short*)pBuffer, width, height);
-      }
-      else if( sizeof(unsigned long) == byteDepth)
-      {
-         ret = TransposeRectangleOutOfPlace( (unsigned long*)pBuffer, width, height);
-      }
-      else if( sizeof(unsigned long long) == byteDepth)
-      {
-         ret =  TransposeRectangleOutOfPlace( (unsigned long long*)pBuffer, width, height);
-      }
-      else
-      {
-         ret =  DEVICE_NOT_SUPPORTED;
-      }
-   }
-   busy_ = false;
-
-   return ret;
-}
-
-
-
-
-int ImageFlipY::Initialize()
-{
-    CPropertyAction* pAct = new CPropertyAction (this, &ImageFlipY::OnPerformanceTiming);
-    (void)CreateProperty("PeformanceTiming (microseconds)", "0", MM::Float, true, pAct); 
-   return DEVICE_OK;
-}
-
-   // action interface
-   // ----------------
-int ImageFlipY::OnPerformanceTiming(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-
-   if (eAct == MM::BeforeGet)
-   {
-      pProp->Set( performanceTiming_.getUsec());
-   }
-   else if (eAct == MM::AfterSet)
-   {
-      // -- it's ready only!
-   }
-
-   return DEVICE_OK;
-}
-
-
-int ImageFlipY::Process(unsigned char *pBuffer, unsigned int width, unsigned int height, unsigned int byteDepth)
-{
-   if(busy_)
-      return DEVICE_ERR;
-
-   int ret = DEVICE_OK;
- 
-   busy_ = true;
-   performanceTiming_ = MM::MMTime(0.);
-   MM::MMTime  s0 = GetCurrentMMTime();
-
-
-   if( sizeof(unsigned char) == byteDepth)
-   {
-      ret = Flip( (unsigned char*)pBuffer, width, height);
-   }
-   else if( sizeof(unsigned short) == byteDepth)
-   {
-      ret = Flip( (unsigned short*)pBuffer, width, height);
-   }
-   else if( sizeof(unsigned long) == byteDepth)
-   {
-      ret = Flip( (unsigned long*)pBuffer, width, height);
-   }
-   else if( sizeof(unsigned long long) == byteDepth)
-   {
-      ret =  Flip( (unsigned long long*)pBuffer, width, height);
-   }
-   else
-   {
-      ret =  DEVICE_NOT_SUPPORTED;
-   }
-
-   performanceTiming_ = GetCurrentMMTime() - s0;
-   busy_ = false;
-
-   return ret;
-}
-
-
-
-
-
-
-
-///
-int ImageFlipX::Initialize()
-{
-    CPropertyAction* pAct = new CPropertyAction (this, &ImageFlipX::OnPerformanceTiming);
-    (void)CreateProperty("PeformanceTiming (microseconds)", "0", MM::Float, true, pAct); 
-   return DEVICE_OK;
-}
-
-   // action interface
-   // ----------------
-int ImageFlipX::OnPerformanceTiming(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-
-   if (eAct == MM::BeforeGet)
-   {
-      pProp->Set( performanceTiming_.getUsec());
-   }
-   else if (eAct == MM::AfterSet)
-   {
-      // -- it's ready only!
-   }
-
-   return DEVICE_OK;
-}
-
-
-int ImageFlipX::Process(unsigned char *pBuffer, unsigned int width, unsigned int height, unsigned int byteDepth)
-{
-   if(busy_)
-      return DEVICE_ERR;
-
-   int ret = DEVICE_OK;
- 
-   busy_ = true;
-   performanceTiming_ = MM::MMTime(0.);
-   MM::MMTime  s0 = GetCurrentMMTime();
-
-
-   if( sizeof(unsigned char) == byteDepth)
-   {
-      ret = Flip( (unsigned char*)pBuffer, width, height);
-   }
-   else if( sizeof(unsigned short) == byteDepth)
-   {
-      ret = Flip( (unsigned short*)pBuffer, width, height);
-   }
-   else if( sizeof(unsigned long) == byteDepth)
-   {
-      ret = Flip( (unsigned long*)pBuffer, width, height);
-   }
-   else if( sizeof(unsigned long long) == byteDepth)
-   {
-      ret =  Flip( (unsigned long long*)pBuffer, width, height);
-   }
-   else
-   {
-      ret =  DEVICE_NOT_SUPPORTED;
-   }
-
-   performanceTiming_ = GetCurrentMMTime() - s0;
-   busy_ = false;
-
-   return ret;
 }
 
 ///
@@ -2373,28 +1413,10 @@ int MedianFilter::Process(unsigned char *pBuffer, unsigned int width, unsigned i
 
 int EVA_NDE_PicoHub::Initialize()
 {
-   EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-   if (pHub && pHub->GenerateRandomError())
-      return SIMULATED_ERROR;
 
-   SetErrorText(SIMULATED_ERROR, "Simulated Error");
-	CPropertyAction *pAct = new CPropertyAction (this, &EVA_NDE_PicoHub::OnErrorRate);
-	CreateProperty("SimulatedErrorRate", "0.0", MM::Float, false, pAct);
-	AddAllowedValue("SimulatedErrorRate", "0.0000");
-	AddAllowedValue("SimulatedErrorRate", "0.0001");
-   AddAllowedValue("SimulatedErrorRate", "0.0010");
-	AddAllowedValue("SimulatedErrorRate", "0.0100");
-	AddAllowedValue("SimulatedErrorRate", "0.1000");
-	AddAllowedValue("SimulatedErrorRate", "0.2000");
-	AddAllowedValue("SimulatedErrorRate", "0.5000");
-	AddAllowedValue("SimulatedErrorRate", "1.0000");
+   SetErrorText(HUB_NOT_AVAILABLE, "Hub is not available");
 
-   pAct = new CPropertyAction (this, &EVA_NDE_PicoHub::OnDivideOneByMe);
-   std::ostringstream os;
-   os<<this->divideOneByMe_;
-   CreateProperty("DivideOneByMe", os.str().c_str(), MM::Integer, false, pAct);
-
-  	initialized_ = true;
+   initialized_ = true;
  
 	return DEVICE_OK;
 }
@@ -2439,51 +1461,6 @@ MM::Device* EVA_NDE_PicoHub::CreatePeripheralDevice(const char* adapterName)
 void EVA_NDE_PicoHub::GetName(char* pName) const
 {
    CDeviceUtils::CopyLimitedString(pName, g_HubDeviceName);
-}
-
-bool EVA_NDE_PicoHub::GenerateRandomError()
-{
-   if (errorRate_ == 0.0)
-      return false;
-
-	return (0 == (rand() % ((int) (1.0 / errorRate_))));
-}
-
-int EVA_NDE_PicoHub::OnErrorRate(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   // Don't simulate an error here!!!!
-
-   if (eAct == MM::AfterSet)
-   {
-      pProp->Get(errorRate_);
-
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(errorRate_);
-   }
-   return DEVICE_OK;
-}
-
-int EVA_NDE_PicoHub::OnDivideOneByMe(MM::PropertyBase* pProp, MM::ActionType eAct)
-{
-   // Don't simulate an error here!!!!
-
-   if (eAct == MM::AfterSet)
-   {
-      pProp->Get(divideOneByMe_);
-      static long result = 0;
-      bool crashtest = CDeviceUtils::CheckEnvironment("MICROMANAGERCRASHTEST");
-      if((0 != divideOneByMe_) || crashtest)
-         result = 1/divideOneByMe_;
-      result = result;
-
-   }
-   else if (eAct == MM::BeforeGet)
-   {
-      pProp->Set(divideOneByMe_);
-   }
-   return DEVICE_OK;
 }
 
 

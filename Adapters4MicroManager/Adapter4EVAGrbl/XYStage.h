@@ -89,6 +89,8 @@ private:
    bool home_;                   // true if stage is homed
    double answerTimeoutMs_;      // max wait for the device to answer
    double moveTimeoutMs_;        // max wait for stage to finish moving
+   double acceleration_; 
+   double maxVelocity_;
   
    enum MOVE_MODE {MOVE, MOVEREL, HOME};
    MOVE_MODE lastMode_;

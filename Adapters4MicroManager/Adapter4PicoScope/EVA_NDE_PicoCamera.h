@@ -46,11 +46,8 @@
 // Error codes
 //
 #define ERR_UNKNOWN_MODE         102
-#define ERR_UNKNOWN_POSITION     103
 #define ERR_IN_SEQUENCE          104
 #define ERR_SEQUENCE_INACTIVE    105
-#define ERR_STAGE_MOVING         106
-#define SIMULATED_ERROR          200
 #define HUB_NOT_AVAILABLE        107
 
 const char* NoHubError = "Parent Hub not defined.";
@@ -71,15 +68,10 @@ public:
    int Shutdown() {return DEVICE_OK;};
    void GetName(char* pName) const; 
    bool Busy() { return busy_;} ;
-   bool GenerateRandomError();
 
    // HUB api
    int DetectInstalledDevices();
    MM::Device* CreatePeripheralDevice(const char* adapterName);
-
-   // action interface
-   int OnErrorRate(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnDivideOneByMe(MM::PropertyBase* pProp, MM::ActionType eAct);
 
 private:
    void GetPeripheralInventory();
@@ -128,10 +120,7 @@ public:
    int ClearROI();
    int PrepareSequenceAcqusition()
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-      return DEVICE_OK;
+        return DEVICE_OK;
    }
    int StartSequenceAcquisition(double interval);
    int StartSequenceAcquisition(long numImages, double interval_ms, bool stopOnOverflow);
@@ -175,7 +164,7 @@ public:
    int SendExposureSequence() const {
       return DEVICE_OK;
    }
-
+   void GenerateEmptyImage(ImgBuffer& img);
    unsigned  GetNumberOfComponents() const { return nComponents_;};
 
    // action interface
@@ -184,19 +173,7 @@ public:
 
 	//int OnSwitch(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnBinning(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnPixelType(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnBitDepth(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnReadoutTime(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnScanMode(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnErrorSimulation(MM::PropertyBase* , MM::ActionType );
-   int OnCameraCCDXSize(MM::PropertyBase* , MM::ActionType );
-   int OnCameraCCDYSize(MM::PropertyBase* , MM::ActionType );
    int OnTriggerDevice(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnDropPixels(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnFastImage(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnSaturatePixels(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnFractionOfPixelsToDropOrSaturate(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnCCDTemp(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnIsSequenceable(MM::PropertyBase* pProp, MM::ActionType eAct);
    //-----oe-------
    int OnSampleOffset(MM::PropertyBase* pProp, MM::ActionType eAct);
@@ -209,10 +186,7 @@ public:
 private:
    int SetAllowedBinning();
    void TestResourceLocking(const bool);
-   void GenerateEmptyImage(ImgBuffer& img);
-   void GenerateSyntheticImage(ImgBuffer& img, double exp);
    int ResizeImageBuffer();
-
    static const double nominalPixelSizeUm_;
 
    double dPhase_;
@@ -220,11 +194,7 @@ private:
    bool busy_;
    bool stopOnOverFlow_;
    bool initialized_;
-   double readoutUs_;
    long timeout_;
-   MM::MMTime readoutStartTime_;
-   long scanMode_;
-   int bitDepth_;
    unsigned roiX_;
    unsigned roiY_;
    MM::MMTime sequenceStartTime_;
@@ -236,18 +206,12 @@ private:
    std::vector<double> exposureSequence_;
    long imageCounter_;
 	long binSize_;
-	long cameraCCDXSize_;
-	long cameraCCDYSize_;
+	long image_width;
+	long image_height;
    double ccdT_;
 	std::string triggerDevice_;
 
    bool stopOnOverflow_;
-
-	bool dropPixels_;
-   bool fastImage_;
-	bool saturatePixels_;
-	double fractionOfPixelsToDropOrSaturate_;
-
 
    MMThreadLock* pEVA_NDE_PicoResourceLock_;
    MMThreadLock imgPixelsLock_;
@@ -255,7 +219,6 @@ private:
    friend class MySequenceThread;
    MySequenceThread * thd_;
 
-   //--------oe---------
 	char ch;
 	PICO_STATUS status;
 	UNIT unit;
@@ -299,472 +262,6 @@ class MySequenceThread : public MMDeviceThreadBase
 }; 
 
 //////////////////////////////////////////////////////////////////////////////
-// CEVA_NDE_PicoFilterWheel class
-// Simulation of the filter changer (state device)
-//////////////////////////////////////////////////////////////////////////////
-
-class CEVA_NDE_PicoFilterWheel : public CStateDeviceBase<CEVA_NDE_PicoFilterWheel>
-{
-public:
-   CEVA_NDE_PicoFilterWheel();
-   ~CEVA_NDE_PicoFilterWheel();
-  
-   // MMDevice API
-   // ------------
-   int Initialize();
-   int Shutdown();
-  
-   void GetName(char* pszName) const;
-   bool Busy();
-   unsigned long GetNumberOfPositions()const {return numPos_;}
-
-   // action interface
-   // ----------------
-   int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   long numPos_;
-   bool busy_;
-   bool initialized_;
-   MM::MMTime changedTime_;
-   long position_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// CEVA_NDE_PicoLightPath class
-// Simulation of the microscope light path switch (state device)
-//////////////////////////////////////////////////////////////////////////////
-class CEVA_NDE_PicoLightPath : public CStateDeviceBase<CEVA_NDE_PicoLightPath>
-{
-public:
-   CEVA_NDE_PicoLightPath();
-   ~CEVA_NDE_PicoLightPath();
-  
-   // MMDevice API
-   // ------------
-   int Initialize();
-   int Shutdown();
-  
-   void GetName(char* pszName) const;
-   bool Busy() {return busy_;}
-   unsigned long GetNumberOfPositions()const {return numPos_;}
-
-   // action interface
-   // ----------------
-   int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   long numPos_;
-   bool busy_;
-   bool initialized_;
-   long position_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// CEVA_NDE_PicoObjectiveTurret class
-// Simulation of the objective changer (state device)
-//////////////////////////////////////////////////////////////////////////////
-
-class CEVA_NDE_PicoObjectiveTurret : public CStateDeviceBase<CEVA_NDE_PicoObjectiveTurret>
-{
-public:
-   CEVA_NDE_PicoObjectiveTurret();
-   ~CEVA_NDE_PicoObjectiveTurret();
-  
-   // MMDevice API
-   // ------------
-   int Initialize();
-   int Shutdown();
-  
-   void GetName(char* pszName) const ;
-   bool Busy() {return busy_;}
-   unsigned long GetNumberOfPositions()const {return numPos_;}
-
-   // action interface
-   // ----------------
-   int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnTrigger(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   long numPos_;
-   bool busy_;
-   bool initialized_;
-   bool sequenceRunning_;
-   unsigned long sequenceMaxSize_;
-   unsigned long sequenceIndex_;
-   std::vector<std::string> sequence_;
-   long position_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// CEVA_NDE_PicoStateDevice class
-// Simulation of a state device in which the number of states can be specified (state device)
-//////////////////////////////////////////////////////////////////////////////
-
-class CEVA_NDE_PicoStateDevice : public CStateDeviceBase<CEVA_NDE_PicoStateDevice>
-{
-public:
-   CEVA_NDE_PicoStateDevice();
-   ~CEVA_NDE_PicoStateDevice();
-  
-   // MMDevice API
-   // ------------
-   int Initialize();
-   int Shutdown();
-  
-   void GetName(char* pszName) const;
-   bool Busy();
-   unsigned long GetNumberOfPositions()const {return numPos_;}
-
-   // action interface
-   // ----------------
-   int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnNumberOfStates(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   long numPos_;
-   bool busy_;
-   bool initialized_;
-   MM::MMTime changedTime_;
-   long position_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// CEVA_NDE_PicoStage class
-// Simulation of the single axis stage
-//////////////////////////////////////////////////////////////////////////////
-
-class CEVA_NDE_PicoStage : public CStageBase<CEVA_NDE_PicoStage>
-{
-public:
-   CEVA_NDE_PicoStage();
-   ~CEVA_NDE_PicoStage();
-
-   bool Busy() {return busy_;}
-   void GetName(char* pszName) const;
-
-   int Initialize();
-   int Shutdown();
-     
-   // Stage API
-   int SetPositionUm(double pos);
-   int GetPositionUm(double& pos) {pos = pos_um_; LogMessage("Reporting position", true); return DEVICE_OK;}
-   double GetStepSize() {return stepSize_um_;}
-   int SetPositionSteps(long steps) 
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      pos_um_ = steps * stepSize_um_; 
-      return  OnStagePositionChanged(pos_um_);
-   }
-   int GetPositionSteps(long& steps)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      steps = (long)(pos_um_ / stepSize_um_);
-      return DEVICE_OK;
-   }
-   int SetOrigin()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-      return DEVICE_OK;
-   }
-   int GetLimits(double& lower, double& upper)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      lower = lowerLimit_;
-      upper = upperLimit_;
-      return DEVICE_OK;
-   }
-   int Move(double /*v*/) {return DEVICE_OK;}
-
-   bool IsContinuousFocusDrive() const {return false;}
-
-   // action interface
-   // ----------------
-   int OnPosition(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-   // Sequence functions
-   int IsStageSequenceable(bool& isSequenceable) const {
-      isSequenceable = false;
-      return DEVICE_OK;
-   }
-   int GetStageSequenceMaxLength(long& nrEvents) const 
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-      nrEvents = 0; return DEVICE_OK;
-   }
-   int StartStageSequence() const
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-      return DEVICE_OK;
-   }
-   int StopStageSequence() const
-   {  
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-      return DEVICE_OK;
-   }
-   int ClearStageSequence() {return DEVICE_OK;}
-   int AddToStageSequence(double /* position */) {return DEVICE_OK;}
-   int SendStageSequence() const {return DEVICE_OK;}
-
-private:
-   void SetIntensityFactor(double pos);
-   double stepSize_um_;
-   double pos_um_;
-   bool busy_;
-   bool initialized_;
-   double lowerLimit_;
-   double upperLimit_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// CEVA_NDE_PicoStage class
-// Simulation of the single axis stage
-//////////////////////////////////////////////////////////////////////////////
-
-class CEVA_NDE_PicoXYStage : public CXYStageBase<CEVA_NDE_PicoXYStage>
-{
-public:
-   CEVA_NDE_PicoXYStage();
-   ~CEVA_NDE_PicoXYStage();
-
-   bool Busy();
-   void GetName(char* pszName) const;
-
-   int Initialize();
-   int Shutdown();
-     
-   // XYStage API
-   /* Note that only the Set/Get PositionStep functions are implemented in the adapter
-    * It is best not to override the Set/Get PositionUm functions in DeviceBase.h, since
-    * those implement corrections based on whether or not X and Y directionality should be 
-    * mirrored and based on a user defined origin
-    */
-
-   // This must be correct or the conversions between steps and Um will go wrong
-   virtual double GetStepSize() {return stepSize_um_;}
-   virtual int SetPositionSteps(long x, long y)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      if (timeOutTimer_ != 0)
-      {
-         if (!timeOutTimer_->expired(GetCurrentMMTime()))
-               return ERR_STAGE_MOVING;
-         delete (timeOutTimer_);
-      }
-      double newPosX = x * stepSize_um_;
-      double newPosY = y * stepSize_um_;
-      double difX = newPosX - posX_um_;
-      double difY = newPosY - posY_um_;
-      double distance = sqrt( (difX * difX) + (difY * difY) );
-      long timeOut = (long) (distance / velocity_);
-      timeOutTimer_ = new MM::TimeoutMs(GetCurrentMMTime(),  timeOut);
-      posX_um_ = x * stepSize_um_;
-      posY_um_ = y * stepSize_um_;
-      int ret = OnXYStagePositionChanged(posX_um_, posY_um_);
-      if (ret != DEVICE_OK)
-         return ret;
-
-      return DEVICE_OK;
-   }
-   virtual int GetPositionSteps(long& x, long& y)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      x = (long)(posX_um_ / stepSize_um_);
-      y = (long)(posY_um_ / stepSize_um_);
-      return DEVICE_OK;
-   }
-   int SetRelativePositionSteps(long x, long y)                                                           
-   {                                                                                                      
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      long xSteps, ySteps;                                                                                
-      GetPositionSteps(xSteps, ySteps);                                                   
-
-      return this->SetPositionSteps(xSteps+x, ySteps+y);                                                  
-   } 
-   virtual int Home()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return DEVICE_OK;
-   }
-   virtual int Stop()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return DEVICE_OK;
-   }
-
-   /* This sets the 0,0 position of the adapter to the current position.  
-    * If possible, the stage controller itself should also be set to 0,0
-    * Note that this differs form the function SetAdapterOrigin(), which 
-    * sets the coordinate system used by the adapter
-    * to values different from the system used by the stage controller
-    */
-   virtual int SetOrigin()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return DEVICE_OK;
-   }
-   virtual int GetLimits(double& lower, double& upper)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      lower = lowerLimit_;
-      upper = upperLimit_;
-      return DEVICE_OK;
-   }
-   virtual int GetLimitsUm(double& xMin, double& xMax, double& yMin, double& yMax)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      xMin = lowerLimit_; xMax = upperLimit_;
-      yMin = lowerLimit_; yMax = upperLimit_;
-      return DEVICE_OK;
-   }
-
-   virtual int GetStepLimits(long& /*xMin*/, long& /*xMax*/, long& /*yMin*/, long& /*yMax*/)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return DEVICE_UNSUPPORTED_COMMAND;
-   }
-   double GetStepSizeXUm()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return stepSize_um_;
-   }
-   double GetStepSizeYUm()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return stepSize_um_;
-   }
-   int Move(double /*vx*/, double /*vy*/) {return DEVICE_OK;}
-
-   int IsXYStageSequenceable(bool& isSequenceable) const {isSequenceable = false; return DEVICE_OK;}
-
-
-   // action interface
-   // ----------------
-   int OnPosition(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   double stepSize_um_;
-   double posX_um_;
-   double posY_um_;
-   bool busy_;
-   MM::TimeoutMs* timeOutTimer_;
-   double velocity_;
-   bool initialized_;
-   double lowerLimit_;
-   double upperLimit_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// EVA_NDE_PicoShutter class
-// Simulation of shutter device
-//////////////////////////////////////////////////////////////////////////////
-class EVA_NDE_PicoShutter : public CShutterBase<EVA_NDE_PicoShutter>
-{
-public:
-   EVA_NDE_PicoShutter() : state_(false), initialized_(false), changedTime_(0.0)
-   {
-      EnableDelay(); // signals that the dealy setting will be used
-      
-      // parent ID display
-      CreateHubIDProperty();
-   }
-   ~EVA_NDE_PicoShutter() {}
-
-   int Initialize();
-   int Shutdown() {initialized_ = false; return DEVICE_OK;}
-
-   void GetName (char* pszName) const;
-   bool Busy();
-
-   // Shutter API
-   int SetOpen (bool open = true)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      state_ = open;
-      changedTime_ = GetCurrentMMTime();
-      return DEVICE_OK;
-   }
-   int GetOpen(bool& open)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      open = state_;
-      return DEVICE_OK;
-   }
-   int Fire(double /*deltaT*/)
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return DEVICE_UNSUPPORTED_COMMAND;
-   }
-
-   // action interface
-   int OnState(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   bool state_;
-   bool initialized_;
-   MM::MMTime changedTime_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
 // EVA_NDE_PicoShutter class
 // Simulation of shutter device
 //////////////////////////////////////////////////////////////////////////////
@@ -782,9 +279,6 @@ public:
    int GetSignal(double& volts);
    int GetLimits(double& minVolts, double& maxVolts)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       minVolts=0.0; maxVolts= 10.0; return DEVICE_OK;
    }
@@ -794,36 +288,24 @@ public:
    // Sequence functions
    int IsDASequenceable(bool& isSequenceable) const
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       isSequenceable = true;
       return DEVICE_OK;
    }
    int GetDASequenceMaxLength(long& nrEvents) const 
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       nrEvents = 256;
       return DEVICE_OK;
    }
    int StartDASequence() const
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       (const_cast<EVA_NDE_PicoDA *>(this))->SetSequenceStateOn();
       return DEVICE_OK;
    }
    int StopDASequence() const
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
    
       (const_cast<EVA_NDE_PicoDA *>(this))->SetSequenceStateOff();
       return DEVICE_OK;
@@ -850,227 +332,6 @@ private:
 
    void SetSentSequence();
 };
-
-
-//////////////////////////////////////////////////////////////////////////////
-// EVA_NDE_PicoMagnifier class
-// Simulation of magnifier Device
-//////////////////////////////////////////////////////////////////////////////
-class EVA_NDE_PicoMagnifier : public CMagnifierBase<EVA_NDE_PicoMagnifier>
-{
-public:
-   EVA_NDE_PicoMagnifier();
-
-   ~EVA_NDE_PicoMagnifier () {};
-
-   int Shutdown()
-   {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
-
-      return DEVICE_OK;
-   }
-
-   void GetName(char* name) const;
-
-   bool Busy() {return false;}
-   int Initialize();
-
-   double GetMagnification();
-
-   // action interface
-   // ----------------
-   int OnPosition(MM::PropertyBase* pProp, MM::ActionType eAct);
-   int OnHighMag(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   std::string highMagString();
-
-   int position_;
-   double highMag_;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-// TransposeProcessor class
-// transpose an image
-// K.H.
-//////////////////////////////////////////////////////////////////////////////
-class TransposeProcessor : public CImageProcessorBase<TransposeProcessor>
-{
-public:
-   TransposeProcessor () : inPlace_ (false), pTemp_(NULL), tempSize_(0), busy_(false)
-   {
-      // parent ID display
-      CreateHubIDProperty();
-   }
-   ~TransposeProcessor () {if( NULL!= pTemp_) free(pTemp_); tempSize_=0;  }
-
-   int Shutdown() {return DEVICE_OK;}
-   void GetName(char* name) const {strcpy(name,"TransposeProcessor");}
-
-   int Initialize();
-
-   bool Busy(void) { return busy_;};
-
-    // really primative image transpose algorithm which will work fine for non-square images... 
-   template <typename PixelType> int TransposeRectangleOutOfPlace( PixelType* pI, unsigned int width, unsigned int height)
-   {
-      int ret = DEVICE_OK;
-      unsigned long tsize = width*height*sizeof(PixelType);
-      if( this->tempSize_ != tsize)
-      {
-         if( NULL != this->pTemp_)
-         {
-            free(pTemp_);
-            pTemp_ = NULL;
-         }
-         pTemp_ = (PixelType *)malloc(tsize);
-      }
-      if( NULL != pTemp_)
-      {
-         PixelType* pTmpImage = (PixelType *) pTemp_;
-         tempSize_ = tsize;
-         for( unsigned long ix = 0; ix < width; ++ix)
-         {
-            for( unsigned long iy = 0; iy < height; ++iy)
-            {
-               pTmpImage[iy + ix*width] = pI[ ix + iy*height];
-            }
-         }
-         memcpy( pI, pTmpImage, tsize);
-      }
-      else
-      {
-         ret = DEVICE_ERR;
-      }
-
-      return ret;
-   }
-
-   
-   template <typename PixelType> void TransposeSquareInPlace( PixelType* pI, unsigned int dim) 
-   { 
-      PixelType tmp;
-      for( unsigned long ix = 0; ix < dim; ++ix)
-      {
-         for( unsigned long iy = ix; iy < dim; ++iy)
-         {
-            tmp = pI[iy*dim + ix];
-            pI[iy*dim +ix] = pI[ix*dim + iy];
-            pI[ix*dim +iy] = tmp; 
-         }
-      }
-
-      return;
-   }
-
-   int Process(unsigned char* buffer, unsigned width, unsigned height, unsigned byteDepth);
-
-   // action interface
-   // ----------------
-   int OnInPlaceAlgorithm(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   bool inPlace_;
-   void* pTemp_;
-   unsigned long tempSize_;
-   bool busy_;
-};
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-// ImageFlipX class
-// flip an image
-// K.H.
-//////////////////////////////////////////////////////////////////////////////
-class ImageFlipX : public CImageProcessorBase<ImageFlipX>
-{
-public:
-   ImageFlipX () :  busy_(false) {}
-   ~ImageFlipX () {  }
-
-   int Shutdown() {return DEVICE_OK;}
-   void GetName(char* name) const {strcpy(name,"ImageFlipX");}
-
-   int Initialize();
-   bool Busy(void) { return busy_;};
-
-    // 
-   template <typename PixelType> int Flip( PixelType* pI, unsigned int width, unsigned int height)
-   {
-      PixelType tmp;
-      int ret = DEVICE_OK;
-      for( unsigned long iy = 0; iy < height; ++iy)
-      {
-         for( unsigned long ix = 0; ix <  (width>>1) ; ++ix)
-         {
-            tmp = pI[ ix + iy*width];
-            pI[ ix + iy*width] = pI[ width - 1 - ix + iy*width];
-            pI[ width -1 - ix + iy*width] = tmp;
-         }
-      }
-      return ret;
-   }
-
-   int Process(unsigned char* buffer, unsigned width, unsigned height, unsigned byteDepth);
-
-   int OnPerformanceTiming(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   bool busy_;
-   MM::MMTime performanceTiming_;
-};
-
-
-//////////////////////////////////////////////////////////////////////////////
-// ImageFlipY class
-// flip an image
-// K.H.
-//////////////////////////////////////////////////////////////////////////////
-class ImageFlipY : public CImageProcessorBase<ImageFlipY>
-{
-public:
-   ImageFlipY () : busy_(false), performanceTiming_(0.) {}
-   ~ImageFlipY () {  }
-
-   int Shutdown() {return DEVICE_OK;}
-   void GetName(char* name) const {strcpy(name,"ImageFlipY");}
-
-   int Initialize();
-   bool Busy(void) { return busy_;};
-
-   template <typename PixelType> int Flip( PixelType* pI, unsigned int width, unsigned int height)
-   {
-      PixelType tmp;
-      int ret = DEVICE_OK;
-      for( unsigned long ix = 0; ix < width ; ++ix)
-      {
-         for( unsigned long iy = 0; iy < (height>>1); ++iy)
-         {
-            tmp = pI[ ix + iy*width];
-            pI[ ix + iy*width] = pI[ ix + (height - 1 - iy)*width];
-            pI[ ix + (height - 1 - iy)*width] = tmp;
-         }
-      }
-      return ret;
-   }
-
-
-   int Process(unsigned char* buffer, unsigned width, unsigned height, unsigned byteDepth);
-
-   // action interface
-   // ----------------
-   int OnPerformanceTiming(MM::PropertyBase* pProp, MM::ActionType eAct);
-
-private:
-   bool busy_;
-   MM::MMTime performanceTiming_;
-
-};
-
-
 
 //////////////////////////////////////////////////////////////////////////////
 // MedianFilter class
@@ -1223,17 +484,11 @@ public:
    // AutoFocus API
    virtual int SetContinuousFocusing(bool state)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       running_ = state; return DEVICE_OK;
    }
    virtual int GetContinuousFocusing(bool& state)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       state = running_; return DEVICE_OK;
    }
@@ -1243,51 +498,33 @@ public:
    }
    virtual int FullFocus()
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       return DEVICE_OK;
    }
    virtual int IncrementalFocus()
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       return DEVICE_OK;
    }
    virtual int GetLastFocusScore(double& score)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       score = 0.0;
       return DEVICE_OK;
    }
    virtual int GetCurrentFocusScore(double& score)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       score = 1.0;
       return DEVICE_OK;
    }
    virtual int GetOffset(double& /*offset*/)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       return DEVICE_OK;
    }
    virtual int SetOffset(double /*offset*/)
    {
-      EVA_NDE_PicoHub* pHub = static_cast<EVA_NDE_PicoHub*>(GetParentHub());
-      if (pHub && pHub->GenerateRandomError())
-         return SIMULATED_ERROR;
 
       return DEVICE_OK;
    }

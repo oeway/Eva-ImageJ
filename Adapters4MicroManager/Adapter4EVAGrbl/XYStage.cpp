@@ -163,21 +163,8 @@ int XYStage::Initialize()
    char hubLabel[MM::MaxStrLength];
    hub->GetLabel(hubLabel);
    SetParentID(hubLabel); // for backward comp.
-
-
    parameters_ = &hub->parameters;
-
    int ret = DEVICE_ERR;
-
-   // initialize device and get hardware information
-
-
-   // confirm that the device is supported
-
-
-   // check if we are already homed
-
-  
 
    // Step size
    CreateProperty(g_StepSizeXProp, CDeviceUtils::ConvertToString(stepSizeUm), MM::Float, true);
@@ -421,10 +408,11 @@ int XYStage::OnMaxVelocity(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
    if (eAct == MM::BeforeGet) 
    {
-
+		pProp->Set(maxVelocity_);
    } 
    else if (eAct == MM::AfterSet) 
    {
+	   pProp->Get(maxVelocity_);
    }
 
    return DEVICE_OK;
@@ -437,11 +425,11 @@ int XYStage::OnAcceleration(MM::PropertyBase* pProp, MM::ActionType eAct)
 {
    if (eAct == MM::BeforeGet) 
    {
-	    pProp->Set(moveTimeoutMs_);
+	    pProp->Set(acceleration_);
    } 
    else if (eAct == MM::AfterSet) 
    {
-	   pProp->Get(moveTimeoutMs_);
+	   pProp->Get(acceleration_);
 
    }
 

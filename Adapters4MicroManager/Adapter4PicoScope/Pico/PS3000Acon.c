@@ -1035,7 +1035,7 @@ void picoInitRapidBlock(UNIT * unit,long sampleOffset_,unsigned long timeout)
     long sampleCount_= BUFFER_SIZE;
 	int i =0;
 	PICO_STATUS status;
-	short triggerVoltage = mv_to_adc(1000, unit->channelSettings[PS3000A_CHANNEL_A].range, unit);
+	short triggerVoltage = mv_to_adc(3000,5000, unit);
 
 	struct tPS3000ATriggerChannelProperties sourceDetails = {	triggerVoltage,
 		256 * 10,

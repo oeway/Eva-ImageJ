@@ -36,6 +36,7 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 	EzVarEnum<thresholdModesEnum>	thresholdModeVarEnum;
 	EzVarBoolean 				inplaceVar;
 	EzVarBoolean 				offsetMapVar;
+	EzVarBoolean 				useLastVar;
 	// some other data
 	boolean						stopFlag;
 	@Override
@@ -46,8 +47,9 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 		thresholdVar = new EzVarDouble("Threshold");
 		inplaceVar = new EzVarBoolean("In-Place",false);
 		offsetMapVar = new EzVarBoolean("Offset Map",true);
+		useLastVar = new EzVarBoolean("Remember Previous Value",false);
 		thresholdModeVarEnum = new EzVarEnum<thresholdModesEnum>("Threshold Mode", thresholdModesEnum.values(), thresholdModesEnum.GreaterThan);
-		EzGroup groupInit= new EzGroup("", sequenceVar,thresholdModeVarEnum,thresholdVar,inplaceVar,offsetMapVar);
+		EzGroup groupInit= new EzGroup("", sequenceVar,thresholdModeVarEnum,thresholdVar,inplaceVar,offsetMapVar,useLastVar);
 		super.addEzComponent(groupInit);			
 
 	}
@@ -66,6 +68,8 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 		ROI2DShape roi = null;
 		
 		 ArrayList<ROI2D> rois = sequence.getROI2Ds();
+		 try
+		 {
 	        int size = rois.size();
 
 	        if (size == 0)
@@ -96,117 +100,133 @@ public class pixelRowAlign extends EzPlug implements EzStoppable, ActionListener
 	        		}
 	            }
 	        }
-		if(roi == null)
-		{
-			MessageDialog.showDialog("No ROI available, please select a ROI for alignment.",
-                    MessageDialog.INFORMATION_MESSAGE);
-			stopFlag = true;
-			return;
-		}
-		
-		if(!inplaceVar.getValue()){
-			try
+			if(roi == null)
 			{
-				sequence = SequenceUtil.getCopy(sequenceVar.getValue());
-	            Icy.getMainInterface().addSequence(sequence);
+				MessageDialog.showDialog("No ROI available, please select a ROI for alignment.",
+	                    MessageDialog.INFORMATION_MESSAGE);
+				stopFlag = true;
+				return;
 			}
-			catch (Exception e) {
-				new AnnounceFrame("Error when copying the sequnce undo will not available!");
+			
+			if(!inplaceVar.getValue()){
+				try
+				{
+					sequence = SequenceUtil.getCopy(sequenceVar.getValue());
+		            Icy.getMainInterface().addSequence(sequence);
+				}
+				catch (Exception e) {
+					new AnnounceFrame("Error when copying the sequnce undo will not available!");
+				}
 			}
-		}
-		offsetMap = new IcyBufferedImage(sequence.getSizeZ(),sequence.getSizeY(),sequence.getSizeT(),DataType.USHORT);	
-		double minX = roi.getBounds().getMinX();
-		double maxX = roi.getBounds().getMaxX();
-		double val = 0.0;
-		long cpt = 0;
-		long totalImageCount = sequence.getSizeT()*sequence.getSizeZ()*sequence.getSizeC();
-        for (int t = 0; t < sequence.getSizeT(); t++)
-        {
-        	for (int z = 0; z < sequence.getSizeZ(); z++)
-        	{
-				// Get the image at t=0 and z=0
-				IcyBufferedImage image = sequence.getImage( t , z );		
-		        for (int component = 0; component < sequence.getSizeC(); component++)
-		        {
-		
-					// Get the data of the image for band 0 as a linear buffer, regardless of the type.
-					Object imageData = image.getDataXY(component);
-					
-					// Get a copy of the data in double.
-					double[] dataBuffer = Array1DUtil.arrayToDoubleArray( imageData , image.isSignedDataType() );
-				    
-					for(int y =0;y<image.getHeight();y++)
-					{
-						int i = 0;
-						boolean detected = false;
-						for(int x=(int) minX;x<maxX;x++)
+			offsetMap = new IcyBufferedImage(sequence.getSizeZ(),sequence.getSizeY(),sequence.getSizeT(),DataType.USHORT);	
+			double minX = roi.getBounds().getMinX();
+			double maxX = roi.getBounds().getMaxX();
+			double val = 0.0;
+			long cpt = 0;
+			long totalImageCount = sequence.getSizeT()*sequence.getSizeZ()*sequence.getSizeC();
+			boolean usePreviousVal = useLastVar.getValue();
+			sequence.beginUpdate();
+	        for (int t = 0; t < sequence.getSizeT(); t++)
+	        {
+	        	if(stopFlag)
+	        		break;
+	        	for (int z = 0; z < sequence.getSizeZ(); z++)
+	        	{
+		        	if(stopFlag)
+		        		break;
+					// Get the image at t=0 and z=0
+					IcyBufferedImage image = sequence.getImage( t , z );		
+			        for (int component = 0; component < sequence.getSizeC(); component++)
+			        {
+			        	if(stopFlag)
+			        		break;
+						// Get the data of the image for band 0 as a linear buffer, regardless of the type.
+						Object imageData = image.getDataXY(component);
+						
+						// Get a copy of the data in double.
+						double[] dataBuffer = Array1DUtil.arrayToDoubleArray( imageData , image.isSignedDataType() );
+					    int i=0;
+						for(int y =0;y<image.getHeight();y++)
 						{
-							if(detected)
+							if(!usePreviousVal)
+								i = 0;
+							boolean detected = false;
+							for(int x=(int) minX;x<maxX;x++)
 							{
-								i = x-(int)minX;
-								break;
-							}
-							else
-							{
-								val = Array1DUtil.getValue(dataBuffer, image.getOffset((int) x, (int) y),
-				                        image.isSignedDataType());
-								if(thresholdModeVarEnum.getValue() == thresholdModesEnum.GreaterThan)
+								if(detected)
 								{
-									if(val > threshold)
-										detected = true;
-								}
-								else if(thresholdModeVarEnum.getValue() == thresholdModesEnum.EqualTo)
-								{
-									if(val == threshold)
-										detected = true;
+									i = x-(int)minX;
+									break;
 								}
 								else
 								{
-									if(val < threshold)
-										detected = true;
+									val = Array1DUtil.getValue(dataBuffer, image.getOffset((int) x, (int) y),
+					                        image.isSignedDataType());
+									if(thresholdModeVarEnum.getValue() == thresholdModesEnum.GreaterThan)
+									{
+										if(val > threshold)
+											detected = true;
+									}
+									else if(thresholdModeVarEnum.getValue() == thresholdModesEnum.EqualTo)
+									{
+										if(val == threshold)
+											detected = true;
+									}
+									else
+									{
+										if(val < threshold)
+											detected = true;
+									}
 								}
 							}
-						}
-						offsetMap.setData(z, y, t, i);
-						//if(detected) //use last i if can't detect
-						{
-							int length =image.getWidth()-i;
-							for(int x=0;x<image.getWidth();x++)
+							offsetMap.setData(z, y, t, i);
+							//if(detected) //use last i if can't detect
 							{
-								if(x<length)
+								int length =image.getWidth()-i;
+								for(int x=0;x<image.getWidth();x++)
 								{
-									val = Array1DUtil.getValue(dataBuffer, image.getOffset((int)(x+i), (int)y),
-					                        image.isSignedDataType());
-									Array1DUtil.setValue(dataBuffer,image.getOffset((int)(x), (int)y),val);
+									if(x<length)
+									{
+										val = Array1DUtil.getValue(dataBuffer, image.getOffset((int)(x+i), (int)y),
+						                        image.isSignedDataType());
+										Array1DUtil.setValue(dataBuffer,image.getOffset((int)(x), (int)y),val);
+									}
+										else
+											Array1DUtil.setValue(dataBuffer,image.getOffset((int)(x), (int)y),0.0);
+										
 								}
-									else
-										Array1DUtil.setValue(dataBuffer,image.getOffset((int)(x), (int)y),0.0);
-									
+								
 							}
 							
+							
 						}
-						
-						
-					}
-					cpt +=1;
-					// Put the data back to the original image
-					// Convert the double data automatically to the data type of the image. image.getDataXY(0) return a reference on the internal data of the image.
-					Array1DUtil.doubleArrayToArray( dataBuffer , image.getDataXY( 0 ) ) ;
-					// notify ICY the data has changed.
-					image.dataChanged();	
-			  		super.getUI().setProgressBarValue((double)cpt/totalImageCount);
-			  		super.getUI().setProgressBarMessage(Long.toString(cpt)+"/"+ Long.toString(totalImageCount));
+						cpt +=1;
+						// Put the data back to the original image
+						// Convert the double data automatically to the data type of the image. image.getDataXY(0) return a reference on the internal data of the image.
+						Array1DUtil.doubleArrayToArray( dataBuffer , image.getDataXY( 0 ) ) ;
+						// notify ICY the data has changed.
+						image.dataChanged();	
+				  		super.getUI().setProgressBarValue((double)cpt/totalImageCount);
+				  		super.getUI().setProgressBarMessage(Long.toString(cpt)+"/"+ Long.toString(totalImageCount));
+			        }
 		        }
 	        }
-        }
-        
-        if(offsetMapVar.getValue()){
-	        Sequence offsetSeq=new Sequence();
-			offsetSeq.setImage(0, 0, offsetMap);
-			offsetSeq.setName("Offset Map of " + sequence.getName());
-			Icy.getMainInterface().addSequence(offsetSeq);
-        }
-		
+	        
+	        if(offsetMapVar.getValue()){
+		        Sequence offsetSeq=new Sequence();
+				offsetSeq.setImage(0, 0, offsetMap);
+				offsetSeq.setName("Offset Map of " + sequence.getName());
+				Icy.getMainInterface().addSequence(offsetSeq);
+	        }
+		 }
+		 catch(Exception e)
+		 {
+			 System.err.println(e.toString());
+		 }
+		 finally
+		 {
+			 sequence.endUpdate();
+		 }
         System.gc();
 		stopFlag = true;
 		new AnnounceFrame("Alignment operation done!",5);
