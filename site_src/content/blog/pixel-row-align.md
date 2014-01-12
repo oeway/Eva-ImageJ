@@ -1,7 +1,7 @@
 Title: Surface tracking plugin for Icy
 Date: 2013-10-12 7:40
 Tags: plugin, ultrasonic
-Slug: 2013-10-12
+Slug: pixel-row-align
 Author: Will Ouyang
 Summary:
 

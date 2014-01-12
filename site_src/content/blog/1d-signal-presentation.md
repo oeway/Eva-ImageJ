@@ -1,7 +1,8 @@
 Title: 1D signal presentation in Icy
 Date: 2013-6-30 21:30
 Tags: plugin, ultrasonic
-Slug: 2013-6-24
+Slug: 1d-signal-presentation
+Lang: en
 Author: Will Ouyang
 Summary:
 

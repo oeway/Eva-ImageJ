@@ -1,7 +1,8 @@
 Title: Powerful intensity profile tool!
 Date: 2013-12-13 11:27
 Tags: plugin
-Slug: 2013-12-13
+Slug: powerful-waveform-display
+Lang: en
 Author: Will Ouyang
 Summary:
 

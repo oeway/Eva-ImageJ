@@ -1,7 +1,7 @@
 Title: Envelop detecting plugin for Icy
 Date: 2013-10-24
 Tags: plugin, ultrasonic
-Slug: 2013-10-24
+Slug: envelop-detection
 Author: Will Ouyang
 Summary:
 

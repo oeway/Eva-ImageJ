@@ -1,5 +1,6 @@
 Title: About EVA
 Slug: about
+Lang: en
 Author: Will Ouyang
 
 EVA stands for "evaluation", it also comes from the movie "WALL-E" by Disney.

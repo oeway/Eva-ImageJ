@@ -1,7 +1,8 @@
 Title: Machine learning plugin for Icy
 Date: 2013-11-17 22:40
 Tags: plugin, machine_learning
-Slug: 2013-11-17
+Slug: rapid-learning
+Lang: en
 Author: Will Ouyang
 Summary:
 

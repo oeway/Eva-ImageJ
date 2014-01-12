@@ -1,7 +1,8 @@
 Title: Plugin to show 1D signal in Icy is out!
 Date: 2013-7-4 10:30
 Tags: plugin, ultrasonic
-Slug: 2013-7-4
+Slug: 1d-signal-chart-canvas
+Lang: en
 Author: Will Ouyang
 Summary:
 
