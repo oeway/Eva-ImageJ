@@ -120,7 +120,6 @@ XYStage::XYStage() :
    home_(false),
    answerTimeoutMs_(1000.0),
    moveTimeoutMs_(10000.0),
-
    cmdThread_(0)
 {
    // set default error messages

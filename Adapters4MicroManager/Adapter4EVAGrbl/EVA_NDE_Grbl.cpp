@@ -47,8 +47,8 @@ MMThreadLock CEVA_NDE_GrblHub::lock_;
 ///////////////////////////////////////////////////////////////////////////////
 MODULE_API void InitializeModuleData()
 {
-   AddAvailableDeviceName(g_DeviceNameEVA_NDE_GrblHub, "Hub (required)");
-   AddAvailableDeviceName(g_DeviceNameEVA_NDE_GrblXYStage, "XYStage");
+   RegisterDevice(g_DeviceNameEVA_NDE_GrblHub, MM::HubDevice, "Hub (required)");
+   RegisterDevice(g_DeviceNameEVA_NDE_GrblXYStage, MM::XYStageDevice, "XYStage");
    //AddAvailableDeviceName(g_DeviceNameEVA_NDE_GrblZStage, "ZStage");
 
 }

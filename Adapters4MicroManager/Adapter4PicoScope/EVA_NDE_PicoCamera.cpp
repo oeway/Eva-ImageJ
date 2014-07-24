@@ -88,10 +88,10 @@ BOOL APIENTRY DllMain( HANDLE /*hModule*/,
  */
 MODULE_API void InitializeModuleData()
 {
-   AddAvailableDeviceName(g_CameraDeviceName, "EVA_NDE_Pico camera");
-   AddAvailableDeviceName("MedianFilter", "MedianFilter");
-   AddAvailableDeviceName(g_DADeviceName, "EVA_NDE_Pico DA");
-   AddAvailableDeviceName(g_HubDeviceName, "EVA_NDE_Pico hub");
+   RegisterDevice(g_CameraDeviceName, MM::CameraDevice, "EVA_NDE_Pico camera");
+   RegisterDevice("MedianFilter", MM::ImageProcessorDevice, "MedianFilter");
+   RegisterDevice(g_DADeviceName, MM::SignalIODevice, "EVA_NDE_Pico DA");
+   RegisterDevice(g_HubDeviceName, MM::HubDevice, "EVA_NDE_Pico hub");
 }
 
 MODULE_API MM::Device* CreateDevice(const char* deviceName)
@@ -321,7 +321,6 @@ int CEVA_NDE_PicoCamera::Initialize()
    std::string statusPropName = "Status";
    CreateProperty(statusPropName.c_str(), "Idle", MM::String, false);
 
-
    // synchronize all properties
    // --------------------------
    nRet = UpdateStatus();
@@ -353,6 +352,17 @@ int CEVA_NDE_PicoCamera::Initialize()
 	{
 		AddAllowedValue("InputRange",  CDeviceUtils::ConvertToString(inputRanges[i]));
 	}
+	short ch;
+	for (ch = 0; ch < unit.channelCount ; ch++)
+	{
+	   char propNameBuf[30]= "Channel A";
+	   propNameBuf[8] +=ch;
+	   pAct = new CPropertyAction (this, &CEVA_NDE_PicoCamera::OnChannelEnable);
+	   CreateProperty(propNameBuf, "ON", MM::String, false);
+	   AddAllowedValue(propNameBuf, "ON");
+	   AddAllowedValue(propNameBuf, "OFF");
+	}
+
   initialized_ = true;
    return DEVICE_OK;
 }
@@ -548,6 +558,41 @@ int CEVA_NDE_PicoCamera::ClearROI()
    return DEVICE_OK;
 }
 
+   unsigned CEVA_NDE_PicoCamera::GetNumberOfComponents()  
+   {
+      return 1;
+   }
+
+   int CEVA_NDE_PicoCamera::GetComponentName(unsigned channel, char* name)
+   {
+      if (channel > 0)
+         return DEVICE_NONEXISTENT_CHANNEL;
+
+      CDeviceUtils::CopyLimitedString(name, "Grayscale");
+      return DEVICE_OK;
+   }
+
+   /**
+    * Multi-Channel cameras use this function to indicate how many channels they 
+    * provide.  Single channel cameras do not need to override this
+    */
+   unsigned CEVA_NDE_PicoCamera::GetNumberOfChannels()  
+   {
+      return 1;//(unsigned)unit.channelCount;
+   }
+
+   /**
+    * Multi-channel cameras should provide names for their channels
+    * Single cahnnel cameras do not need to override this default implementation
+    */
+    int CEVA_NDE_PicoCamera::GetChannelName(unsigned  channel, char* name)
+   {
+	   char tmp[30] = "Channel A";
+	   tmp[8] +=channel;
+      CDeviceUtils::CopyLimitedString(name, tmp);
+      return DEVICE_OK;
+   }
+
 /**
 * Returns the current exposure setting in milliseconds.
 * Required by the MM::Camera API.
@@ -728,7 +773,11 @@ int CEVA_NDE_PicoCamera::InsertImage()
    unsigned int h = GetImageHeight();
    unsigned int b = GetImageBytesPerPixel();
 
+   // This method inserts a new image into the circular buffer (residing in MMCore)
+   //int ret = GetCoreCallback()->InsertMultiChannel(this, pI, 1, w, h, b, &md ); // Inserting the md causes crash in debug builds
+
    int ret = GetCoreCallback()->InsertImage(this, pI, w, h, b, md.Serialize().c_str());
+
    if (!stopOnOverflow_ && ret == DEVICE_BUFFER_OVERFLOW)
    {
       // do not stop on overflow - just reset the buffer
@@ -1116,6 +1165,24 @@ int CEVA_NDE_PicoCamera::OnIsSequenceable(MM::PropertyBase* pProp, MM::ActionTyp
 }
 
 
+int CEVA_NDE_PicoCamera::OnChannelEnable(MM::PropertyBase* pProp, MM::ActionType eAct)
+{
+   std::string val = "ON";
+   if (eAct == MM::BeforeGet)
+   {
+      val = "ON";
+
+      pProp->Set(val.c_str());
+   }
+   else if (eAct == MM::AfterSet)
+   {
+      pProp->Get(val);
+      if (val == "ON") 
+      {
+      }
+   }
+   return DEVICE_OK;
+}
 ///////////////////////////////////////////////////////////////////////////////
 // Private CEVA_NDE_PicoCamera methods
 ///////////////////////////////////////////////////////////////////////////////

@@ -183,6 +183,12 @@ public:
    int OnRowCount(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnInputRange(MM::PropertyBase* pProp, MM::ActionType eAct);
    int OnTimeoutMs(MM::PropertyBase* pProp, MM::ActionType eAct);
+   int OnChannelEnable(MM::PropertyBase* pProp, MM::ActionType eAct);
+
+   int GetChannelName(unsigned /* channel */, char* name);
+   unsigned GetNumberOfComponents();
+   unsigned GetNumberOfChannels() ;
+   int GetComponentName(unsigned channel, char* name);
 private:
    int SetAllowedBinning();
    void TestResourceLocking(const bool);

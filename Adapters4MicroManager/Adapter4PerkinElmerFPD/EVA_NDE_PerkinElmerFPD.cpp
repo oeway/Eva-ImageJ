@@ -104,12 +104,13 @@ BOOL APIENTRY DllMain( HANDLE /*hModule*/,
  */
 MODULE_API void InitializeModuleData()
 {
-   AddAvailableDeviceName(g_CameraDeviceName, "EVA_NDE_PerkinElmer Camera");
-   AddAvailableDeviceName("TransposeProcessor", "TransposeProcessor");
-   AddAvailableDeviceName("ImageFlipX", "ImageFlipX");
-   AddAvailableDeviceName("ImageFlipY", "ImageFlipY");
-   AddAvailableDeviceName("MedianFilter", "MedianFilter");
-   AddAvailableDeviceName(g_HubDeviceName, "EVA_NDE_PerkinElmer Hub");
+   RegisterDevice(g_CameraDeviceName, MM::CameraDevice, "EVA_NDE_PerkinElmer Camera");
+   RegisterDevice("TransposeProcessor", MM::ImageProcessorDevice, "TransposeProcessor");
+   RegisterDevice("ImageFlipX", MM::ImageProcessorDevice, "ImageFlipX");
+   RegisterDevice("ImageFlipY", MM::ImageProcessorDevice, "ImageFlipY");
+   RegisterDevice("MedianFilter", MM::ImageProcessorDevice, "MedianFilter");
+   RegisterDevice(g_HubDeviceName, MM::HubDevice, "EVA_NDE_PerkinElmer Hub");
+
 }
 
 MODULE_API MM::Device* CreateDevice(const char* deviceName)
