@@ -1,0 +1,40 @@
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): -------->>
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): Core session started on 2012-06-08T22:52:05.984375 by Administrator on PC-201206051205
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): Debug logging disabled
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): Debug logging disabled
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): > MM Studio version: 1.4.7  20111110
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): > MMCore version 2.3.1
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): > Device API version 51, Module API version 7
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): > Operating System: Windows XP 5.1
+LOG(2012-06-08T22:52:05.984375, 2884, 00161718:): > JVM: Java HotSpot(TM) Client VM, version 1.6.0_32; 32 bit
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): All devices unloaded.
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): > Notification for Device: Core Property: Initialize changed to value: 0
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Device DHub loaded from DemoCamera and labeled as DHub-1
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Device DCam loaded from DemoCamera and labeled as DCam
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Device DCam set as default camera.
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Starting initialization sequence for 2 devices...
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Device DHub-1 initialized.
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Device DCam initialized.
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): > Notification for Device: Core Property: Initialize changed to value: 1
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Camera device set to DCam
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): > Notification for Device: Core Property: Camera changed to value: DCam
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Auto shutter ON.
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): > Notification for Device: Core Property: AutoShutter changed to value: 1
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-06-08T22:52:06.390625, 2884, 00161718:): System state cache updated.
+LOG(2012-06-08T22:52:06.421875, 2884, 00161718:): System state cache updated.
+LOG(2012-06-08T22:52:06.421875, 2884, 00161718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-08T22:52:06.421875, 2884, 00161718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-08T22:52:06.421875, 2884, 00161718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-06-08T22:52:06.421875, 2884, 00161718:): > Startup script file (G:\Projects\MM_Project\micro-manager1.4\mmstudio/MMStartup.bsh) not present.

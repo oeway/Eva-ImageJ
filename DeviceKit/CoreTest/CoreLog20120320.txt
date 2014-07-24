@@ -1,0 +1,1499 @@
+LOG(2012-03-20T16:22:32.769490, 6044, 007E75B0:): -------->>
+LOG(2012-03-20T16:24:14.347299, 4828, 001775B0:): -------->>
+LOG(2012-03-20T16:24:14.353300, 4828, 001775B0:): Core session started on 2012-03-20T16:24:14.353300 by oeway on 1997-PC
+LOG(2012-03-20T16:24:14.353300, 4828, 001775B0:): Debug logging disabled
+LOG(2012-03-20T16:24:14.362300, 4828, 001775B0:): All devices unloaded.
+LOG(2012-03-20T16:24:14.446305, 4828, 001775B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:24:14.447305, 4828, 001775B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:24:14.448305, 4828, 001775B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:24:14.458306, 4828, 001775B0:): Device VarianFPD message: Open Link Fail!
+LOG(2012-03-20T16:24:14.463306, 4828, 001775B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:24:14.464306, 4828, 001775B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:24:14.465306, 4828, 001775B0:): Auto shutter OFF.
+LOG(2012-03-20T16:24:14.465306, 4828, 001775B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:24:14.466306, 4828, 001775B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:24:14.466306, 4828, 001775B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:24:14.467306, 4828, 001775B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:24:14.467306, 4828, 001775B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:24:14.467306, 4828, 001775B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:24:14.468306, 4828, 001775B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:24:14.468306, 4828, 001775B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:24:14.469306, 4828, 001775B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:24:14.469306, 4828, 001775B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:24:14.479307, 4828, 001775B0:): System state cache updated.
+LOG(2012-03-20T16:26:36.972457, 4212, 000875B0:): -------->>
+LOG(2012-03-20T16:26:36.979458, 4212, 000875B0:): Core session started on 2012-03-20T16:26:36.979458 by oeway on 1997-PC
+LOG(2012-03-20T16:26:36.980458, 4212, 000875B0:): Debug logging disabled
+LOG(2012-03-20T16:26:36.985458, 4212, 000875B0:): All devices unloaded.
+LOG(2012-03-20T16:26:37.040461, 4212, 000875B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:26:37.040461, 4212, 000875B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:26:37.041461, 4212, 000875B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:26:37.051462, 4212, 000875B0:): Device VarianFPD message: Open Link Fail!
+LOG(2012-03-20T16:26:37.055462, 4212, 000875B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:26:37.056462, 4212, 000875B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:26:37.057462, 4212, 000875B0:): Auto shutter OFF.
+LOG(2012-03-20T16:26:37.057462, 4212, 000875B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:26:37.058462, 4212, 000875B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:26:37.058462, 4212, 000875B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:26:37.059462, 4212, 000875B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:26:37.059462, 4212, 000875B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:26:37.060462, 4212, 000875B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:26:37.060462, 4212, 000875B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:26:37.060462, 4212, 000875B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:26:37.061462, 4212, 000875B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:26:37.061462, 4212, 000875B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:26:37.071463, 4212, 000875B0:): System state cache updated.
+LOG(2012-03-20T16:36:37.409800, 3980, 002875B0:): -------->>
+LOG(2012-03-20T16:36:37.413800, 3980, 002875B0:): Core session started on 2012-03-20T16:36:37.413800 by oeway on 1997-PC
+LOG(2012-03-20T16:36:37.414800, 3980, 002875B0:): Debug logging disabled
+LOG(2012-03-20T16:36:37.417801, 3980, 002875B0:): All devices unloaded.
+LOG(2012-03-20T16:36:37.509806, 3980, 002875B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:36:37.510806, 3980, 002875B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:36:37.510806, 3980, 002875B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:36:37.514806, 3980, 002875B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:36:37.519806, 3980, 002875B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:36:37.520807, 3980, 002875B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:36:37.521807, 3980, 002875B0:): Auto shutter OFF.
+LOG(2012-03-20T16:36:37.522807, 3980, 002875B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:36:37.522807, 3980, 002875B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:36:37.523807, 3980, 002875B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:36:37.524807, 3980, 002875B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:36:37.525807, 3980, 002875B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:36:37.526807, 3980, 002875B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:36:37.526807, 3980, 002875B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:36:37.527807, 3980, 002875B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:36:37.527807, 3980, 002875B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:36:37.528807, 3980, 002875B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:36:37.528807, 3980, 002875B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:36:37.529807, 3980, 002875B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:36:37.529807, 3980, 002875B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:36:37.541808, 3980, 002875B0:): System state cache updated.
+LOG(2012-03-20T16:36:37.630813, 3980, 002875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:36:37.633813, 3980, 002875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:37:35.466121, 4120, 002C75B0:): -------->>
+LOG(2012-03-20T16:37:35.473121, 4120, 002C75B0:): Core session started on 2012-03-20T16:37:35.473121 by oeway on 1997-PC
+LOG(2012-03-20T16:37:35.473121, 4120, 002C75B0:): Debug logging disabled
+LOG(2012-03-20T16:37:35.477121, 4120, 002C75B0:): All devices unloaded.
+LOG(2012-03-20T16:37:35.567127, 4120, 002C75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:37:35.567127, 4120, 002C75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:37:35.568127, 4120, 002C75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:37:35.572127, 4120, 002C75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:37:35.576127, 4120, 002C75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:37:35.577127, 4120, 002C75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:37:35.577127, 4120, 002C75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:37:35.578127, 4120, 002C75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:37:35.579127, 4120, 002C75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:37:35.579127, 4120, 002C75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:37:35.580127, 4120, 002C75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:37:35.580127, 4120, 002C75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:37:35.581127, 4120, 002C75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:37:35.582127, 4120, 002C75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:37:35.582127, 4120, 002C75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:37:35.583127, 4120, 002C75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:37:35.583127, 4120, 002C75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:37:35.583127, 4120, 002C75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:37:35.584128, 4120, 002C75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:37:35.584128, 4120, 002C75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:37:35.594128, 4120, 002C75B0:): System state cache updated.
+LOG(2012-03-20T16:38:50.068388, 4264, 006C75B0:): -------->>
+LOG(2012-03-20T16:38:50.076388, 4264, 006C75B0:): Core session started on 2012-03-20T16:38:50.076388 by oeway on 1997-PC
+LOG(2012-03-20T16:38:50.076388, 4264, 006C75B0:): Debug logging disabled
+LOG(2012-03-20T16:38:50.080388, 4264, 006C75B0:): All devices unloaded.
+LOG(2012-03-20T16:38:50.179394, 4264, 006C75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:38:50.179394, 4264, 006C75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:38:50.180394, 4264, 006C75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:38:50.183394, 4264, 006C75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:38:50.187395, 4264, 006C75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:38:50.188395, 4264, 006C75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:38:50.189395, 4264, 006C75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:38:50.190395, 4264, 006C75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:38:50.190395, 4264, 006C75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:38:50.191395, 4264, 006C75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:38:50.192395, 4264, 006C75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:38:50.192395, 4264, 006C75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:38:50.193395, 4264, 006C75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:38:50.193395, 4264, 006C75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:38:50.195395, 4264, 006C75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:38:50.195395, 4264, 006C75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:38:50.195395, 4264, 006C75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:38:50.196395, 4264, 006C75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:38:50.196395, 4264, 006C75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:38:50.196395, 4264, 006C75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:38:50.206396, 4264, 006C75B0:): System state cache updated.
+LOG(2012-03-20T16:38:50.296401, 4264, 006C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:38:50.298401, 4264, 006C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:38:50.301401, 4264, 006C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:39:07.988413, 4528, 002B75B0:): -------->>
+LOG(2012-03-20T16:39:07.999413, 4528, 002B75B0:): Core session started on 2012-03-20T16:39:07.999413 by oeway on 1997-PC
+LOG(2012-03-20T16:39:08.000413, 4528, 002B75B0:): Debug logging disabled
+LOG(2012-03-20T16:39:08.007414, 4528, 002B75B0:): All devices unloaded.
+LOG(2012-03-20T16:39:08.111420, 4528, 002B75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:39:08.111420, 4528, 002B75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:39:08.113420, 4528, 002B75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:39:08.117420, 4528, 002B75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:39:08.122420, 4528, 002B75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:39:08.123420, 4528, 002B75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:39:08.124421, 4528, 002B75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:39:08.125421, 4528, 002B75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:39:08.126421, 4528, 002B75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:39:08.126421, 4528, 002B75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:39:08.127421, 4528, 002B75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:39:08.128421, 4528, 002B75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:39:08.128421, 4528, 002B75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:39:08.129421, 4528, 002B75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:39:08.129421, 4528, 002B75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:39:08.130421, 4528, 002B75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:39:08.130421, 4528, 002B75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:39:08.130421, 4528, 002B75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:39:08.131421, 4528, 002B75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:39:08.131421, 4528, 002B75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:39:08.141422, 4528, 002B75B0:): System state cache updated.
+LOG(2012-03-20T16:39:08.248428, 4528, 002B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:39:08.251428, 4528, 002B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:39:08.253428, 4528, 002B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:39:47.184655, 4528, 002B75B0:): Resolution ID Resolution10: for device Objective defined as State=1
+LOG(2012-03-20T16:39:47.186655, 4528, 002B75B0:): Resolution ID Resolution20: for device Objective defined as State=3
+LOG(2012-03-20T16:39:47.188655, 4528, 002B75B0:): Resolution ID Resolution40: for device Objective defined as State=0
+LOG(2012-03-20T16:39:47.189655, 4528, 002B75B0:): Pixel size 1.000000 um set for resolution ID: Resolution10
+LOG(2012-03-20T16:39:47.190655, 4528, 002B75B0:): Pixel size 0.500000 um set for resolution ID: Resolution20
+LOG(2012-03-20T16:39:47.190655, 4528, 002B75B0:): Pixel size 0.250000 um set for resolution ID: Resolution40
+LOG(2012-03-20T16:43:08.375162, 6076, 002575B0:): -------->>
+LOG(2012-03-20T16:43:08.388163, 6076, 002575B0:): Core session started on 2012-03-20T16:43:08.388163 by oeway on 1997-PC
+LOG(2012-03-20T16:43:08.389163, 6076, 002575B0:): Debug logging disabled
+LOG(2012-03-20T16:43:08.392163, 6076, 002575B0:): All devices unloaded.
+LOG(2012-03-20T16:43:08.498169, 6076, 002575B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:43:08.498169, 6076, 002575B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:43:08.499169, 6076, 002575B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:43:08.502169, 6076, 002575B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:43:08.507170, 6076, 002575B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:43:08.508170, 6076, 002575B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:43:08.509170, 6076, 002575B0:): Auto shutter OFF.
+LOG(2012-03-20T16:43:08.509170, 6076, 002575B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:43:08.510170, 6076, 002575B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:43:08.510170, 6076, 002575B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:43:08.511170, 6076, 002575B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:43:08.512170, 6076, 002575B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:43:08.512170, 6076, 002575B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:43:08.513170, 6076, 002575B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:43:08.514170, 6076, 002575B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:43:08.514170, 6076, 002575B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:43:08.515170, 6076, 002575B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:43:08.515170, 6076, 002575B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:43:08.516170, 6076, 002575B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:43:08.516170, 6076, 002575B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:43:08.526171, 6076, 002575B0:): System state cache updated.
+LOG(2012-03-20T16:43:08.604175, 6076, 002575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:43:08.606175, 6076, 002575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:43:08.609175, 6076, 002575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:43:37.066803, 5428, 00237718:): -------->>
+LOG(2012-03-20T16:43:37.074804, 5428, 00237718:): Core session started on 2012-03-20T16:43:37.074804 by oeway on 1997-PC
+LOG(2012-03-20T16:43:37.075804, 5428, 00237718:): Debug logging disabled
+LOG(2012-03-20T16:43:37.081804, 5428, 00237718:): All devices unloaded.
+LOG(2012-03-20T16:43:37.191810, 5428, 00237718:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:43:37.191810, 5428, 00237718:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:43:37.192810, 5428, 00237718:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:43:37.195811, 5428, 00237718:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:43:37.201811, 5428, 00237718:): Device VarianFPD initialized.
+LOG(2012-03-20T16:43:37.202811, 5428, 00237718:): Camera device set to VarianFPD
+LOG(2012-03-20T16:43:37.203811, 5428, 00237718:): Auto shutter OFF.
+LOG(2012-03-20T16:43:37.204811, 5428, 00237718:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:43:37.205811, 5428, 00237718:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:43:37.205811, 5428, 00237718:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:43:37.206811, 5428, 00237718:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:43:37.207811, 5428, 00237718:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:43:37.208811, 5428, 00237718:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:43:37.208811, 5428, 00237718:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:43:37.209811, 5428, 00237718:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:43:37.209811, 5428, 00237718:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:43:37.210811, 5428, 00237718:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:43:37.210811, 5428, 00237718:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:43:37.211811, 5428, 00237718:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:43:37.211811, 5428, 00237718:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:43:37.222812, 5428, 00237718:): System state cache updated.
+LOG(2012-03-20T16:43:37.312817, 5428, 00237718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:43:37.314817, 5428, 00237718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:43:37.317818, 5428, 00237718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:43:50.221556, 5428, 00237718:): Resolution ID Resolution10: for device Objective defined as State=1
+LOG(2012-03-20T16:43:50.780588, 5428, 00237718:): Resolution ID Resolution20: for device Objective defined as State=3
+LOG(2012-03-20T16:43:51.354620, 5428, 00237718:): Resolution ID Resolution40: for device Objective defined as State=0
+LOG(2012-03-20T16:43:56.507915, 5428, 00237718:): Pixel size 1.000000 um set for resolution ID: Resolution10
+LOG(2012-03-20T16:43:57.310961, 5428, 00237718:): Pixel size 0.500000 um set for resolution ID: Resolution20
+LOG(2012-03-20T16:43:58.114007, 5428, 00237718:): Pixel size 0.250000 um set for resolution ID: Resolution40
+LOG(2012-03-20T16:45:40.200846, 3696, 003775B0:): -------->>
+LOG(2012-03-20T16:45:40.206846, 3696, 003775B0:): Core session started on 2012-03-20T16:45:40.206846 by oeway on 1997-PC
+LOG(2012-03-20T16:45:40.206846, 3696, 003775B0:): Debug logging disabled
+LOG(2012-03-20T16:45:40.210847, 3696, 003775B0:): All devices unloaded.
+LOG(2012-03-20T16:45:40.320853, 3696, 003775B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:45:40.320853, 3696, 003775B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:45:40.322853, 3696, 003775B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:45:40.327853, 3696, 003775B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:45:40.333854, 3696, 003775B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:45:40.334854, 3696, 003775B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:45:40.335854, 3696, 003775B0:): Auto shutter OFF.
+LOG(2012-03-20T16:45:40.335854, 3696, 003775B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:45:40.336854, 3696, 003775B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:45:40.337854, 3696, 003775B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:45:40.337854, 3696, 003775B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:45:40.338854, 3696, 003775B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:45:40.339854, 3696, 003775B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:45:40.339854, 3696, 003775B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:45:40.340854, 3696, 003775B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:45:40.340854, 3696, 003775B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:45:40.340854, 3696, 003775B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:45:40.341854, 3696, 003775B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:45:40.341854, 3696, 003775B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:45:40.342854, 3696, 003775B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:45:40.351855, 3696, 003775B0:): System state cache updated.
+LOG(2012-03-20T16:45:55.164702, 5400, 002A75B0:): -------->>
+LOG(2012-03-20T16:45:55.176703, 5400, 002A75B0:): Core session started on 2012-03-20T16:45:55.176703 by oeway on 1997-PC
+LOG(2012-03-20T16:45:55.177703, 5400, 002A75B0:): Debug logging disabled
+LOG(2012-03-20T16:45:55.185703, 5400, 002A75B0:): All devices unloaded.
+LOG(2012-03-20T16:45:55.297710, 5400, 002A75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:45:55.297710, 5400, 002A75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:45:55.298710, 5400, 002A75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:45:55.302710, 5400, 002A75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:45:55.306710, 5400, 002A75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:45:55.307710, 5400, 002A75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:45:55.308710, 5400, 002A75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:45:55.309710, 5400, 002A75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:45:55.310710, 5400, 002A75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:45:55.310710, 5400, 002A75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:45:55.311710, 5400, 002A75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:45:55.312710, 5400, 002A75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:45:55.312710, 5400, 002A75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:45:55.313710, 5400, 002A75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:45:55.313710, 5400, 002A75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:45:55.313710, 5400, 002A75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:45:55.314711, 5400, 002A75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:45:55.314711, 5400, 002A75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:45:55.315711, 5400, 002A75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:45:55.315711, 5400, 002A75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:45:55.325711, 5400, 002A75B0:): System state cache updated.
+LOG(2012-03-20T16:45:55.382714, 5400, 002A75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:45:55.383714, 5400, 002A75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:45:55.385715, 5400, 002A75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:47:26.578931, 4920, 003375B0:): -------->>
+LOG(2012-03-20T16:47:26.583931, 4920, 003375B0:): Core session started on 2012-03-20T16:47:26.583931 by oeway on 1997-PC
+LOG(2012-03-20T16:47:26.584931, 4920, 003375B0:): Debug logging disabled
+LOG(2012-03-20T16:47:26.588931, 4920, 003375B0:): All devices unloaded.
+LOG(2012-03-20T16:47:26.698937, 4920, 003375B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:47:26.698937, 4920, 003375B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:47:26.699937, 4920, 003375B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:47:26.703938, 4920, 003375B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:47:26.708938, 4920, 003375B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:47:26.709938, 4920, 003375B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:47:26.710938, 4920, 003375B0:): Auto shutter OFF.
+LOG(2012-03-20T16:47:26.711938, 4920, 003375B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:47:26.711938, 4920, 003375B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:47:26.712938, 4920, 003375B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:47:26.713938, 4920, 003375B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:47:26.714938, 4920, 003375B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:47:26.715938, 4920, 003375B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:47:26.717938, 4920, 003375B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:47:26.718939, 4920, 003375B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:47:26.718939, 4920, 003375B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:47:26.719939, 4920, 003375B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:47:26.719939, 4920, 003375B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:47:26.719939, 4920, 003375B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:47:26.720939, 4920, 003375B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:47:26.730939, 4920, 003375B0:): System state cache updated.
+LOG(2012-03-20T16:47:26.802943, 4920, 003375B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:47:26.805944, 4920, 003375B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:47:26.807944, 4920, 003375B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:48:09.161366, 5768, 003575B0:): -------->>
+LOG(2012-03-20T16:48:09.184367, 5768, 003575B0:): Core session started on 2012-03-20T16:48:09.184367 by oeway on 1997-PC
+LOG(2012-03-20T16:48:09.184367, 5768, 003575B0:): Debug logging disabled
+LOG(2012-03-20T16:48:09.188368, 5768, 003575B0:): All devices unloaded.
+LOG(2012-03-20T16:48:09.300374, 5768, 003575B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:48:09.300374, 5768, 003575B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:48:09.301374, 5768, 003575B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:48:09.306374, 5768, 003575B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:48:09.310375, 5768, 003575B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:48:09.312375, 5768, 003575B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:48:09.313375, 5768, 003575B0:): Auto shutter OFF.
+LOG(2012-03-20T16:48:09.313375, 5768, 003575B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:48:09.314375, 5768, 003575B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:48:09.316375, 5768, 003575B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:48:09.317375, 5768, 003575B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:48:09.317375, 5768, 003575B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:48:09.318375, 5768, 003575B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:48:09.319375, 5768, 003575B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:48:09.320375, 5768, 003575B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:48:09.320375, 5768, 003575B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:48:09.321375, 5768, 003575B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:48:09.321375, 5768, 003575B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:48:09.321375, 5768, 003575B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:48:09.322375, 5768, 003575B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:48:09.332376, 5768, 003575B0:): System state cache updated.
+LOG(2012-03-20T16:48:09.436382, 5768, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:48:09.439382, 5768, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:48:09.442382, 5768, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:48:41.630223, 4572, 000975B0:): -------->>
+LOG(2012-03-20T16:48:41.648224, 4572, 000975B0:): Core session started on 2012-03-20T16:48:41.648224 by oeway on 1997-PC
+LOG(2012-03-20T16:48:41.649224, 4572, 000975B0:): Debug logging disabled
+LOG(2012-03-20T16:48:41.652224, 4572, 000975B0:): All devices unloaded.
+LOG(2012-03-20T16:48:41.757230, 4572, 000975B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:48:41.757230, 4572, 000975B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:48:41.758231, 4572, 000975B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:48:41.761231, 4572, 000975B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:48:41.765231, 4572, 000975B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:48:41.766231, 4572, 000975B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:48:41.767231, 4572, 000975B0:): Auto shutter OFF.
+LOG(2012-03-20T16:48:41.767231, 4572, 000975B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:48:41.768231, 4572, 000975B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:48:41.769231, 4572, 000975B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:48:41.769231, 4572, 000975B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:48:41.770231, 4572, 000975B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:48:41.771231, 4572, 000975B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:48:41.771231, 4572, 000975B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:48:41.772231, 4572, 000975B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:48:41.772231, 4572, 000975B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:48:41.773231, 4572, 000975B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:48:41.773231, 4572, 000975B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:48:41.773231, 4572, 000975B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:48:41.774231, 4572, 000975B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:48:41.784232, 4572, 000975B0:): System state cache updated.
+LOG(2012-03-20T16:48:41.875237, 4572, 000975B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:48:41.878237, 4572, 000975B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:48:41.880238, 4572, 000975B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:52:09.913136, 5844, 003475B0:): -------->>
+LOG(2012-03-20T16:52:09.925137, 5844, 003475B0:): Core session started on 2012-03-20T16:52:09.925137 by oeway on 1997-PC
+LOG(2012-03-20T16:52:09.925137, 5844, 003475B0:): Debug logging disabled
+LOG(2012-03-20T16:52:09.929137, 5844, 003475B0:): All devices unloaded.
+LOG(2012-03-20T16:52:10.031143, 5844, 003475B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:52:10.031143, 5844, 003475B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:52:10.032143, 5844, 003475B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:52:10.035143, 5844, 003475B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:52:10.041144, 5844, 003475B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:52:10.042144, 5844, 003475B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:52:10.043144, 5844, 003475B0:): Auto shutter OFF.
+LOG(2012-03-20T16:52:10.044144, 5844, 003475B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:52:10.044144, 5844, 003475B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:52:10.045144, 5844, 003475B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:52:10.045144, 5844, 003475B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:52:10.046144, 5844, 003475B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:52:10.047144, 5844, 003475B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:52:10.047144, 5844, 003475B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:52:10.048144, 5844, 003475B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:52:10.048144, 5844, 003475B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:52:10.048144, 5844, 003475B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:52:10.049144, 5844, 003475B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:52:10.049144, 5844, 003475B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:52:10.049144, 5844, 003475B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:52:10.060145, 5844, 003475B0:): System state cache updated.
+LOG(2012-03-20T16:52:10.131149, 5844, 003475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:52:10.133149, 5844, 003475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:52:10.134149, 5844, 003475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:02.890166, 5716, 005175B0:): -------->>
+LOG(2012-03-20T16:53:02.897167, 5716, 005175B0:): Core session started on 2012-03-20T16:53:02.897167 by oeway on 1997-PC
+LOG(2012-03-20T16:53:02.897167, 5716, 005175B0:): Debug logging disabled
+LOG(2012-03-20T16:53:02.901167, 5716, 005175B0:): All devices unloaded.
+LOG(2012-03-20T16:53:03.027174, 5716, 005175B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:53:03.027174, 5716, 005175B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:53:03.029174, 5716, 005175B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:53:03.033175, 5716, 005175B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:53:03.038175, 5716, 005175B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:53:03.039175, 5716, 005175B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:53:03.040175, 5716, 005175B0:): Auto shutter OFF.
+LOG(2012-03-20T16:53:03.040175, 5716, 005175B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:53:03.041175, 5716, 005175B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:53:03.042175, 5716, 005175B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:53:03.042175, 5716, 005175B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:53:03.043175, 5716, 005175B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:53:03.043175, 5716, 005175B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:53:03.044175, 5716, 005175B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:53:03.044175, 5716, 005175B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:53:03.045175, 5716, 005175B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:53:03.045175, 5716, 005175B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:53:03.045175, 5716, 005175B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:53:03.046175, 5716, 005175B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:53:03.046175, 5716, 005175B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:53:03.056176, 5716, 005175B0:): System state cache updated.
+LOG(2012-03-20T16:53:03.170182, 5716, 005175B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:03.172183, 5716, 005175B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:03.175183, 5716, 005175B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:15.582892, 4204, 002675B0:): -------->>
+LOG(2012-03-20T16:53:15.593893, 4204, 002675B0:): Core session started on 2012-03-20T16:53:15.593893 by oeway on 1997-PC
+LOG(2012-03-20T16:53:15.593893, 4204, 002675B0:): Debug logging disabled
+LOG(2012-03-20T16:53:15.596893, 4204, 002675B0:): All devices unloaded.
+LOG(2012-03-20T16:53:15.688898, 4204, 002675B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:53:15.688898, 4204, 002675B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:53:15.689899, 4204, 002675B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:53:15.692899, 4204, 002675B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:53:15.696899, 4204, 002675B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:53:15.697899, 4204, 002675B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:53:15.698899, 4204, 002675B0:): Auto shutter OFF.
+LOG(2012-03-20T16:53:15.698899, 4204, 002675B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:53:15.699899, 4204, 002675B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:53:15.699899, 4204, 002675B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:53:15.718900, 4204, 002675B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:53:15.721900, 4204, 002675B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:53:15.737901, 4204, 002675B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:53:15.743902, 4204, 002675B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:53:15.744902, 4204, 002675B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:53:15.744902, 4204, 002675B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:53:15.745902, 4204, 002675B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:53:15.745902, 4204, 002675B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:53:15.746902, 4204, 002675B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:53:15.746902, 4204, 002675B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:53:15.758902, 4204, 002675B0:): System state cache updated.
+LOG(2012-03-20T16:53:15.939913, 4204, 002675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:15.940913, 4204, 002675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:15.942913, 4204, 002675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:25.616466, 5120, 002B75B0:): -------->>
+LOG(2012-03-20T16:53:25.647468, 5120, 002B75B0:): Core session started on 2012-03-20T16:53:25.647468 by oeway on 1997-PC
+LOG(2012-03-20T16:53:25.647468, 5120, 002B75B0:): Debug logging disabled
+LOG(2012-03-20T16:53:25.651468, 5120, 002B75B0:): All devices unloaded.
+LOG(2012-03-20T16:53:25.828478, 5120, 002B75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:53:25.828478, 5120, 002B75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:53:25.830479, 5120, 002B75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:53:25.834479, 5120, 002B75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:53:25.839479, 5120, 002B75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:53:25.840479, 5120, 002B75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:53:25.841479, 5120, 002B75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:53:25.841479, 5120, 002B75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:53:25.842479, 5120, 002B75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:53:25.843479, 5120, 002B75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:53:25.844479, 5120, 002B75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:53:25.844479, 5120, 002B75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:53:25.845479, 5120, 002B75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:53:25.845479, 5120, 002B75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:53:25.846479, 5120, 002B75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:53:25.846479, 5120, 002B75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:53:25.847480, 5120, 002B75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:53:25.847480, 5120, 002B75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:53:25.847480, 5120, 002B75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:53:25.848480, 5120, 002B75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:53:25.857480, 5120, 002B75B0:): System state cache updated.
+LOG(2012-03-20T16:53:25.972487, 5120, 002B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:25.975487, 5120, 002B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:53:25.977487, 5120, 002B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:54:27.425002, 1908, 000C75B0:): -------->>
+LOG(2012-03-20T16:54:27.433002, 1908, 000C75B0:): Core session started on 2012-03-20T16:54:27.433002 by oeway on 1997-PC
+LOG(2012-03-20T16:54:27.434002, 1908, 000C75B0:): Debug logging disabled
+LOG(2012-03-20T16:54:27.439002, 1908, 000C75B0:): All devices unloaded.
+LOG(2012-03-20T16:54:27.602012, 1908, 000C75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:54:27.603012, 1908, 000C75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:54:27.604012, 1908, 000C75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:54:27.607012, 1908, 000C75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:54:27.612012, 1908, 000C75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:54:27.613012, 1908, 000C75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:54:27.614012, 1908, 000C75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:54:27.615012, 1908, 000C75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:54:27.615012, 1908, 000C75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:54:27.616012, 1908, 000C75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:54:27.616012, 1908, 000C75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:54:27.617013, 1908, 000C75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:54:27.618013, 1908, 000C75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:54:27.618013, 1908, 000C75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:54:27.619013, 1908, 000C75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:54:27.620013, 1908, 000C75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:54:27.620013, 1908, 000C75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:54:27.621013, 1908, 000C75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:54:27.621013, 1908, 000C75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:54:27.622013, 1908, 000C75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:54:27.633013, 1908, 000C75B0:): System state cache updated.
+LOG(2012-03-20T16:54:27.740020, 1908, 000C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:54:27.742020, 1908, 000C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:54:27.745020, 1908, 000C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:54:28.385056, 1908, 000C75B0:): All devices unloaded.
+LOG(2012-03-20T16:54:38.186617, 5196, 004475B0:): -------->>
+LOG(2012-03-20T16:54:38.197618, 5196, 004475B0:): Core session started on 2012-03-20T16:54:38.197618 by oeway on 1997-PC
+LOG(2012-03-20T16:54:38.197618, 5196, 004475B0:): Debug logging disabled
+LOG(2012-03-20T16:54:38.201618, 5196, 004475B0:): All devices unloaded.
+LOG(2012-03-20T16:54:38.394629, 5196, 004475B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:54:38.394629, 5196, 004475B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:54:38.396629, 5196, 004475B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:54:38.401629, 5196, 004475B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:54:38.406630, 5196, 004475B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:54:38.407630, 5196, 004475B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:54:38.408630, 5196, 004475B0:): Auto shutter OFF.
+LOG(2012-03-20T16:54:38.409630, 5196, 004475B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:54:38.409630, 5196, 004475B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:54:38.410630, 5196, 004475B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:54:38.411630, 5196, 004475B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:54:38.411630, 5196, 004475B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:54:38.412630, 5196, 004475B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:54:38.412630, 5196, 004475B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:54:38.413630, 5196, 004475B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:54:38.413630, 5196, 004475B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:54:38.414630, 5196, 004475B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:54:38.414630, 5196, 004475B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:54:38.415630, 5196, 004475B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:54:38.415630, 5196, 004475B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:54:38.426631, 5196, 004475B0:): System state cache updated.
+LOG(2012-03-20T16:54:38.720648, 5196, 004475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:54:38.722648, 5196, 004475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:54:38.723648, 5196, 004475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:55:04.851142, 4444, 003275B0:): -------->>
+LOG(2012-03-20T16:55:04.880144, 4444, 003275B0:): Core session started on 2012-03-20T16:55:04.880144 by oeway on 1997-PC
+LOG(2012-03-20T16:55:04.880144, 4444, 003275B0:): Debug logging disabled
+LOG(2012-03-20T16:55:04.884144, 4444, 003275B0:): All devices unloaded.
+LOG(2012-03-20T16:55:05.078155, 4444, 003275B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:55:05.078155, 4444, 003275B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:55:05.079155, 4444, 003275B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:55:05.085156, 4444, 003275B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:55:05.091156, 4444, 003275B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:55:05.092156, 4444, 003275B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:55:05.093156, 4444, 003275B0:): Auto shutter OFF.
+LOG(2012-03-20T16:55:05.093156, 4444, 003275B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:55:05.094156, 4444, 003275B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:55:05.095156, 4444, 003275B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:55:05.095156, 4444, 003275B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:55:05.096156, 4444, 003275B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:55:05.097156, 4444, 003275B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:55:05.097156, 4444, 003275B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:55:05.098156, 4444, 003275B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:55:05.098156, 4444, 003275B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:55:05.098156, 4444, 003275B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:55:05.099156, 4444, 003275B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:55:05.099156, 4444, 003275B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:55:05.100156, 4444, 003275B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:55:05.109157, 4444, 003275B0:): System state cache updated.
+LOG(2012-03-20T16:55:05.177161, 4444, 003275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:55:05.179161, 4444, 003275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:55:05.182161, 4444, 003275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:55:34.730851, 4340, 001A75B0:): -------->>
+LOG(2012-03-20T16:55:34.739852, 4340, 001A75B0:): Core session started on 2012-03-20T16:55:34.739852 by oeway on 1997-PC
+LOG(2012-03-20T16:55:34.739852, 4340, 001A75B0:): Debug logging disabled
+LOG(2012-03-20T16:55:34.743852, 4340, 001A75B0:): All devices unloaded.
+LOG(2012-03-20T16:55:34.885860, 4340, 001A75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:55:34.885860, 4340, 001A75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:55:34.887860, 4340, 001A75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:55:34.892860, 4340, 001A75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:55:34.898861, 4340, 001A75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:55:34.899861, 4340, 001A75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:55:34.900861, 4340, 001A75B0:): Auto shutter OFF.
+LOG(2012-03-20T16:55:34.901861, 4340, 001A75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:55:34.901861, 4340, 001A75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:55:34.902861, 4340, 001A75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:55:34.903861, 4340, 001A75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:55:34.903861, 4340, 001A75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:55:34.904861, 4340, 001A75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:55:34.904861, 4340, 001A75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:55:34.905861, 4340, 001A75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:55:34.905861, 4340, 001A75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:55:34.906861, 4340, 001A75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:55:34.906861, 4340, 001A75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:55:34.906861, 4340, 001A75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:55:34.907861, 4340, 001A75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:55:34.917862, 4340, 001A75B0:): System state cache updated.
+LOG(2012-03-20T16:55:34.983866, 4340, 001A75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:55:34.985866, 4340, 001A75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:55:34.986866, 4340, 001A75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:56:26.985840, 6060, 003575B0:): -------->>
+LOG(2012-03-20T16:56:27.002841, 6060, 003575B0:): Core session started on 2012-03-20T16:56:27.002841 by oeway on 1997-PC
+LOG(2012-03-20T16:56:27.002841, 6060, 003575B0:): Debug logging disabled
+LOG(2012-03-20T16:56:27.006841, 6060, 003575B0:): All devices unloaded.
+LOG(2012-03-20T16:56:27.181851, 6060, 003575B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T16:56:27.181851, 6060, 003575B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T16:56:27.182851, 6060, 003575B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T16:56:27.187852, 6060, 003575B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T16:56:27.192852, 6060, 003575B0:): Device VarianFPD initialized.
+LOG(2012-03-20T16:56:27.193852, 6060, 003575B0:): Camera device set to VarianFPD
+LOG(2012-03-20T16:56:27.194852, 6060, 003575B0:): Auto shutter OFF.
+LOG(2012-03-20T16:56:27.194852, 6060, 003575B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T16:56:27.195852, 6060, 003575B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T16:56:27.196852, 6060, 003575B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T16:56:27.196852, 6060, 003575B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T16:56:27.197852, 6060, 003575B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T16:56:27.197852, 6060, 003575B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T16:56:27.198852, 6060, 003575B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T16:56:27.198852, 6060, 003575B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T16:56:27.199852, 6060, 003575B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T16:56:27.199852, 6060, 003575B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T16:56:27.200852, 6060, 003575B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T16:56:27.200852, 6060, 003575B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T16:56:27.200852, 6060, 003575B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T16:56:27.211853, 6060, 003575B0:): System state cache updated.
+LOG(2012-03-20T16:56:27.328860, 6060, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:56:27.330860, 6060, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T16:56:27.332860, 6060, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:00:00.010024, 3320, 000D75B0:): -------->>
+LOG(2012-03-20T17:00:00.024025, 3320, 000D75B0:): Core session started on 2012-03-20T17:00:00.024025 by oeway on 1997-PC
+LOG(2012-03-20T17:00:00.024025, 3320, 000D75B0:): Debug logging disabled
+LOG(2012-03-20T17:00:00.029025, 3320, 000D75B0:): All devices unloaded.
+LOG(2012-03-20T17:00:00.204035, 3320, 000D75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:00:00.204035, 3320, 000D75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:00:00.205035, 3320, 000D75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:00:00.209036, 3320, 000D75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:00:00.214036, 3320, 000D75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:00:00.215036, 3320, 000D75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:00:00.216036, 3320, 000D75B0:): Auto shutter OFF.
+LOG(2012-03-20T17:00:00.216036, 3320, 000D75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:00:00.217036, 3320, 000D75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:00:00.218036, 3320, 000D75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:00:00.218036, 3320, 000D75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:00:00.219036, 3320, 000D75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:00:00.220036, 3320, 000D75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:00:00.220036, 3320, 000D75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:00:00.221036, 3320, 000D75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:00:00.221036, 3320, 000D75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:00:00.222036, 3320, 000D75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:00:00.222036, 3320, 000D75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:00:00.223036, 3320, 000D75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:00:00.223036, 3320, 000D75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:00:00.233037, 3320, 000D75B0:): System state cache updated.
+LOG(2012-03-20T17:00:00.312042, 3320, 000D75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:00:00.313042, 3320, 000D75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:00:00.314042, 3320, 000D75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:00:59.094404, 6072, 003975B0:): -------->>
+LOG(2012-03-20T17:00:59.106404, 6072, 003975B0:): Core session started on 2012-03-20T17:00:59.106404 by oeway on 1997-PC
+LOG(2012-03-20T17:00:59.106404, 6072, 003975B0:): Debug logging disabled
+LOG(2012-03-20T17:00:59.110405, 6072, 003975B0:): All devices unloaded.
+LOG(2012-03-20T17:00:59.298415, 6072, 003975B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:00:59.298415, 6072, 003975B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:00:59.299415, 6072, 003975B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:00:59.305416, 6072, 003975B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:00:59.311416, 6072, 003975B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:00:59.312416, 6072, 003975B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:00:59.313416, 6072, 003975B0:): Auto shutter OFF.
+LOG(2012-03-20T17:00:59.314416, 6072, 003975B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:00:59.314416, 6072, 003975B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:00:59.315416, 6072, 003975B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:00:59.316416, 6072, 003975B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:00:59.316416, 6072, 003975B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:00:59.317416, 6072, 003975B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:00:59.318417, 6072, 003975B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:00:59.319417, 6072, 003975B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:00:59.319417, 6072, 003975B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:00:59.319417, 6072, 003975B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:00:59.320417, 6072, 003975B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:00:59.320417, 6072, 003975B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:00:59.321417, 6072, 003975B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:00:59.330417, 6072, 003975B0:): System state cache updated.
+LOG(2012-03-20T17:00:59.403421, 6072, 003975B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:00:59.406422, 6072, 003975B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:00:59.408422, 6072, 003975B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:01:22.914766, 764, 006E75B0:): -------->>
+LOG(2012-03-20T17:01:22.926767, 764, 006E75B0:): Core session started on 2012-03-20T17:01:22.926767 by oeway on 1997-PC
+LOG(2012-03-20T17:01:22.926767, 764, 006E75B0:): Debug logging disabled
+LOG(2012-03-20T17:01:22.930767, 764, 006E75B0:): All devices unloaded.
+LOG(2012-03-20T17:01:23.331790, 764, 006E75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:01:23.331790, 764, 006E75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:01:23.332790, 764, 006E75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:01:23.335790, 764, 006E75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:01:23.340791, 764, 006E75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:01:23.341791, 764, 006E75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:01:23.341791, 764, 006E75B0:): Auto shutter OFF.
+LOG(2012-03-20T17:01:23.342791, 764, 006E75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:01:23.343791, 764, 006E75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:01:23.343791, 764, 006E75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:01:23.344791, 764, 006E75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:01:23.344791, 764, 006E75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:01:23.345791, 764, 006E75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:01:23.346791, 764, 006E75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:01:23.346791, 764, 006E75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:01:23.347791, 764, 006E75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:01:23.347791, 764, 006E75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:01:23.347791, 764, 006E75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:01:23.348791, 764, 006E75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:01:23.348791, 764, 006E75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:01:23.359792, 764, 006E75B0:): System state cache updated.
+LOG(2012-03-20T17:01:23.450797, 764, 006E75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:01:23.453797, 764, 006E75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:01:23.455797, 764, 006E75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:01:51.468399, 3096, 004775B0:): -------->>
+LOG(2012-03-20T17:01:51.483400, 3096, 004775B0:): Core session started on 2012-03-20T17:01:51.483400 by oeway on 1997-PC
+LOG(2012-03-20T17:01:51.483400, 3096, 004775B0:): Debug logging disabled
+LOG(2012-03-20T17:01:51.486400, 3096, 004775B0:): All devices unloaded.
+LOG(2012-03-20T17:01:51.620408, 3096, 004775B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:01:51.620408, 3096, 004775B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:01:51.621408, 3096, 004775B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:01:51.626408, 3096, 004775B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:01:51.632409, 3096, 004775B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:01:51.633409, 3096, 004775B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:01:51.634409, 3096, 004775B0:): Auto shutter OFF.
+LOG(2012-03-20T17:01:51.635409, 3096, 004775B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:01:51.636409, 3096, 004775B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:01:51.637409, 3096, 004775B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:01:51.637409, 3096, 004775B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:01:51.638409, 3096, 004775B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:01:51.639409, 3096, 004775B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:01:51.639409, 3096, 004775B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:01:51.640409, 3096, 004775B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:01:51.640409, 3096, 004775B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:01:51.641409, 3096, 004775B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:01:51.641409, 3096, 004775B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:01:51.642409, 3096, 004775B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:01:51.642409, 3096, 004775B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:01:51.652410, 3096, 004775B0:): System state cache updated.
+LOG(2012-03-20T17:01:51.735415, 3096, 004775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:01:51.737415, 3096, 004775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:01:51.739415, 3096, 004775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:13.457657, 5824, 007775B0:): -------->>
+LOG(2012-03-20T17:02:13.466658, 5824, 007775B0:): Core session started on 2012-03-20T17:02:13.466658 by oeway on 1997-PC
+LOG(2012-03-20T17:02:13.466658, 5824, 007775B0:): Debug logging disabled
+LOG(2012-03-20T17:02:13.470658, 5824, 007775B0:): All devices unloaded.
+LOG(2012-03-20T17:02:13.661669, 5824, 007775B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:02:13.662669, 5824, 007775B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:02:13.663669, 5824, 007775B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:02:13.668669, 5824, 007775B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:02:13.672669, 5824, 007775B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:02:13.674669, 5824, 007775B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:02:13.674669, 5824, 007775B0:): Auto shutter OFF.
+LOG(2012-03-20T17:02:13.675670, 5824, 007775B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:02:13.676670, 5824, 007775B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:02:13.677670, 5824, 007775B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:02:13.677670, 5824, 007775B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:02:13.678670, 5824, 007775B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:02:13.678670, 5824, 007775B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:02:13.679670, 5824, 007775B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:02:13.680670, 5824, 007775B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:02:13.680670, 5824, 007775B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:02:13.680670, 5824, 007775B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:02:13.681670, 5824, 007775B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:02:13.681670, 5824, 007775B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:02:13.681670, 5824, 007775B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:02:13.691670, 5824, 007775B0:): System state cache updated.
+LOG(2012-03-20T17:02:13.795676, 5824, 007775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:13.796676, 5824, 007775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:13.797677, 5824, 007775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:21.860138, 4536, 004275B0:): -------->>
+LOG(2012-03-20T17:02:21.871138, 4536, 004275B0:): Core session started on 2012-03-20T17:02:21.871138 by oeway on 1997-PC
+LOG(2012-03-20T17:02:21.872138, 4536, 004275B0:): Debug logging disabled
+LOG(2012-03-20T17:02:21.876139, 4536, 004275B0:): All devices unloaded.
+LOG(2012-03-20T17:02:22.023147, 4536, 004275B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:02:22.024147, 4536, 004275B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:02:22.025147, 4536, 004275B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:02:22.030147, 4536, 004275B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:02:22.036148, 4536, 004275B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:02:22.037148, 4536, 004275B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:02:22.038148, 4536, 004275B0:): Auto shutter OFF.
+LOG(2012-03-20T17:02:22.039148, 4536, 004275B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:02:22.039148, 4536, 004275B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:02:22.040148, 4536, 004275B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:02:22.041148, 4536, 004275B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:02:22.041148, 4536, 004275B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:02:22.042148, 4536, 004275B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:02:22.042148, 4536, 004275B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:02:22.043148, 4536, 004275B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:02:22.043148, 4536, 004275B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:02:22.044148, 4536, 004275B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:02:22.044148, 4536, 004275B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:02:22.045148, 4536, 004275B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:02:22.045148, 4536, 004275B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:02:22.055149, 4536, 004275B0:): System state cache updated.
+LOG(2012-03-20T17:02:22.124153, 4536, 004275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:22.127153, 4536, 004275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:22.129153, 4536, 004275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:59.356282, 4748, 004075B0:): -------->>
+LOG(2012-03-20T17:02:59.362283, 4748, 004075B0:): Core session started on 2012-03-20T17:02:59.362283 by oeway on 1997-PC
+LOG(2012-03-20T17:02:59.363283, 4748, 004075B0:): Debug logging disabled
+LOG(2012-03-20T17:02:59.366283, 4748, 004075B0:): All devices unloaded.
+LOG(2012-03-20T17:02:59.493290, 4748, 004075B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:02:59.494290, 4748, 004075B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:02:59.495290, 4748, 004075B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:02:59.500291, 4748, 004075B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:02:59.504291, 4748, 004075B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:02:59.505291, 4748, 004075B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:02:59.506291, 4748, 004075B0:): Auto shutter OFF.
+LOG(2012-03-20T17:02:59.507291, 4748, 004075B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:02:59.507291, 4748, 004075B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:02:59.508291, 4748, 004075B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:02:59.509291, 4748, 004075B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:02:59.509291, 4748, 004075B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:02:59.510291, 4748, 004075B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:02:59.511291, 4748, 004075B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:02:59.512291, 4748, 004075B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:02:59.512291, 4748, 004075B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:02:59.513291, 4748, 004075B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:02:59.513291, 4748, 004075B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:02:59.513291, 4748, 004075B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:02:59.514291, 4748, 004075B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:02:59.523292, 4748, 004075B0:): System state cache updated.
+LOG(2012-03-20T17:02:59.630298, 4748, 004075B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:59.632298, 4748, 004075B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:02:59.634298, 4748, 004075B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:03:45.555925, 5360, 003575B0:): -------->>
+LOG(2012-03-20T17:03:45.565925, 5360, 003575B0:): Core session started on 2012-03-20T17:03:45.565925 by oeway on 1997-PC
+LOG(2012-03-20T17:03:45.565925, 5360, 003575B0:): Debug logging disabled
+LOG(2012-03-20T17:03:45.570926, 5360, 003575B0:): All devices unloaded.
+LOG(2012-03-20T17:03:45.635929, 5360, 003575B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:03:45.635929, 5360, 003575B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:03:45.637929, 5360, 003575B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:03:45.642930, 5360, 003575B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:03:45.648930, 5360, 003575B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:03:45.649930, 5360, 003575B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:03:45.650930, 5360, 003575B0:): Auto shutter OFF.
+LOG(2012-03-20T17:03:45.651930, 5360, 003575B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:03:45.651930, 5360, 003575B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:03:45.652930, 5360, 003575B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:03:45.653930, 5360, 003575B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:03:45.653930, 5360, 003575B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:03:45.654930, 5360, 003575B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:03:45.655931, 5360, 003575B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:03:45.655931, 5360, 003575B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:03:45.656931, 5360, 003575B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:03:45.656931, 5360, 003575B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:03:45.656931, 5360, 003575B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:03:45.657931, 5360, 003575B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:03:45.658931, 5360, 003575B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:03:45.668931, 5360, 003575B0:): System state cache updated.
+LOG(2012-03-20T17:03:45.772937, 5360, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:03:45.774937, 5360, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:03:45.776937, 5360, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:16.446692, 5348, 003C75B0:): -------->>
+LOG(2012-03-20T17:04:16.451692, 5348, 003C75B0:): Core session started on 2012-03-20T17:04:16.451692 by oeway on 1997-PC
+LOG(2012-03-20T17:04:16.452692, 5348, 003C75B0:): Debug logging disabled
+LOG(2012-03-20T17:04:16.455692, 5348, 003C75B0:): All devices unloaded.
+LOG(2012-03-20T17:04:16.519696, 5348, 003C75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:04:16.519696, 5348, 003C75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:04:16.520696, 5348, 003C75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:04:16.523696, 5348, 003C75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:04:16.528696, 5348, 003C75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:04:16.529696, 5348, 003C75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:04:16.530696, 5348, 003C75B0:): Auto shutter OFF.
+LOG(2012-03-20T17:04:16.530696, 5348, 003C75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:04:16.531697, 5348, 003C75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:04:16.531697, 5348, 003C75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:04:16.532697, 5348, 003C75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:04:16.533697, 5348, 003C75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:04:16.533697, 5348, 003C75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:04:16.534697, 5348, 003C75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:04:16.534697, 5348, 003C75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:04:16.535697, 5348, 003C75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:04:16.535697, 5348, 003C75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:04:16.535697, 5348, 003C75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:04:16.536697, 5348, 003C75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:04:16.536697, 5348, 003C75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:04:16.546697, 5348, 003C75B0:): System state cache updated.
+LOG(2012-03-20T17:04:16.639703, 5348, 003C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:16.640703, 5348, 003C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:16.641703, 5348, 003C75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:28.407376, 1492, 002875B0:): -------->>
+LOG(2012-03-20T17:04:28.413376, 1492, 002875B0:): Core session started on 2012-03-20T17:04:28.413376 by oeway on 1997-PC
+LOG(2012-03-20T17:04:28.414376, 1492, 002875B0:): Debug logging disabled
+LOG(2012-03-20T17:04:28.417376, 1492, 002875B0:): All devices unloaded.
+LOG(2012-03-20T17:04:28.498381, 1492, 002875B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:04:28.498381, 1492, 002875B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:04:28.499381, 1492, 002875B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:04:28.502381, 1492, 002875B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:04:28.507381, 1492, 002875B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:04:28.508382, 1492, 002875B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:04:28.508382, 1492, 002875B0:): Auto shutter OFF.
+LOG(2012-03-20T17:04:28.509382, 1492, 002875B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:04:28.509382, 1492, 002875B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:04:28.510382, 1492, 002875B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:04:28.511382, 1492, 002875B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:04:28.511382, 1492, 002875B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:04:28.512382, 1492, 002875B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:04:28.512382, 1492, 002875B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:04:28.513382, 1492, 002875B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:04:28.513382, 1492, 002875B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:04:28.514382, 1492, 002875B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:04:28.514382, 1492, 002875B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:04:28.515382, 1492, 002875B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:04:28.515382, 1492, 002875B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:04:28.525383, 1492, 002875B0:): System state cache updated.
+LOG(2012-03-20T17:04:28.615388, 1492, 002875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:28.617388, 1492, 002875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:28.619388, 1492, 002875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:40.848087, 5068, 002675B0:): -------->>
+LOG(2012-03-20T17:04:40.854088, 5068, 002675B0:): Core session started on 2012-03-20T17:04:40.854088 by oeway on 1997-PC
+LOG(2012-03-20T17:04:40.855088, 5068, 002675B0:): Debug logging disabled
+LOG(2012-03-20T17:04:40.859088, 5068, 002675B0:): All devices unloaded.
+LOG(2012-03-20T17:04:40.944093, 5068, 002675B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:04:40.944093, 5068, 002675B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:04:40.945093, 5068, 002675B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:04:40.950093, 5068, 002675B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:04:40.954093, 5068, 002675B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:04:40.955093, 5068, 002675B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:04:40.956094, 5068, 002675B0:): Auto shutter OFF.
+LOG(2012-03-20T17:04:40.957094, 5068, 002675B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:04:40.958094, 5068, 002675B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:04:40.958094, 5068, 002675B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:04:40.959094, 5068, 002675B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:04:40.959094, 5068, 002675B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:04:40.960094, 5068, 002675B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:04:40.961094, 5068, 002675B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:04:40.961094, 5068, 002675B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:04:40.963094, 5068, 002675B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:04:40.975095, 5068, 002675B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:04:40.981095, 5068, 002675B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:04:40.982095, 5068, 002675B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:04:40.982095, 5068, 002675B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:04:40.992096, 5068, 002675B0:): System state cache updated.
+LOG(2012-03-20T17:04:41.325115, 5068, 002675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:41.328115, 5068, 002675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:04:41.330115, 5068, 002675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:12.786914, 4184, 000675B0:): -------->>
+LOG(2012-03-20T17:05:12.792914, 4184, 000675B0:): Core session started on 2012-03-20T17:05:12.792914 by oeway on 1997-PC
+LOG(2012-03-20T17:05:12.792914, 4184, 000675B0:): Debug logging disabled
+LOG(2012-03-20T17:05:12.796915, 4184, 000675B0:): All devices unloaded.
+LOG(2012-03-20T17:05:12.860918, 4184, 000675B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:05:12.860918, 4184, 000675B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:05:12.861918, 4184, 000675B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:05:12.864919, 4184, 000675B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:05:12.869919, 4184, 000675B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:05:12.870919, 4184, 000675B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:05:12.871919, 4184, 000675B0:): Auto shutter OFF.
+LOG(2012-03-20T17:05:12.871919, 4184, 000675B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:05:12.872919, 4184, 000675B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:05:12.873919, 4184, 000675B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:05:12.873919, 4184, 000675B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:05:12.874919, 4184, 000675B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:05:12.874919, 4184, 000675B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:05:12.875919, 4184, 000675B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:05:12.876919, 4184, 000675B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:05:12.876919, 4184, 000675B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:05:12.877919, 4184, 000675B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:05:12.877919, 4184, 000675B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:05:12.878919, 4184, 000675B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:05:12.879919, 4184, 000675B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:05:12.891920, 4184, 000675B0:): System state cache updated.
+LOG(2012-03-20T17:05:12.990926, 4184, 000675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:12.991926, 4184, 000675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:12.992926, 4184, 000675B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:21.087389, 4744, 004175B0:): -------->>
+LOG(2012-03-20T17:05:21.099390, 4744, 004175B0:): Core session started on 2012-03-20T17:05:21.099390 by oeway on 1997-PC
+LOG(2012-03-20T17:05:21.100390, 4744, 004175B0:): Debug logging disabled
+LOG(2012-03-20T17:05:21.103390, 4744, 004175B0:): All devices unloaded.
+LOG(2012-03-20T17:05:21.161393, 4744, 004175B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:05:21.162393, 4744, 004175B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:05:21.163393, 4744, 004175B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:05:21.168394, 4744, 004175B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:05:21.175394, 4744, 004175B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:05:21.176394, 4744, 004175B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:05:21.177394, 4744, 004175B0:): Auto shutter OFF.
+LOG(2012-03-20T17:05:21.178394, 4744, 004175B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:05:21.179394, 4744, 004175B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:05:21.179394, 4744, 004175B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:05:21.180394, 4744, 004175B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:05:21.181394, 4744, 004175B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:05:21.181394, 4744, 004175B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:05:21.182394, 4744, 004175B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:05:21.183394, 4744, 004175B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:05:21.183394, 4744, 004175B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:05:21.183394, 4744, 004175B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:05:21.184394, 4744, 004175B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:05:21.184394, 4744, 004175B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:05:21.184394, 4744, 004175B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:05:21.195395, 4744, 004175B0:): System state cache updated.
+LOG(2012-03-20T17:05:21.273400, 4744, 004175B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:21.275400, 4744, 004175B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:21.278400, 4744, 004175B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:52.325176, 4924, 003275B0:): -------->>
+LOG(2012-03-20T17:05:52.336176, 4924, 003275B0:): Core session started on 2012-03-20T17:05:52.336176 by oeway on 1997-PC
+LOG(2012-03-20T17:05:52.336176, 4924, 003275B0:): Debug logging disabled
+LOG(2012-03-20T17:05:52.340176, 4924, 003275B0:): All devices unloaded.
+LOG(2012-03-20T17:05:52.418181, 4924, 003275B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:05:52.419181, 4924, 003275B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:05:52.420181, 4924, 003275B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:05:52.425181, 4924, 003275B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:05:52.429182, 4924, 003275B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:05:52.430182, 4924, 003275B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:05:52.431182, 4924, 003275B0:): Auto shutter OFF.
+LOG(2012-03-20T17:05:52.432182, 4924, 003275B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:05:52.432182, 4924, 003275B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:05:52.433182, 4924, 003275B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:05:52.434182, 4924, 003275B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:05:52.434182, 4924, 003275B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:05:52.435182, 4924, 003275B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:05:52.436182, 4924, 003275B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:05:52.436182, 4924, 003275B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:05:52.436182, 4924, 003275B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:05:52.437182, 4924, 003275B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:05:52.437182, 4924, 003275B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:05:52.438182, 4924, 003275B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:05:52.438182, 4924, 003275B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:05:52.448183, 4924, 003275B0:): System state cache updated.
+LOG(2012-03-20T17:05:52.564189, 4924, 003275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:52.565189, 4924, 003275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:05:52.567189, 4924, 003275B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:08:15.220349, 4760, 001B75B0:): -------->>
+LOG(2012-03-20T17:08:15.230349, 4760, 001B75B0:): Core session started on 2012-03-20T17:08:15.230349 by oeway on 1997-PC
+LOG(2012-03-20T17:08:15.231349, 4760, 001B75B0:): Debug logging disabled
+LOG(2012-03-20T17:08:15.234350, 4760, 001B75B0:): All devices unloaded.
+LOG(2012-03-20T17:08:15.332355, 4760, 001B75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:08:15.333355, 4760, 001B75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:08:15.334355, 4760, 001B75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:08:15.339356, 4760, 001B75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:08:15.345356, 4760, 001B75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:08:15.347356, 4760, 001B75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:08:15.347356, 4760, 001B75B0:): Auto shutter OFF.
+LOG(2012-03-20T17:08:15.348356, 4760, 001B75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:08:15.349356, 4760, 001B75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:08:15.350356, 4760, 001B75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:08:15.350356, 4760, 001B75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:08:15.351356, 4760, 001B75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:08:15.351356, 4760, 001B75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:08:15.352356, 4760, 001B75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:08:15.353356, 4760, 001B75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:08:15.353356, 4760, 001B75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:08:15.353356, 4760, 001B75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:08:15.354356, 4760, 001B75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:08:15.354356, 4760, 001B75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:08:15.354356, 4760, 001B75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:08:15.365357, 4760, 001B75B0:): System state cache updated.
+LOG(2012-03-20T17:08:15.435361, 4760, 001B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:08:15.437361, 4760, 001B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:08:15.438361, 4760, 001B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:23:55.267116, 5460, 003575B0:): -------->>
+LOG(2012-03-20T17:23:55.289118, 5460, 003575B0:): Core session started on 2012-03-20T17:23:55.289118 by oeway on 1997-PC
+LOG(2012-03-20T17:23:55.289118, 5460, 003575B0:): Debug logging disabled
+LOG(2012-03-20T17:23:55.294118, 5460, 003575B0:): All devices unloaded.
+LOG(2012-03-20T17:23:55.381123, 5460, 003575B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:23:55.381123, 5460, 003575B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:23:55.382123, 5460, 003575B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:23:55.387123, 5460, 003575B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:23:55.394124, 5460, 003575B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:23:55.396124, 5460, 003575B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:23:55.397124, 5460, 003575B0:): Auto shutter OFF.
+LOG(2012-03-20T17:23:55.397124, 5460, 003575B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:23:55.398124, 5460, 003575B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:23:55.399124, 5460, 003575B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:23:55.399124, 5460, 003575B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:23:55.400124, 5460, 003575B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:23:55.401124, 5460, 003575B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:23:55.401124, 5460, 003575B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:23:55.402124, 5460, 003575B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:23:55.402124, 5460, 003575B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:23:55.402124, 5460, 003575B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:23:55.403124, 5460, 003575B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:23:55.403124, 5460, 003575B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:23:55.404124, 5460, 003575B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:23:55.414125, 5460, 003575B0:): System state cache updated.
+LOG(2012-03-20T17:23:55.492129, 5460, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:23:55.496129, 5460, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:23:55.498130, 5460, 003575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:30:19.330083, 904, 002475B0:): -------->>
+LOG(2012-03-20T17:30:19.345084, 904, 002475B0:): Core session started on 2012-03-20T17:30:19.345084 by oeway on 1997-PC
+LOG(2012-03-20T17:30:19.346084, 904, 002475B0:): Debug logging disabled
+LOG(2012-03-20T17:30:19.349085, 904, 002475B0:): All devices unloaded.
+LOG(2012-03-20T17:30:19.448090, 904, 002475B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:30:19.449090, 904, 002475B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:30:19.450090, 904, 002475B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:30:19.453091, 904, 002475B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:30:19.457091, 904, 002475B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:30:19.458091, 904, 002475B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:30:19.459091, 904, 002475B0:): Auto shutter OFF.
+LOG(2012-03-20T17:30:19.459091, 904, 002475B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:30:19.460091, 904, 002475B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:30:19.461091, 904, 002475B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:30:19.462091, 904, 002475B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:30:19.462091, 904, 002475B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:30:19.463091, 904, 002475B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:30:19.463091, 904, 002475B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:30:19.464091, 904, 002475B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:30:19.464091, 904, 002475B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:30:19.465091, 904, 002475B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:30:19.465091, 904, 002475B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:30:19.466091, 904, 002475B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:30:19.466091, 904, 002475B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:30:19.477092, 904, 002475B0:): System state cache updated.
+LOG(2012-03-20T17:30:19.602099, 904, 002475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:30:19.604099, 904, 002475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:30:19.607099, 904, 002475B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:32:49.309662, 5712, 005575B0:): -------->>
+LOG(2012-03-20T17:32:49.316662, 5712, 005575B0:): Core session started on 2012-03-20T17:32:49.316662 by oeway on 1997-PC
+LOG(2012-03-20T17:32:49.316662, 5712, 005575B0:): Debug logging disabled
+LOG(2012-03-20T17:32:49.322663, 5712, 005575B0:): All devices unloaded.
+LOG(2012-03-20T17:32:49.376666, 5712, 005575B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:32:49.376666, 5712, 005575B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:32:49.377666, 5712, 005575B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:32:49.381666, 5712, 005575B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:32:49.386666, 5712, 005575B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:32:49.387666, 5712, 005575B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:32:49.388666, 5712, 005575B0:): Auto shutter OFF.
+LOG(2012-03-20T17:32:49.389666, 5712, 005575B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:32:49.389666, 5712, 005575B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:32:49.390666, 5712, 005575B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:32:49.391666, 5712, 005575B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:32:49.391666, 5712, 005575B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:32:49.392667, 5712, 005575B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:32:49.393667, 5712, 005575B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:32:49.394667, 5712, 005575B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:32:49.394667, 5712, 005575B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:32:49.395667, 5712, 005575B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:32:49.395667, 5712, 005575B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:32:49.396667, 5712, 005575B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:32:49.396667, 5712, 005575B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:32:49.407667, 5712, 005575B0:): System state cache updated.
+LOG(2012-03-20T17:32:49.508673, 5712, 005575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:32:49.509673, 5712, 005575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:32:49.511673, 5712, 005575B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:34:03.663915, 5472, 007875B0:): -------->>
+LOG(2012-03-20T17:34:03.673915, 5472, 007875B0:): Core session started on 2012-03-20T17:34:03.673915 by oeway on 1997-PC
+LOG(2012-03-20T17:34:03.674915, 5472, 007875B0:): Debug logging disabled
+LOG(2012-03-20T17:34:03.678915, 5472, 007875B0:): All devices unloaded.
+LOG(2012-03-20T17:34:03.736919, 5472, 007875B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:34:03.736919, 5472, 007875B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:34:03.737919, 5472, 007875B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:34:03.741919, 5472, 007875B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:34:03.746919, 5472, 007875B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:34:03.748919, 5472, 007875B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:34:03.749920, 5472, 007875B0:): Auto shutter OFF.
+LOG(2012-03-20T17:34:03.750920, 5472, 007875B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:34:03.751920, 5472, 007875B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:34:03.751920, 5472, 007875B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:34:03.752920, 5472, 007875B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:34:03.753920, 5472, 007875B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:34:03.754920, 5472, 007875B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:34:03.754920, 5472, 007875B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:34:03.755920, 5472, 007875B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:34:03.755920, 5472, 007875B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:34:03.756920, 5472, 007875B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:34:03.756920, 5472, 007875B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:34:03.757920, 5472, 007875B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:34:03.757920, 5472, 007875B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:34:03.767921, 5472, 007875B0:): System state cache updated.
+LOG(2012-03-20T17:34:03.850925, 5472, 007875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:34:03.852925, 5472, 007875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:34:03.853925, 5472, 007875B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:27.677720, 3584, 002B7718:): -------->>
+LOG(2012-03-20T17:35:27.684720, 3584, 002B7718:): Core session started on 2012-03-20T17:35:27.684720 by oeway on 1997-PC
+LOG(2012-03-20T17:35:27.684720, 3584, 002B7718:): Debug logging disabled
+LOG(2012-03-20T17:35:27.691721, 3584, 002B7718:): All devices unloaded.
+LOG(2012-03-20T17:35:27.778726, 3584, 002B7718:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:35:27.779726, 3584, 002B7718:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:35:27.779726, 3584, 002B7718:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:35:27.783726, 3584, 002B7718:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:35:27.792727, 3584, 002B7718:): Device VarianFPD initialized.
+LOG(2012-03-20T17:35:27.793727, 3584, 002B7718:): Camera device set to VarianFPD
+LOG(2012-03-20T17:35:27.794727, 3584, 002B7718:): Auto shutter OFF.
+LOG(2012-03-20T17:35:27.795727, 3584, 002B7718:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:35:27.796727, 3584, 002B7718:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:35:27.797727, 3584, 002B7718:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:35:27.797727, 3584, 002B7718:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:35:27.798727, 3584, 002B7718:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:35:27.799727, 3584, 002B7718:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:35:27.800727, 3584, 002B7718:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:35:27.801727, 3584, 002B7718:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:35:27.801727, 3584, 002B7718:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:35:27.802727, 3584, 002B7718:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:35:27.802727, 3584, 002B7718:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:35:27.803727, 3584, 002B7718:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:35:27.803727, 3584, 002B7718:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:35:27.814728, 3584, 002B7718:): System state cache updated.
+LOG(2012-03-20T17:35:27.893732, 3584, 002B7718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:27.895732, 3584, 002B7718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:27.896732, 3584, 002B7718:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:36.145204, 4948, 002775B0:): -------->>
+LOG(2012-03-20T17:35:36.152205, 4948, 002775B0:): Core session started on 2012-03-20T17:35:36.152205 by oeway on 1997-PC
+LOG(2012-03-20T17:35:36.153205, 4948, 002775B0:): Debug logging disabled
+LOG(2012-03-20T17:35:36.157205, 4948, 002775B0:): All devices unloaded.
+LOG(2012-03-20T17:35:36.246210, 4948, 002775B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:35:36.246210, 4948, 002775B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:35:36.247210, 4948, 002775B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:35:36.250210, 4948, 002775B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:35:36.255211, 4948, 002775B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:35:36.256211, 4948, 002775B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:35:36.257211, 4948, 002775B0:): Auto shutter OFF.
+LOG(2012-03-20T17:35:36.258211, 4948, 002775B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:35:36.258211, 4948, 002775B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:35:36.259211, 4948, 002775B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:35:36.259211, 4948, 002775B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:35:36.260211, 4948, 002775B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:35:36.261211, 4948, 002775B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:35:36.261211, 4948, 002775B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:35:36.262211, 4948, 002775B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:35:36.262211, 4948, 002775B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:35:36.263211, 4948, 002775B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:35:36.263211, 4948, 002775B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:35:36.263211, 4948, 002775B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:35:36.264211, 4948, 002775B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:35:36.275212, 4948, 002775B0:): System state cache updated.
+LOG(2012-03-20T17:35:36.388218, 4948, 002775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:36.390218, 4948, 002775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:36.393218, 4948, 002775B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:55.115289, 6024, 004075B0:): -------->>
+LOG(2012-03-20T17:35:55.121290, 6024, 004075B0:): Core session started on 2012-03-20T17:35:55.121290 by oeway on 1997-PC
+LOG(2012-03-20T17:35:55.121290, 6024, 004075B0:): Debug logging disabled
+LOG(2012-03-20T17:35:55.126290, 6024, 004075B0:): All devices unloaded.
+LOG(2012-03-20T17:35:55.190294, 6024, 004075B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:35:55.191294, 6024, 004075B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:35:55.191294, 6024, 004075B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:35:55.194294, 6024, 004075B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:35:55.198294, 6024, 004075B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:35:55.199294, 6024, 004075B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:35:55.200294, 6024, 004075B0:): Auto shutter OFF.
+LOG(2012-03-20T17:35:55.201294, 6024, 004075B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:35:55.201294, 6024, 004075B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:35:55.202294, 6024, 004075B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:35:55.202294, 6024, 004075B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:35:55.203294, 6024, 004075B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:35:55.203294, 6024, 004075B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:35:55.204294, 6024, 004075B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:35:55.205294, 6024, 004075B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:35:55.205294, 6024, 004075B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:35:55.205294, 6024, 004075B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:35:55.206294, 6024, 004075B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:35:55.206294, 6024, 004075B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:35:55.206294, 6024, 004075B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:35:55.216295, 6024, 004075B0:): System state cache updated.
+LOG(2012-03-20T17:35:55.328301, 6024, 004075B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:55.329302, 6024, 004075B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:35:55.330302, 6024, 004075B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:36:20.345732, 5352, 001B75B0:): -------->>
+LOG(2012-03-20T17:36:20.350733, 5352, 001B75B0:): Core session started on 2012-03-20T17:36:20.350733 by oeway on 1997-PC
+LOG(2012-03-20T17:36:20.350733, 5352, 001B75B0:): Debug logging disabled
+LOG(2012-03-20T17:36:20.354733, 5352, 001B75B0:): All devices unloaded.
+LOG(2012-03-20T17:36:20.446738, 5352, 001B75B0:): Device VarianFPD loaded from VarianFPD and labeled as VarianFPD
+LOG(2012-03-20T17:36:20.447738, 5352, 001B75B0:): Device VarianFPD set as default camera.
+LOG(2012-03-20T17:36:20.447738, 5352, 001B75B0:): Starting initialization sequence for 1 devices...
+LOG(2012-03-20T17:36:20.451738, 5352, 001B75B0:): Device VarianFPD message: Get System Information Fail!
+LOG(2012-03-20T17:36:20.455739, 5352, 001B75B0:): Device VarianFPD initialized.
+LOG(2012-03-20T17:36:20.456739, 5352, 001B75B0:): Camera device set to VarianFPD
+LOG(2012-03-20T17:36:20.457739, 5352, 001B75B0:): Auto shutter OFF.
+LOG(2012-03-20T17:36:20.457739, 5352, 001B75B0:): Configuration Calibration/Offset Calibration: new setting for device VarianFPD defined as CalibrationMode=Offset Calibration
+LOG(2012-03-20T17:36:20.459739, 5352, 001B75B0:): Configuration Calibration/Normal: new setting for device VarianFPD defined as CalibrationMode=Normal
+LOG(2012-03-20T17:36:20.459739, 5352, 001B75B0:): Configuration Calibration/Gain Calibration: new setting for device VarianFPD defined as CalibrationMode=Gain Calibration
+LOG(2012-03-20T17:36:20.460739, 5352, 001B75B0:): Configuration Mode/Demo: new setting for device VarianFPD defined as Mode=Demo
+LOG(2012-03-20T17:36:20.461739, 5352, 001B75B0:): Configuration Mode/High-Res Fluoro: new setting for device VarianFPD defined as Mode=High-Res Fluoro
+LOG(2012-03-20T17:36:20.461739, 5352, 001B75B0:): Configuration Mode/RAD: new setting for device VarianFPD defined as Mode=RAD
+LOG(2012-03-20T17:36:20.462739, 5352, 001B75B0:): Configuration Mode/Low-Res Fluoro: new setting for device VarianFPD defined as Mode=Low-Res Fluoro
+LOG(2012-03-20T17:36:20.462739, 5352, 001B75B0:): Resolution ID Res20x: for device Objective defined as Label=Nikon 20X Plan Fluor ELWD
+LOG(2012-03-20T17:36:20.463739, 5352, 001B75B0:): Pixel size 0.500000 um set for resolution ID: Res20x
+LOG(2012-03-20T17:36:20.463739, 5352, 001B75B0:): Resolution ID Res40x: for device Objective defined as Label=Nikon 40X Plan Flueor ELWD
+LOG(2012-03-20T17:36:20.464739, 5352, 001B75B0:): Pixel size 0.250000 um set for resolution ID: Res40x
+LOG(2012-03-20T17:36:20.464739, 5352, 001B75B0:): Resolution ID Res10x: for device Objective defined as Label=Nikon 10X S Fluor
+LOG(2012-03-20T17:36:20.465739, 5352, 001B75B0:): Pixel size 1.000000 um set for resolution ID: Res10x
+LOG(2012-03-20T17:36:20.475740, 5352, 001B75B0:): System state cache updated.
+LOG(2012-03-20T17:36:20.565745, 5352, 001B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:36:20.567745, 5352, 001B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+
+LOG(2012-03-20T17:36:20.569745, 5352, 001B75B0:): Error occured. Device GetPixelSizeUm. Objective
+Can't find the device with the specified label.
+

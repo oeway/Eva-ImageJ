@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/bsh-2.0b4.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/clojure.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/commons-math-2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/MMCoreJ.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/swing-layout-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/swingx-0.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Micro-Manager-1.4/plugins/Micro-Manager/ij.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/mmstudio"/>
+	<classpathentry kind="con" path="org.dyno.visual.swing.VS_LIBRARY/layoutext"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
